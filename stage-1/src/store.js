@@ -243,16 +243,18 @@ class Store {
     return { ...this.createRequestRecord(caller, payer, amount, note, this.tick()) };
   }
 
-  // A request is visible only to its two parties; anyone else gets 404 so the
-  // response does not reveal whether it exists.
-  visibleRequest(caller, id) {
+  // Request actions: 404 only for an unknown id; the endpoint rules of §8 then
+  // give 403 to anyone who is not the payer (pay, decline) or the requester
+  // (cancel), third parties included (coordinator ruling). Listings still
+  // show a request only to its two parties.
+  existingRequest(id) {
     const r = this.s.requestById.get(id);
-    if (!r || (r.requester_id !== caller.id && r.payer_id !== caller.id)) throw notFound();
+    if (!r) throw notFound();
     return r;
   }
 
   payRequest(caller, id, visibility) {
-    const r = this.visibleRequest(caller, id);
+    const r = this.existingRequest(id);
     if (r.payer_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the payer may pay this request');
     if (r.status !== 'pending') throw new ApiError(409, 'request_not_pending', 'request is not pending');
     const requester = this.s.users.get(r.requester_id);
@@ -265,14 +267,14 @@ class Store {
   }
 
   declineRequest(caller, id) {
-    const r = this.visibleRequest(caller, id);
+    const r = this.existingRequest(id);
     if (r.payer_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the payer may decline this request');
     if (r.status !== 'declined') this.transitionRequest(r, 'declined');
     return { ...r };
   }
 
   cancelRequest(caller, id) {
-    const r = this.visibleRequest(caller, id);
+    const r = this.existingRequest(id);
     if (r.requester_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the requester may cancel this request');
     if (r.status !== 'cancelled') this.transitionRequest(r, 'cancelled');
     return { ...r };

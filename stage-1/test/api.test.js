@@ -149,7 +149,14 @@ test('requests lifecycle', async () => {
   const id = big.body.request_id;
   assert.strictEqual((await call('POST', `/requests/${id}/pay`, { token: t.bob, key: 'p1', body: {} })).body.error.code, 'insufficient_funds');
   assert.strictEqual((await call('POST', `/requests/${id}/pay`, { token: t.cy, key: 'p1', body: {} })).status, 403);
-  assert.strictEqual((await call('POST', `/requests/${id}/pay`, { token: t.ada, key: 'p1', body: {} })).status, 404);
+  // third party: 403 on every action of an existing request, 404 only for unknown ids
+  assert.strictEqual((await call('POST', `/requests/${id}/pay`, { token: t.ada, key: 'p1', body: {} })).status, 403);
+  assert.strictEqual((await call('POST', `/requests/${id}/decline`, { token: t.ada })).status, 403);
+  assert.strictEqual((await call('POST', `/requests/${id}/cancel`, { token: t.ada })).status, 403);
+  assert.strictEqual((await call('POST', '/requests/rq_nope/pay', { token: t.ada, key: 'p1', body: {} })).status, 404);
+  assert.strictEqual((await call('POST', '/requests/rq_nope/decline', { token: t.ada })).status, 404);
+  assert.strictEqual((await call('POST', '/requests/rq_nope/cancel', { token: t.ada })).status, 404);
+  assert.ok(!(await call('GET', '/requests', { token: t.ada })).body.requests.some((r) => r.request_id === id));
   assert.strictEqual((await call('POST', `/requests/${id}/cancel`, { token: t.bob })).status, 403);
   const pays = await Promise.all(Array.from({ length: 20 }, (_, i) => call('POST', '/requests/rq_1/pay', { token: t.ada, key: `q${i % 2}`, body: { visibility: 'private' } })));
   assert.strictEqual(pays.filter((r) => r.status === 201).length, 1);
