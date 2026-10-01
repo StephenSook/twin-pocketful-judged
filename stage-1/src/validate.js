@@ -42,7 +42,7 @@ function errorBody(code, message) {
 }
 
 function isPlainObject(v) {
-  return v !== null && typeof v === 'object' && !Array.isArray(v);
+  return v !== null && typeof v === 'object' && !Array.isArray(v) && !(v instanceof InexactNumber);
 }
 
 function charLength(s) {
@@ -114,10 +114,43 @@ function parseJsonBuffer(buf) {
   }
   if (text.trim() === '') return ok(undefined);
   try {
-    return ok(JSON.parse(text));
+    return ok(JSON.parse(text, exactNumbers));
   } catch {
     return malformed('request body is not valid JSON');
   }
+}
+
+// A number literal whose exact decimal value is not an integer but which
+// rounds to one as a double (1000.0000000000001 -> 1000). Kept as an object so
+// no number check accepts it and canonicalJson keeps it distinct.
+class InexactNumber {
+  constructor(source) {
+    this.source = source;
+    Object.freeze(this);
+  }
+}
+
+const NUMBER_LITERAL_RE = /^-?([0-9]+)(?:\.([0-9]+))?(?:[eE]([+-]?[0-9]+))?$/;
+
+// True when the JSON number literal denotes an exact integer, e.g. "1000",
+// "1000.0", "1e3", "1500e-3".
+function isIntegralLiteral(source) {
+  const m = NUMBER_LITERAL_RE.exec(source);
+  if (!m) return false;
+  const frac = m[2] || '';
+  const digits = (m[1] + frac).replace(/^0+/, '');
+  if (digits === '') return true;
+  const trimmed = digits.replace(/0+$/, '');
+  const scale = frac.length - Number(m[3] || 0) - (digits.length - trimmed.length);
+  return scale <= 0;
+}
+
+function exactNumbers(key, value, ctx) {
+  if (typeof value === 'number' && Number.isInteger(value) && ctx && typeof ctx.source === 'string'
+      && !isIntegralLiteral(ctx.source)) {
+    return new InexactNumber(ctx.source);
+  }
+  return value;
 }
 
 // A body that parsed but is not a JSON object (array, string, number, null,
@@ -321,7 +354,8 @@ function validateTransferEntry(t) {
 // Canonical text of a parsed JSON value: object keys sorted, no whitespace.
 // Two bodies are the "same JSON value" exactly when these strings are equal.
 function canonicalJson(value) {
-  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value instanceof InexactNumber) return `~${value.source}`;
+  if (Array.isArray(value))return `[${value.map(canonicalJson).join(',')}]`;
   if (isPlainObject(value)) {
     const keys = Object.keys(value).sort();
     return `{${keys.map((k) => `${JSON.stringify(k)}:${canonicalJson(value[k])}`).join(',')}}`;
