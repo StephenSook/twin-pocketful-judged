@@ -173,7 +173,8 @@ async function reset(req, res) {
   const fixture = await readObject(req, { maxBytes: TEST_BODY_BYTES });
   const plan = planFixture(fixture);
   // Slow hashing happens before the swap; the swap itself is one assignment.
-  const hashes = await Promise.all(plan.users.map((u) => passwords.hashPassword(u.password)));
+  const params = passwords.paramsForFixture(plan.users.length);
+  const hashes = await Promise.all(plan.users.map((u) => passwords.hashPassword(u.password, params)));
   store.replace(buildFixtureState(plan, hashes));
   v.sendNoContent(res);
 }

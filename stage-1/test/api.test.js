@@ -236,3 +236,13 @@ test('export and import round trip; reset validation', async () => {
   assert.strictEqual(bad.status, 422);
   assert.strictEqual((await call('GET', '/me', { token: t.ada })).status, 200);
 });
+
+test('large reset fixture fits the reset budget and every seeded user can log in', async () => {
+  const users = Array.from({ length: 150 }, (_, i) => ({ id: `u${i}`, email: `u${i}@x.io`, password: 'correct horse', display_name: `U${i}`, handle: `u${i}`, balance: 1 }));
+  const t0 = Date.now();
+  assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'JPY', minor_units: 0, users } })).status, 204);
+  assert.ok(Date.now() - t0 < 10000, `reset took ${Date.now() - t0} ms`);
+  const l = await call('POST', '/auth/login', { body: { email: 'u149@x.io', password: 'correct horse' } });
+  assert.strictEqual(l.status, 200);
+  assert.strictEqual((await call('GET', '/me', { token: l.body.token })).body.minor_units, 0);
+});
