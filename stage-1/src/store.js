@@ -161,7 +161,9 @@ class Store {
   commitTransfers(entries, { requestId = null, settlementId = null } = {}) {
     const delta = new Map();
     for (const e of entries) {
-      if (!Number.isSafeInteger(e.amount) || e.amount < 1 || e.from === e.to) {
+      // amount 0 is legal only for paying a zero split share (§9); callers
+      // validate amounts of new payments as 1..1000000000 before reaching here.
+      if (!Number.isSafeInteger(e.amount) || e.amount < 0 || e.from === e.to) {
         throw new ApiError(422, 'validation_failed', 'invalid transfer');
       }
       delta.set(e.from, (delta.get(e.from) || 0) - e.amount);

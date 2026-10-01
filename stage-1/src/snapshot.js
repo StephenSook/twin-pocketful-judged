@@ -19,6 +19,8 @@ function fail(message) {
 const isObj = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);
 const isId = (x) => typeof x === 'string' && x.length >= 1 && x.length <= MAX_ID;
 const isAmount = (x) => Number.isSafeInteger(x) && x >= 1;
+// Zero split shares (§9) create zero-amount requests and, when paid, payments.
+const isShare = (x) => Number.isSafeInteger(x) && x >= 0;
 const isNote = (x) => typeof x === 'string';
 const optArray = (x, name) => {
   if (x === undefined) return [];
@@ -73,7 +75,7 @@ function planFixture(f) {
     if (!isObj(p)) fail('payment must be an object');
     if (!isId(p.id) || paymentIds.has(p.id)) fail('payment id must be a unique string of 1..64 characters');
     if (!ids.has(p.from_user_id) || !ids.has(p.to_user_id)) fail('payment references an unknown user');
-    if (!isAmount(p.amount)) fail('payment amount must be a positive integer');
+    if (!isShare(p.amount)) fail('payment amount must be a nonnegative integer');
     if (p.note !== undefined && !isNote(p.note)) fail('payment note must be a string');
     if (p.visibility !== undefined && !VISIBILITIES.has(p.visibility)) fail('payment visibility is invalid');
     paymentIds.add(p.id);
@@ -85,7 +87,7 @@ function planFixture(f) {
     if (!isObj(r)) fail('request must be an object');
     if (!isId(r.id) || requestIds.has(r.id)) fail('request id must be a unique string of 1..64 characters');
     if (!ids.has(r.requester_id) || !ids.has(r.payer_id)) fail('request references an unknown user');
-    if (!isAmount(r.amount)) fail('request amount must be a positive integer');
+    if (!isShare(r.amount)) fail('request amount must be a nonnegative integer');
     if (r.note !== undefined && !isNote(r.note)) fail('request note must be a string');
     if (r.status !== undefined && !STATUSES.has(r.status)) fail('request status is invalid');
     if (r.payment_id !== undefined && r.payment_id !== null && !paymentIds.has(r.payment_id)) fail('request payment_id is unknown');
@@ -235,7 +237,7 @@ function buildImportedState(doc) {
     if (Object.keys(p).length !== PAYMENT_KEYS.length || !PAYMENT_KEYS.every((k) => k in p)) fail('state payment fields are invalid');
     if (!isId(p.payment_id) || s.paymentById.has(p.payment_id)) fail('state payment id is invalid');
     if (!userMatches(p.from_user_id, p.from_handle) || !userMatches(p.to_user_id, p.to_handle)) fail('state payment user is invalid');
-    if (!isAmount(p.amount) || p.currency !== s.currency || !isNote(p.note) || !VISIBILITIES.has(p.visibility)) fail('state payment is invalid');
+    if (!isShare(p.amount) || p.currency !== s.currency || !isNote(p.note) || !VISIBILITIES.has(p.visibility)) fail('state payment is invalid');
     if (p.request_id !== null && !isId(p.request_id)) fail('state payment request_id is invalid');
     if (p.settlement_id !== null && !isId(p.settlement_id)) fail('state payment settlement_id is invalid');
     if (typeof p.created_at !== 'string' || !Number.isFinite(Date.parse(p.created_at))) fail('state payment created_at is invalid');
@@ -252,7 +254,7 @@ function buildImportedState(doc) {
     if (Object.keys(r).length !== REQUEST_KEYS.length || !REQUEST_KEYS.every((k) => k in r)) fail('state request fields are invalid');
     if (!isId(r.request_id) || s.requestById.has(r.request_id)) fail('state request id is invalid');
     if (!userMatches(r.requester_id, r.requester_handle) || !userMatches(r.payer_id, r.payer_handle)) fail('state request user is invalid');
-    if (!isAmount(r.amount) || r.currency !== s.currency || !isNote(r.note) || !STATUSES.has(r.status)) fail('state request is invalid');
+    if (!isShare(r.amount) || r.currency !== s.currency || !isNote(r.note) || !STATUSES.has(r.status)) fail('state request is invalid');
     if (r.payment_id !== null && !s.paymentById.has(r.payment_id)) fail('state request payment_id is invalid');
     if (typeof r.created_at !== 'string' || !Number.isFinite(Date.parse(r.created_at))) fail('state request created_at is invalid');
     prevMs = item.ms;
