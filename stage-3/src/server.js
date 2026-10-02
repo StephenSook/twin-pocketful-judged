@@ -95,7 +95,9 @@ async function login(req, res) {
 }
 
 function getMe(req, res, url) {
-  const started = Date.now();
+  // Read instant: never before any committed event (the event clock is monotonic
+  // and may run ahead of Date.now() within a millisecond).
+  const started = store.readInstant();
   const user = requireUser(req);
   const { as_of: asOf, known_at: knownAt } = take(v.parseMeQuery(url.searchParams));
   if (asOf === null && knownAt === null) {
@@ -112,7 +114,6 @@ function getMe(req, res, url) {
 // ---- stage 3: statements, corrections, revisions ----------------------------------
 
 function getStatement(req, res, url) {
-  const started = Date.now();
   const user = requireUser(req);
   const q = take(v.validateStatementQuery(url.searchParams));
   let token;
@@ -123,7 +124,9 @@ function getStatement(req, res, url) {
   } else {
     // The snapshot stores only this reference; revisions are append-only, so
     // recomputing with the same cutoff gives exactly the frozen result.
-    ref = store.statementRef(q.from ? q.from.ms : null, q.to ? q.to.ms : started, q.known_at ? q.known_at.ms : INF);
+    // Default `to` is just after the read instant, so every committed payment is
+    // inside the half-open window; an explicit `to` stays exactly half-open.
+    ref = store.statementRef(q.from ? q.from.ms : null, q.to ? q.to.ms : store.readInstant() + 1, q.known_at ? q.known_at.ms : INF);
     if (q.known_at) ref.known_at_raw = q.known_at.raw;
     token = snapshots.createRef(user.id, ref);
   }

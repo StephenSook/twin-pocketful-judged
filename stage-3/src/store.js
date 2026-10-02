@@ -120,6 +120,11 @@ class Store {
   // Opaque ids that sort in creation order (stage 3: statement entries at the
   // same effective instant are ordered by payment id): fixed-width base-36 time
   // and per-millisecond counter, then a random suffix.
+  // The instant a read begins: at or after every committed event time.
+  readInstant() {
+    return Math.max(Date.now(), this.s.lastMs);
+  }
+
   newId(prefix, taken) {
     for (;;) {
       const now = Math.max(Date.now(), this.idMs || 0);

@@ -423,3 +423,14 @@ test('void then pay in the same second keeps a valid history; own export re-impo
     assert.strictEqual((await call('POST', '/payments', { token: b, key: `back${round}`, body: { to_handle: 'a', amount: 100 } })).status, 201);
   }
 });
+
+test('a statement read right after a payment always includes it (default to follows committed events)', async () => {
+  const t = await reset();
+  for (let i = 0; i < 40; i++) {
+    const p = await call('POST', '/payments', { token: t.ada, key: `z${i}`, body: { to_handle: 'cy', amount: 1 } });
+    const st = (await call('GET', '/statement?limit=200', { token: t.ada })).body;
+    assert.ok(st.entries.some((e) => e.payment.payment_id === p.body.payment_id), `payment ${i} missing from the default window`);
+    const m = await me(t.ada, `?known_at=${q(p.body.created_at)}`);
+    assert.strictEqual(m.balance, (await me(t.ada)).balance);
+  }
+});
