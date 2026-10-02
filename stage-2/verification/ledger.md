@@ -220,8 +220,8 @@ The executable check is `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/
 
 ## Stage 2 ambiguity readings
 
-- S2-A1: visible RFC3339 authorization expiry overrides the brief's hidden-exact-time preference (conflict sent to coordinator).
-- S2-A2: clock-expired capture returns authorization_expired even after read materializes expiry; captured/voided returns authorization_not_open. Pending coordinator ruling; no precedence claim until resolved.
+- S2-A1 (confirmed coordinator S2-1): “Text is the RFC 3339 expires_at” controls authorization-expires-{id}; its visible text stays exact. A separate relative label is permitted. The brief's hover-only exact timestamp rule applies elsewhere.
+- S2-A2 (confirmed coordinator S2-2): “The authorisation is not open | 409 authorization_not_open” and “expires_at is at or before now | 409 authorization_expired” resolve as follows: clock-expired or seeded-expired capture returns authorization_expired even after a read materializes expiry; captured/voided returns authorization_not_open even after its deadline. Void of captured/expired returns authorization_not_open. Existing model behavior matches this ruling.
 - S2-A3: captured_amount/payment_ids persist after void/expiry; remaining_amount is zero when closed rather than amount minus captured.
 - S2-A4: arbitrary new fields in migrated historical replay receipts must not be synthesized if doing so changes the original JSON response. Earlier cached receipt equality controls replay; newly read ordinary payments include authorization_id:null.
 - S2-A5: model takes explicit logical time as operation input, never reads a clock internally. Live driver binds service timestamps; no time-sensitive random run crosses deadlines accidentally.
@@ -354,7 +354,7 @@ All entries start **unchecked**. Each row specifies an intended falsifier, not o
 | R2-120 | “remaining_amount ... held ... zero closed” | Open amount-captured; captured/voided/expired0. | own HTTP/model check |
 | R2-121 | “Void and expiry ... partially captured ... preserve records” | Close partial holds, retain captured_amount/payment_ids and payments. | own HTTP/model check |
 | R2-122 | “not open ...409 authorization_not_open” | Captured/voided terminal states reject new capture. | own HTTP/model check |
-| R2-123 | “expires_at at/before now ...409 authorization_expired” | Expired capture rejected consistently before/after read; pending ruling precedence. | own HTTP/model check |
+| R2-123 | “expires_at at/before now ...409 authorization_expired” | Expired capture rejected consistently before/after read; coordinator S2-2 confirms precedence. | own HTTP/model check |
 | R2-124 | “capture amount below1/not integer ...422” | Explicit0,negative,fraction,string,bool,null reject. | own HTTP/model check |
 | R2-125 | “Only payer may void ... no key” | Receiver/outsider403; payer200 without key. | own HTTP/model check |
 | R2-126 | “void ... already-voided200 current state” | Repeat void changes nothing and returns same current authorization. | own HTTP/model check |
