@@ -96,7 +96,7 @@ function historyIsSound(s, user, override, nowMs) {
       held += BigInt(events[i].dHeld);
       i++;
     }
-    if (total < 0n || total - held < 0n) return false;
+    if (total < 0n || held < 0n || total - held < 0n) return false;
   }
   return true;
 }

@@ -511,7 +511,9 @@ function importHistory(st, s) {
         prev = rev;
         return rev;
       });
-      if (revs[0].amount !== p.amount || revs[0].effective_at !== p.created_at) fail('state revision 1 must match the payment');
+      if (revs[0].amount !== p.amount || revs[0].effective_at !== p.created_at || revs[0].recorded_at !== p.created_at || revs[0].reason !== '') {
+        fail('state revision 1 must match the payment');
+      }
       extras.revisions.set(item.payment_id, revs);
     }
   }
@@ -531,6 +533,27 @@ function importHistory(st, s) {
       if (!isObj(e) || !s.authorizationById.has(e.authorization_id) || !okNum(e.createdMs) || !okNum(e.initialHold) || !okNum(e.expMs)
         || !Array.isArray(e.captures) || !e.captures.every((c) => isObj(c) && okNum(c.ms) && okNum(c.amount))
         || !(e.closedMs === null || okNum(e.closedMs)) || typeof e.noHistory !== 'boolean') fail('state authorization history is invalid');
+      // Event logs must describe a possible hold: nonnegative, captures within
+      // the hold and matching the authorization's capture payments, closure
+      // consistent with the status.
+      const a = s.authorizationById.get(e.authorization_id);
+      const kinds = [null, 'captured', 'voided', 'expired'];
+      const capturePayments = a.payment_ids.map((id) => s.paymentById.get(id));
+      let prevMs = e.createdMs;
+      let capturedSum = 0;
+      for (const c of e.captures) {
+        if (c.amount < 1 || c.ms < prevMs) fail('state authorization history is invalid');
+        prevMs = c.ms;
+        capturedSum += c.amount;
+      }
+      if (e.initialHold < 0 || e.initialHold > a.amount || capturedSum > e.initialHold || e.expMs < e.createdMs
+        || !kinds.includes(e.closedKind) || (e.closedMs === null) !== (e.closedKind === null)
+        || (e.closedMs !== null && e.closedMs < e.createdMs)
+        || (a.status === 'open' ? e.closedKind !== null : !e.noHistory && e.closedKind !== a.status)
+        || (!e.noHistory && (e.captures.length !== capturePayments.length
+          || e.captures.some((c, i) => capturePayments[i].amount !== c.amount || Date.parse(capturePayments[i].created_at) !== c.ms)))) {
+        fail('state authorization history is invalid');
+      }
       extras.authEvents.set(e.authorization_id, {
         createdMs: e.createdMs, initialHold: e.initialHold, expMs: e.expMs,
         captures: e.captures.map((c) => ({ ms: c.ms, amount: c.amount })),

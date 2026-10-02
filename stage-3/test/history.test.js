@@ -383,3 +383,22 @@ test('import refuses inconsistent history: negative or mismatched openings', asy
   assert.strictEqual((await me(t.ada)).balance, 10000, 'a refused import changes nothing');
   assert.strictEqual((await call('POST', '/_test/import', { body: exp })).status, 204);
 });
+
+test('import refuses impossible hold histories and altered revision 1', async () => {
+  const t = await reset();
+  const id = (await call('POST', '/authorizations', { token: t.ada, key: 'h', body: { to_handle: 'bob', amount: 20 } })).body.authorization_id;
+  assert.strictEqual((await call('POST', `/authorizations/${id}/capture`, { token: t.bob, key: 'c', body: { amount: 5, final: false } })).status, 201);
+  const exp = (await call('GET', '/_test/export')).body;
+  const tamper = (fn) => { const d = JSON.parse(JSON.stringify(exp)); fn(d.state); return d; };
+  const ev = (st) => st.auth_events.find((e) => e.authorization_id === id);
+  for (const [name, fn] of [
+    ['negative initial hold', (st) => { ev(st).initialHold = -1; }],
+    ['negative capture', (st) => { ev(st).captures[0].amount = -5; }],
+    ['revision 1 recorded_at moved', (st) => { st.revisions.find((r) => r.payment_id === 'p_1').revisions[0].recorded_at = '2020-01-01T00:00:00+00:00'; }],
+  ]) {
+    assert.strictEqual((await call('POST', '/_test/import', { body: tamper(fn) })).status, 422, name);
+  }
+  assert.strictEqual((await me(t.ada)).held, 15, 'refused imports change nothing');
+  assert.strictEqual((await call('POST', '/_test/import', { body: exp })).status, 204);
+  assert.strictEqual((await me(t.ada)).held, 15);
+});
