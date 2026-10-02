@@ -477,6 +477,7 @@ Initial live run of driver5dfddf3 against product95f41e2 exited1 on a random req
 - S3-A4: snapshot conflict rules name from/to/known_at; unrelated unknown query fields remain ignored.
 - S3-A5 (confirmed coordinator audit ruling): corrections “require ... the original sender” even for publicly visible payments; revision history is visible only to the two parties.
 - S3-A6: seeded closed holds do not reconstruct unspecified historical lifecycle. API-created holds do, including import from stage2.
+- S3-A7 (coordinator S3-4): “by selected effective_at, then payment id” uses plain string order, including p_10 before p_9. Builder's new-ID policy uses fixed-width sequences so lexical order also matches creation order within a resource type. Seeded/imported IDs remain unchanged. The oracle already sorts plain strings and deliberately tests non-creation-order seeded IDs at tied instants; it does not infer numeric suffix ordering. Gatekeeper rejected product8548455 under S3-4; earlier modeler passes are bounded evidence, not acceptance.
 
 ## R3 entries
 
