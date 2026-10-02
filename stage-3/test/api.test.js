@@ -118,7 +118,7 @@ test('payments, idempotency and invariants', async () => {
   assert.strictEqual(first.body.visibility, 'public');
   assert.strictEqual(first.body.note, 'dinner 🍝');
   assert.strictEqual(first.body.settlement_id, null);
-  assert.match(first.body.created_at, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\+00:00$/);
+  assert.match(first.body.created_at, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}\+00:00$/); // ruling S3-5
   const replay = await call('POST', '/payments', { token: t.ada, key: 'k1', body: { note: 'dinner 🍝', amount: 1500.0, to_handle: 'bob' } });
   assert.strictEqual(replay.status, 200);
   assert.deepStrictEqual(replay.body, first.body);

@@ -13,10 +13,9 @@
 
 const INF = Number.POSITIVE_INFINITY;
 
-// RFC 3339 with +00:00; milliseconds only when not a whole second (ruling S3-1).
+// RFC 3339 with milliseconds and +00:00 (rulings S3-1, S3-5).
 function stamp(ms) {
-  const iso = new Date(ms).toISOString();
-  return ms % 1000 === 0 ? iso.replace(/\.\d{3}Z$/, '+00:00') : iso.replace(/Z$/, '+00:00');
+  return new Date(ms).toISOString().replace(/Z$/, '+00:00');
 }
 
 // Latest revision recorded at or before K, or null. `override` replaces the

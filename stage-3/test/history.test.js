@@ -232,7 +232,7 @@ test('linked payments are immutable; historical holds; closed_at', async () => {
   assert.strictEqual(auth.body.closed_at, null);
   const id = auth.body.authorization_id;
   const created = Date.parse(auth.body.created_at);
-  assert.deepStrictEqual([(await me(t.ada, `?as_of=${q(iso(before - 1000))}`)).held, (await me(t.ada, `?as_of=${q(iso(created))}`)).held], [0, 3000]);
+  assert.deepStrictEqual([(await me(t.ada, `?as_of=${q(iso(before - 1000))}`)).held, (await me(t.ada, `?as_of=${q(auth.body.created_at)}`)).held], [0, 3000]);
   const cap = await call('POST', `/authorizations/${id}/capture`, { token: t.bob, key: 'cp', body: { amount: 1000, final: false } });
   assert.strictEqual((await call('POST', `/payments/${cap.body.payment_id}/corrections`, { token: t.ada, key: 'l2', body: { expected_revision: 1, amount: 50, effective_at: iso(T0), reason: 'x' } })).body.error.code, 'linked_payment_immutable');
   await sleep(1100);
@@ -401,4 +401,25 @@ test('import refuses impossible hold histories and altered revision 1', async ()
   assert.strictEqual((await me(t.ada)).held, 15, 'refused imports change nothing');
   assert.strictEqual((await call('POST', '/_test/import', { body: exp })).status, 204);
   assert.strictEqual((await me(t.ada)).held, 15);
+});
+
+test('void then pay in the same second keeps a valid history; own export re-imports', async () => {
+  const users = [
+    { id: 'u_a', email: 'a@x.io', password: 'correct horse', display_name: 'A', handle: 'a', balance: 100 },
+    { id: 'u_b', email: 'b@x.io', password: 'correct horse', display_name: 'B', handle: 'b', balance: 0 },
+  ];
+  assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users } })).status, 204);
+  const a = (await call('POST', '/auth/login', { body: { email: 'a@x.io', password: 'correct horse' } })).body.token;
+  for (let round = 0; round < 3; round++) {
+    const id = (await call('POST', '/authorizations', { token: a, key: `h${round}`, body: { to_handle: 'b', amount: 100 } })).body.authorization_id;
+    assert.strictEqual((await call('POST', `/authorizations/${id}/void`, { token: a })).status, 200);
+    const p = await call('POST', '/payments', { token: a, key: `p${round}`, body: { to_handle: 'b', amount: 100 } });
+    assert.strictEqual(p.status, 201);
+    const view = await me(a, `?as_of=${q(p.body.created_at)}`);
+    assert.deepStrictEqual([view.total, view.held, view.available], [0, 0, 0]);
+    const exp = await call('GET', '/_test/export');
+    assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204);
+    const b = (await call('POST', '/auth/login', { body: { email: 'b@x.io', password: 'correct horse' } })).body.token;
+    assert.strictEqual((await call('POST', '/payments', { token: b, key: `back${round}`, body: { to_handle: 'a', amount: 100 } })).status, 201);
+  }
 });

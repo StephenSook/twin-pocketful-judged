@@ -132,7 +132,7 @@ function planFixture(f) {
     if (typeof a.expires_at !== 'string' || !Number.isFinite(Date.parse(a.expires_at))) fail('authorization expires_at is required');
     if (a.payment_id !== undefined && a.payment_id !== null && !paymentIds.has(a.payment_id)) fail('authorization payment_id is unknown');
     if (a.payment_ids !== undefined && (!Array.isArray(a.payment_ids) || !a.payment_ids.every((x) => paymentIds.has(x)))) fail('authorization payment_ids is invalid');
-    const expMs = Math.floor(Date.parse(a.expires_at) / 1000) * 1000;
+    const expMs = Date.parse(a.expires_at);
     if (status === 'open' && expMs > now) {
       heldBy.set(a.from_user_id, (heldBy.get(a.from_user_id) || 0) + (a.amount - captured));
     }
@@ -181,7 +181,7 @@ function buildFixtureState(plan, hashes) {
         request_id: typeof p.request_id === 'string' ? p.request_id : requestByPayment.get(p.id) || null,
         settlement_id: typeof p.settlement_id === 'string' ? p.settlement_id : null,
         authorization_id: typeof p.authorization_id === 'string' ? p.authorization_id : null,
-        created_at: rfc3339(ms),
+        created_at: typeof p.created_at === 'string' ? p.created_at : rfc3339(ms), // seeded values kept as given (S3-5)
       },
     };
   });
@@ -199,7 +199,7 @@ function buildFixtureState(plan, hashes) {
         note: r.note === undefined ? '' : r.note,
         status: r.status === undefined ? 'pending' : r.status,
         payment_id: typeof r.payment_id === 'string' ? r.payment_id : null,
-        created_at: rfc3339(ms),
+        created_at: typeof r.created_at === 'string' ? r.created_at : rfc3339(ms),
       },
     };
   });
@@ -216,7 +216,7 @@ function buildFixtureState(plan, hashes) {
   for (const id of plan.operators) s.operators.add(id);
   s.authorizationTtlSeconds = plan.ttl;
   const auths = plan.authorizations.map((x, seq) => {
-    const ms = Math.floor(timestampMs(x.created_at, now) / 1000) * 1000;
+    const ms = timestampMs(x.created_at, now);
     const from = s.users.get(x.from_user_id);
     const to = s.users.get(x.to_user_id);
     const paymentIdsList = Array.isArray(x.payment_ids) ? x.payment_ids.slice()
@@ -235,10 +235,10 @@ function buildFixtureState(plan, hashes) {
         note: x.note === undefined ? '' : x.note,
         visibility: x.visibility === undefined ? 'public' : x.visibility,
         status: x.status === 'open' && !open ? 'expired' : x.status,
-        expires_at: rfc3339(x.expMs),
+        expires_at: x.expires_at,
         payment_id: typeof x.payment_id === 'string' ? x.payment_id : paymentIdsList.length ? paymentIdsList[paymentIdsList.length - 1] : null,
         payment_ids: paymentIdsList,
-        created_at: rfc3339(ms),
+        created_at: typeof x.created_at === 'string' ? x.created_at : rfc3339(ms),
       },
     };
   });

@@ -33,8 +33,10 @@ class ApiError extends Error {
 
 const notFound = () => new ApiError(404, 'not_found', 'not found');
 
+// Ruling S3-5: every new event carries a millisecond RFC 3339 instant from one
+// monotonic clock (tick), so visible time order equals event order.
 function rfc3339(ms) {
-  return new Date(ms).toISOString().replace(/\.\d{3}Z$/, '+00:00');
+  return new Date(ms).toISOString().replace(/Z$/, '+00:00');
 }
 
 function tokenDigest(token) {
@@ -206,14 +208,15 @@ class Store {
     const move = Math.abs(diff);
     if (move > 0 && debited.balance - this.held(debited) < move) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
     if (BigInt(credited.balance) + BigInt(move) > BigInt(MAX_BALANCE)) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
-    const now = Date.now();
+    const now = this.tick();
     const recMs = Math.max(now, last.recMs + 1); // recorded times strictly increase (ruling S3-1)
+    this.s.lastMs = recMs;
     const rev = {
       revision: last.revision + 1,
       amount,
       effMs: effective_at.ms,
       recMs,
-      effective_at: ledger.stamp(effective_at.ms),
+      effective_at: effective_at.raw, // echoed as given (validated strict RFC 3339)
       recorded_at: ledger.stamp(recMs),
       reason,
       seq: this.s.revSeq + 1,
@@ -545,7 +548,6 @@ class Store {
     // The hold must fit in the caller's available funds (total - held).
     if (caller.balance - this.held(caller) < amount) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
     const ms = this.tick();
-    const createdSec = Math.floor(ms / 1000);
     const a = {
       authorization_id: this.newId('a', (x) => this.s.authorizationById.has(x)),
       from_user_id: caller.id,
@@ -559,10 +561,10 @@ class Store {
       note,
       visibility,
       status: 'open',
-      expires_at: rfc3339((createdSec + this.s.authorizationTtlSeconds) * 1000),
+      expires_at: rfc3339(ms + this.s.authorizationTtlSeconds * 1000),
       payment_id: null,
       payment_ids: [],
-      created_at: rfc3339(createdSec * 1000),
+      created_at: rfc3339(ms),
       closed_at: null,
     };
     this.s.authorizations.push({ ms, a });
@@ -570,7 +572,7 @@ class Store {
     this.s.openAuthorizations.add(a);
     pushTo(this.s.authorizationsByPayer, caller.id, a);
     this.s.authEvents.set(a.authorization_id, {
-      createdMs: createdSec * 1000, initialHold: amount, expMs: Date.parse(a.expires_at),
+      createdMs: ms, initialHold: amount, expMs: Date.parse(a.expires_at),
       captures: [], closedMs: null, closedKind: null, noHistory: false,
     });
     return authorizationView(a);
@@ -627,7 +629,7 @@ class Store {
     if (a.from_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the payer may void this authorization');
     if (a.status === 'open') {
       const ev = this.s.authEvents.get(a.authorization_id);
-      const at = Math.max(Date.now(), ev ? ev.createdMs : 0);
+      const at = this.tick(); // same monotonic clock as every other event (S3-5)
       a.status = 'voided';
       a.remaining_amount = 0;
       a.closed_at = ledger.stamp(at);
