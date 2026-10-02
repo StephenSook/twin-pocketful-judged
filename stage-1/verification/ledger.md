@@ -13,6 +13,7 @@ Source: supplied Pocketful Stage 1 §§1–11. IDs are permanent; later stages c
 - A7: test-control export/import are exceptions to §6's earlier authentication list, as explicitly stated in §10.
 - A8: no acceptance rule rejects optional extra response fields. Compare required fields; replay compares complete JSON responses exactly.
 - A9 (coordinator ruling, R1-041): “outside ±2⁵³” excludes neither endpoint. Reset/import accept nonnegative balances through 9007199254740992 inclusive. Aggregate wallet totals remain exact even above 2^53. Boundary checks debit one unit, restore it, execute a net-zero settlement at the upper boundary, and export/import that state.
+- A10 (coordinator final revised ruling, R1-033/049/050/093/095/096): endpoint-specific “Not the payer is 403 forbidden” and “Not the requester is 403 forbidden” take precedence over the generic visibility error rule. Any wrong-role caller, including an unrelated third party, gets 403 on pay/decline/cancel of an existing request; unknown IDs get 404. Listings still exclude unrelated requests. This withdraws the earlier third-party-404 ruling and confirms the existing model and driver behavior.
 
 ## Entries
 
