@@ -253,3 +253,37 @@ test('exports round-trip refunds and batches; a stage-3 snapshot keeps its froze
   assert.ok(fresh.entries.every((e) => e.payment.refund_of === null));
   assert.strictEqual((await call('POST', '/payments/p_1/refunds', { token: (await call('POST', '/auth/login', { body: { email: 'bob@example.com', password: 'correct horse' } })).body.token, key: 'up', body: { amount: 10 } })).status, 201);
 });
+
+test('import refuses refunds and batches that are not consistent', async () => {
+  const users = [
+    { id: 'u_a', email: 'a@x.io', password: 'correct horse', display_name: 'A', handle: 'a', balance: 200 },
+    { id: 'u_b', email: 'b@x.io', password: 'correct horse', display_name: 'B', handle: 'b', balance: 0 },
+    { id: 'u_c', email: 'c@x.io', password: 'correct horse', display_name: 'C', handle: 'c', balance: 0 },
+  ];
+  const t = await reset({ currency: 'EUR', minor_units: 2, users, settlement_operator_ids: ['u_c'] });
+  const st = await call('POST', '/settlements', { token: t.c, key: 's', body: { transfers: [{ from_handle: 'a', to_handle: 'b', amount: 100 }, { from_handle: 'b', to_handle: 'a', amount: 100 }] } });
+  const [m1, m2] = st.body.payments;
+  const batch = await call('POST', '/correction-batches', { token: t.c, key: 'b', body: { corrections: [
+    fix({ payment_id: m1.payment_id, amount: 50, effective_at: m1.created_at }), fix({ payment_id: m2.payment_id, amount: 50, effective_at: m2.created_at })] } });
+  assert.strictEqual(batch.status, 201, batch.text);
+  const d = await call('POST', '/payments', { token: t.a, key: 'd', body: { to_handle: 'b', amount: 50, note: 'n', visibility: 'private' } });
+  const refund = await call('POST', `/payments/${d.body.payment_id}/refunds`, { token: t.b, key: 'r', body: { amount: 10 } });
+  assert.strictEqual(refund.status, 201);
+  const exp = JSON.parse((await call('GET', '/_test/export')).text);
+  const tamper = (fn) => { const x = JSON.parse(JSON.stringify(exp)); fn(x.state); return x; };
+  const refundOf = (st2) => st2.payments.find((x) => x.payment.refund_of).payment;
+  const batchRev = (st2, id) => st2.revisions.find((x) => x.payment_id === id).revisions[1];
+  const shift = (stamp, ms) => new Date(Date.parse(stamp) + ms).toISOString().replace('Z', '+00:00');
+  const cases = {
+    'refund note': (st2) => { refundOf(st2).note = 'other'; },
+    'refund visibility': (st2) => { refundOf(st2).visibility = 'public'; },
+    'batch recorded_at': (st2) => { const r = batchRev(st2, m1.payment_id); r.recorded_at = shift(r.recorded_at, 1); },
+    'settlement effective_at': (st2) => { const r = batchRev(st2, m1.payment_id); r.effective_at = shift(r.effective_at, -1); },
+    'member outside a batch': (st2) => { batchRev(st2, m2.payment_id).correction_batch_id = null; },
+  };
+  for (const [name, fn] of Object.entries(cases)) {
+    assert.strictEqual((await call('POST', '/_test/import', { body: tamper(fn) })).status, 422, name);
+  }
+  assert.strictEqual((await me(t.a)).balance, 160, 'refused imports change nothing');
+  assert.strictEqual((await call('POST', '/_test/import', { body: exp })).status, 204);
+});

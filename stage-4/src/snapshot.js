@@ -456,6 +456,38 @@ function validateHistory(s) {
     if (!target || target.refund_of !== null || p.from_user_id !== target.to_user_id || p.to_user_id !== target.from_user_id
       || p.request_id !== null || p.authorization_id !== null || p.settlement_id !== null || p.amount < 1) fail('state refund is invalid');
     if (s.revisions.get(p.payment_id).length !== 1) fail('state refund has corrections');
+    if (p.note !== target.note || p.visibility !== target.visibility) fail('state refund must copy the note and visibility');
+    if (Date.parse(p.created_at) < Date.parse(target.created_at)) fail('state refund precedes its payment');
+  }
+  // Captures are immutable; settlement members change only through complete
+  // batches; one batch shares recorded_at, and a settlement's members within
+  // one batch share their effective instant.
+  const batches = new Map(); // correction_batch_id -> [{p, r}]
+  for (const { p } of s.payments) {
+    const revs = s.revisions.get(p.payment_id);
+    if (p.authorization_id !== null && revs.length !== 1) fail('state capture has corrections');
+    for (const r of revs.slice(1)) {
+      // a correction's effective time is never later than when it was recorded
+      if (r.effMs > r.recMs) fail('state revision takes effect after it was recorded');
+      if (p.settlement_id !== null && !r.correction_batch_id) fail('state settlement member corrected outside a batch');
+      if (r.correction_batch_id) {
+        if (!batches.has(r.correction_batch_id)) batches.set(r.correction_batch_id, []);
+        batches.get(r.correction_batch_id).push({ p, r });
+      }
+    }
+  }
+  for (const items of batches.values()) {
+    if (!items.every((x) => x.r.recorded_at === items[0].r.recorded_at)) fail('state batch revisions must share recorded_at');
+    const bySettlement = new Map();
+    for (const x of items) {
+      if (x.p.settlement_id === null) continue;
+      if (!bySettlement.has(x.p.settlement_id)) bySettlement.set(x.p.settlement_id, []);
+      bySettlement.get(x.p.settlement_id).push(x);
+    }
+    for (const [sid, members] of bySettlement) {
+      if (members.length !== s.settlementMembers.get(sid).length) fail('state batch must include every settlement member');
+      if (!members.every((x) => x.r.effMs === members[0].r.effMs)) fail('state settlement members need one effective instant');
+    }
   }
   for (const [targetId, total] of s.refundedTotal) {
     const revs = s.revisions.get(targetId);
