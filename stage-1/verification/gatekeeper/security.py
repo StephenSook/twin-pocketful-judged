@@ -2,7 +2,10 @@
 """API-only security checks. Usage: python3 security.py URL; never logs secrets."""
 import json
 import secrets
+import sys
 import probe as p
+
+fixture_exemption = '--fixture-exemption' in sys.argv[2:]
 
 tokens = p.seed(20)
 _, request = p.call('POST', '/requests', {'payer_handle': 'a', 'amount': 2, 'note': 'private request'}, tokens['b'], 'request')
@@ -43,5 +46,6 @@ p.check(all(h.startswith('$argon2id$v=19$') for h in hashes), 'Argon2id password
 p.check(all(len(h.split('$')[4]) >= 22 for h in hashes), 'password hashes carry a salt')
 for h in hashes:
     params = dict(field.split('=') for field in h.split('$')[3].split(','))
-    p.check(int(params['m']) >= 19456 and int(params['t']) >= 2, 'slow password hash parameters')
-print(json.dumps({'result': 'PASS', 'assertions': p.COUNT, 'identifier_kinds': ['bearer token', 'request ID', 'recipient/payer handle', 'settlement handles', 'idempotency key'], 'authorization_ruling': 'known request wrong role 403; unknown request 404', 'pages': 'not applicable; API-only'}))
+    minimum_memory, minimum_passes = (1024, 1) if fixture_exemption else (19456, 2)
+    p.check(int(params['m']) >= minimum_memory and int(params['t']) >= minimum_passes, 'password hash parameters under declared scope')
+print(json.dumps({'result': 'PASS', 'assertions': p.COUNT, 'fixture_exemption': fixture_exemption, 'identifier_kinds': ['bearer token', 'request ID', 'recipient/payer handle', 'settlement handles', 'idempotency key'], 'authorization_ruling': 'known request wrong role 403; unknown request 404', 'pages': 'not applicable; API-only'}))

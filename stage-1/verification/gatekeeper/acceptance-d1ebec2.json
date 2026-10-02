@@ -1,0 +1,417 @@
+{
+  "verdict": "ACCEPT",
+  "revision": "d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1",
+  "stage": 1,
+  "stage_folder": "stage-1",
+  "stage_tree": "c6d424062c5ffab8b21857db3c0310f628effd24",
+  "clean_checkout": "/tmp/gatekeeper-s1-v_ns6w8t/candidate-d1ebec2",
+  "evidence_directory": "/tmp/gatekeeper-s1-v_ns6w8t",
+  "default_command_cwd": "/home/ubuntu/work/band-work/current",
+  "scope": "Pocketful Stage 1 §§1–11 with coordinator rulings below. Public seeded fixture passwords use expressly permitted reduced-cost Argon2id; signup and post-login hashes retain full cost. No export-timeout exemption remains.",
+  "checks": [
+    {
+      "gate": 1,
+      "name": "Provided check tool",
+      "result": "PASS",
+      "runs": [
+        {
+          "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+          "command": "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python -m harness run --track pocketful --repo /tmp/gatekeeper-s1-v_ns6w8t/candidate-d1ebec2 --stage 1 --mode isolated --out /tmp/gatekeeper-s1-v_ns6w8t/harness-d1ebec2",
+          "exit_status": 0
+        },
+        {
+          "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+          "command": ".venv/bin/python -m harness run --track pocketful --repo /home/ubuntu/work/band-work/current --stage 1 --mode isolated --out /home/ubuntu/work/band-work/checks/pocketful-judged/s1-2",
+          "exit_status": 0,
+          "reported_revision": "d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1"
+        }
+      ],
+      "own_stage": {
+        "collected": 147,
+        "passed": 147,
+        "failed": 0,
+        "not_run": 0
+      },
+      "next_stage": {
+        "stage": 2,
+        "collected": 35,
+        "passed": 0,
+        "failed_as_expected": 1,
+        "not_run": 34,
+        "not_run_reason": "tool fail-fast",
+        "applicable": true,
+        "applicability_basis": "Pocketful tool invoked the next suite and emitted counts; no exemption reported. Participant guide requires next-suite checks for graded tracks."
+      },
+      "claimed_stage": 1,
+      "highest_contiguous_stage": 1
+    },
+    {
+      "gate": 2,
+      "name": "Ledger/model/differential",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/model/driver.py --base-url http://172.24.0.8:18080",
+      "exit_status": 0,
+      "result": "PASS",
+      "counts": {
+        "operations": 263,
+        "concurrent_replays": 50
+      },
+      "seed": 20261001,
+      "subresults": {
+        "persistence": "pass",
+        "auth_controls": "pass",
+        "inclusive_boundary": "pass"
+      },
+      "ledger_revision": "eb261eb",
+      "driver_revision": "895ee97"
+    },
+    {
+      "gate": 3,
+      "name": "Concurrency and serial witness",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/probe.py http://172.24.0.8:18080",
+      "exit_status": 0,
+      "result": "PASS",
+      "counts": {
+        "assertions": 917,
+        "in_flight": 50
+      },
+      "max_request_seconds": 0.02,
+      "details": "Atomic snapshots during debit bursts verify exact total, nonnegative balances, unique request-payment links, and matching receipts/wallet movements. Recorded history admits a one-at-a-time witness respecting real-time precedence. Identical-key and request-pay races also pass."
+    },
+    {
+      "gate": 4,
+      "name": "Clean build and resource limits",
+      "result": "PASS",
+      "runs": [
+        {
+          "command": "docker build --no-cache -t gatekeeper-s1-d1ebec2 /tmp/gatekeeper-s1-v_ns6w8t/candidate-d1ebec2/stage-1",
+          "exit_status": 0
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/environment.py gatekeeper-s1-d1ebec2 gatekeeper-s1-internal",
+          "exit_status": 0,
+          "assertions": 422,
+          "startup_seconds": [
+            0.2616,
+            0.2747
+          ],
+          "max_request_seconds": 2.489
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/cold_login.py gatekeeper-s1-d1ebec2 gatekeeper-s1-internal",
+          "exit_status": 0,
+          "requests": 50,
+          "http_401": 50,
+          "timeouts": 0,
+          "max_seconds": 2.4823
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/seeded_limits.py http://172.24.0.8:18080",
+          "exit_status": 0,
+          "assertions": 544,
+          "cases": [
+            {
+              "distinct_users": 1000,
+              "reset_seconds": 0.3922,
+              "immediate_export_seconds": 0.0035,
+              "import_seconds": 0.0089,
+              "login_200": 49,
+              "wrong_password_401": 1,
+              "max_login_seconds": 0.0661,
+              "signup_201": 50
+            },
+            {
+              "distinct_users": 5000,
+              "reset_seconds": 1.9005,
+              "immediate_export_seconds": 0.0113,
+              "import_seconds": 0.0368,
+              "login_200": 49,
+              "wrong_password_401": 1,
+              "max_login_seconds": 0.0514,
+              "signup_201": 50
+            }
+          ]
+        }
+      ],
+      "limits": {
+        "cpus": 2,
+        "memory_bytes": 2147483648,
+        "outbound_network": "blocked by inspected Docker internal network",
+        "request_seconds": 5,
+        "test_control_seconds": 10,
+        "startup_seconds": 60
+      }
+    },
+    {
+      "gate": 5,
+      "name": "State portability/upgrade",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/environment.py gatekeeper-s1-d1ebec2 gatekeeper-s1-internal",
+      "exit_status": 0,
+      "result": "PASS for cross-process portability",
+      "counts": {
+        "source_instances_removed": 1,
+        "destination_instances": 1
+      },
+      "details": "Export source removed before target import. Original bearer tokens, hashed-password login, balances, receipts and exact retries preserved. Destination sessions replaced. Large fixture import checked by seeded_limits.py.",
+      "prior_version_upgrade": "NOT APPLICABLE: no earlier accepted stage exists"
+    },
+    {
+      "gate": 6,
+      "name": "Tamper and check-specialization inspection",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/integrity.py /tmp/gatekeeper-s1-v_ns6w8t/candidate-d1ebec2 /home/ubuntu/work/dark-factory-wearedevs /tmp/gatekeeper-s1-v_ns6w8t/provided-baseline.json",
+      "exit_status": 0,
+      "result": "PASS",
+      "counts": {
+        "provided_files_byte_identical": 30,
+        "changed": 0,
+        "product_files": 6,
+        "check_identifier_hit_files": 0
+      },
+      "details": "SHA-256 baseline comparison plus bounded source-name scan and manual review of state-change, auth, seed, snapshot and validation logic. Normative /_test routes are not hidden test-specific branches."
+    },
+    {
+      "gate": 7,
+      "name": "Planted faults",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/mutate.py /tmp/gatekeeper-s1-v_ns6w8t/candidate-d1ebec2/stage-1 gatekeeper-s1-internal /tmp/gatekeeper-s1-v_ns6w8t/mutations-d1ebec2",
+      "exit_status": 0,
+      "result": "PASS",
+      "counts": {
+        "planted": 5,
+        "caught": 5,
+        "uncaught": 0,
+        "discarded_unobservable": 0
+      },
+      "faults": [
+        {
+          "fault": "remove overdraft guard",
+          "caught_by": "every snapshot nonnegative"
+        },
+        {
+          "fault": "omit wallet credits",
+          "caught_by": "every snapshot conserves total"
+        },
+        {
+          "fault": "bypass idempotency cache",
+          "caught_by": "one original among 50 identical writes"
+        },
+        {
+          "fault": "remove pending-state guards",
+          "caught_by": "request paid once among 50 distinct keys"
+        },
+        {
+          "fault": "bypass private-feed filter",
+          "caught_by": "private visibility including operator"
+        }
+      ],
+      "cleanup": "Mutations only in temporary copies; mutant containers removed."
+    },
+    {
+      "gate": 8,
+      "name": "Security",
+      "result": "PASS under explicit fixture scope",
+      "runs": [
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/security.py http://172.24.0.8:18080 --fixture-exemption",
+          "exit_status": 0,
+          "assertions": 152
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/password_scope.py http://172.24.0.8:18080 --fixture-exemption",
+          "exit_status": 0,
+          "assertions": 30,
+          "initial_seed_parameters": "m=1024,t=1,p=1",
+          "signup_parameters": "m=47104,t=2,p=1",
+          "after_successful_login_parameters": "m=47104,t=2,p=1",
+          "initial_seed_meets_original_minimum": false,
+          "details": "Wrong password does not upgrade; successful seeded login upgrades to full signup cost."
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/integrity.py /tmp/gatekeeper-s1-v_ns6w8t/candidate-d1ebec2 /home/ubuntu/work/dark-factory-wearedevs /tmp/gatekeeper-s1-v_ns6w8t/provided-baseline.json",
+          "exit_status": 0,
+          "tracked_files_scanned": 35,
+          "credential_pattern_hit_files": 0,
+          "external_package_dependencies": 0,
+          "advisory_audit": "empty pinned application-package inventory"
+        }
+      ],
+      "identifier_kinds": [
+        "bearer token",
+        "request ID",
+        "recipient/payer handles",
+        "operator settlement handles",
+        "idempotency key"
+      ],
+      "authorization": "Wrong role on existing request is 403; unknown request is 404, per final endpoint-specific ruling. Operator/private-list isolation verified. Refusals omit object contents.",
+      "storage": "Salted Argon2id; explicit low-cost seed exception. No raw passwords or bearer tokens in export; bearer tokens are cryptographic digests.",
+      "page_headers": "NOT APPLICABLE: API only; coordinator ruling",
+      "limitations": "Credential and specialization scans are bounded inspections, not mathematical proof; no discovered repository credential."
+    },
+    {
+      "gate": 9,
+      "name": "Stage compliance",
+      "command": "same provided harness commands as gate 1",
+      "exit_status": 0,
+      "result": "PASS",
+      "own_stage_passed": 147,
+      "next_stage_passed": 0,
+      "claimed_stage": 1,
+      "earlier_stages": "none",
+      "next_stage_custom_probe": "not written"
+    },
+    {
+      "gate": 10,
+      "name": "Plain HTTP non-loopback origin",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/probe.py http://172.24.0.8:18080",
+      "exit_status": 0,
+      "result": "PASS for API",
+      "origin": "http://172.24.0.8:18080",
+      "screens": "NOT APPLICABLE: Stage 1 has no UI"
+    },
+    {
+      "gate": "regressions",
+      "name": "Previously rejected boundaries",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/boundaries.py http://172.24.0.8:18080",
+      "exit_status": 0,
+      "result": "PASS",
+      "counts": {
+        "passed": 2,
+        "failed": 0
+      },
+      "details": "Exactly 2^53 accepted; U+0130 local-part expansion derives i_."
+    }
+  ],
+  "rulings": [
+    {
+      "id": "authorization-final",
+      "source": "coordinator9498da17; ledger18805af",
+      "quote": "The caller is not the request's payer | 403 forbidden; Not the payer is 403 forbidden; Not the requester is 403 forbidden; Unknown request | 404 not_found",
+      "effect": "Endpoint rows win over generic visibility; listings remain private."
+    },
+    {
+      "id": "inclusive-balance",
+      "source": "coordinator28b9ea2f; ledger A9",
+      "quote": "Exactly 2^53 (9007199254740992) is not outside ±2⁵³, so it is in range.",
+      "effect": "Inclusive endpoint and exact aggregates required; fixed145a95f."
+    },
+    {
+      "id": "fixture-password-cost",
+      "source": "coordinator ea7c8af9-5942-4f31-a671-856e4af8025a, relayed verbatim in builder ec3fc1b1-3703-4366-bacc-6e7ffcdee5c4",
+      "quote": "I withdraw the residual-limit acceptance and the rejection of option C. The written requirements win over seat baselines. §6 requires only that passwords be stored with \"a password-hashing function such as bcrypt, scrypt or Argon2, or an equivalent\". It sets no cost parameters. §2 and §10 set hard 10 s limits on reset, export and import.",
+      "implementation_scope_quote": "Seeded fixture passwords are public test input. Hash them with Argon2id at reduced cost",
+      "signup_quote": "Signups keep the full parameters. Plaintext is never persisted or exported.",
+      "upgrade_quote": "after a seeded user's first successful login, rehash their password in the background with the OWASP-strength parameters you use for signups.",
+      "effect": "Original blanket minimum checks remain failed in history; fixture exception explicit in final command flags. No waiver for reset/export/import timeout."
+    }
+  ],
+  "ledger_audit_items": [
+    {
+      "item": "R1-024 null amount",
+      "closure": "ruled",
+      "source": "ledger eb261eb coordinator audit rulings",
+      "quote": "invalid amount values (including strings and booleans) ... are 422 validation_failed",
+      "reading": "Including is non-exhaustive; null is invalid amount, so422."
+    },
+    {
+      "item": "A1 split denominator",
+      "closure": "ruled",
+      "source": "ledger eb261eb",
+      "quote": "The caller may be included in participant_handles or omitted. Shares follow the equal-split rule in §9, in the order the handles are given",
+      "reading": "Exactly supplied ordered handles; never implicitly append caller."
+    },
+    {
+      "item": "A2 zero shares",
+      "closure": "fixed b5fac7f and ruled",
+      "source": "ledger eb261eb",
+      "quote": "A share of 0 is legal and still produces a request for that participant.",
+      "reading": "Zero split requests are payable; direct amounts retain minimum1."
+    },
+    {
+      "item": "A4 note length",
+      "closure": "ruled",
+      "source": "ledger eb261eb",
+      "quote": "Unicode and emoji survive a round trip",
+      "reading": "Coordinator accepts Unicode code-point count, not UTF-16 unit count."
+    }
+  ],
+  "audit_status": "Every delivered concrete audit discrepancy is fixed or ruled above. No additional concrete unruled audit input is open. Undelivered/uncommitted audit placeholders are not treated as an acceptance gate, per coordinator cb082f0f.",
+  "earlier_failures": [
+    {
+      "revision": "e3f5e4a and b5fac7f",
+      "failure": "provided harness147 collected,146passed,1failed: third-party request actions404 instead of403",
+      "fixed_in": "2299fe8",
+      "evidence": "rejection-2299fe8.md"
+    },
+    {
+      "revision": "e3f5e4a",
+      "failure": "builder-reported zero-share payment422",
+      "fixed_in": "b5fac7f",
+      "evidence": "Independent zero-share regression subsequently passed; original failure was builder evidence, not falsely claimed independently observed."
+    },
+    {
+      "revision": "2299fe8",
+      "failure": "2^53 reset422; Unicode lowercase expansion '_' instead of'i_'",
+      "fixed_in": [
+        "145a95f",
+        "9a272ad"
+      ],
+      "evidence": "rejection-2299fe8.md; boundaries.py final2/2"
+    },
+    {
+      "revision": "18805af",
+      "failure": "cold50 unknown-logins:48HTTP401,2timeouts,max5.0138s",
+      "fixed_in": "ed67fb8",
+      "evidence": "rejection-18805af.md; finalcold_login.py50/50,max2.4823s"
+    },
+    {
+      "revision": "ed67fb8",
+      "failure": "1000-user shared-password reset timeout10.0347/10.0299s",
+      "fixed_in": "dadabac (intermediate dedup e434c09)",
+      "evidence": "rejection-ed67fb8.md; finalseeded_limits.py1000/5000pass"
+    },
+    {
+      "revision": "a7a67ec",
+      "failure": "1000-distinct reset204 then immediate exporttimeout10.0104s",
+      "fixed_in": "dadabac",
+      "evidence": "rejection-a7a67ec.md; residual-limit waiver9358587b was later withdrawn byea7c8af9"
+    },
+    {
+      "revision": "dadabac",
+      "failure": "security.py and password_scope.py exit1 under blanket OWASP minimum",
+      "closure": "ruled fixture-only exception byea7c8af9 relayedec3fc1b1; signup/post-login strength independently passes",
+      "evidence": "rejection-dadabac.md; original minimum remainsfalse in finalpassword_scope output"
+    },
+    {
+      "revision": "verification e8dfb7d/67dbebc",
+      "failure": "symbolic request-ID prefix binding;21-character derived-handle oracle",
+      "fixed_in": [
+        "67dbebc",
+        "e148d3a"
+      ],
+      "evidence": "Verifier defects, not product defects; model final263operationspasses"
+    },
+    {
+      "revision": "verification before db566a1",
+      "failure": "unbounded serial-history search invocation terminated",
+      "fixed_in": "db566a1",
+      "evidence": "Read-first/earliest-completion ordering and explicit100000-statebudget; aborted invocation not counted aspass"
+    },
+    {
+      "revision": "verification initial salt assertion",
+      "failure": "per-account seed-salt uniqueness overconstrained explicitly authorized shared-password dedup",
+      "closure": "coordinator308887d6 allowed sharedseedhash/salt; seed salt presence retained, signupfullstrengthverified",
+      "evidence": "rejection-a7a67ec.md; final candidate independently uses per-user salts"
+    },
+    {
+      "type": "environment",
+      "failure": "assumed df-harness-internal network absent",
+      "closure": "created dedicated gatekeeper-s1-internal; failed startup not counted",
+      "evidence": "rejection-2299fe8.md"
+    },
+    {
+      "type": "environment",
+      "failure": "metadata git rev-parse ran in kickoff repository",
+      "closure": "verified explicit clean candidateHEAD; actual clone/harness path correct",
+      "evidence": "room environment correction7dcd7e58"
+    }
+  ],
+  "assurance_limits": "Empirical and source-review acceptance under stated rulings; not proof over unbounded fixture sizes. Measured up to5000 distinct seeded users and50 concurrent requests. No tests that errored/timed out/skipped were counted as passes; prior failures preserved in referenced reports. Scope exception is limited to public test-fixture seed hash cost."
+}

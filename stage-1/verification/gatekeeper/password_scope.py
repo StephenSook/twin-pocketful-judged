@@ -5,6 +5,7 @@ Usage: python3 password_scope.py URL
 Reports whether the original minimum covers the initial seeded hash separately.
 """
 import json
+import sys
 import time
 import probe as p
 
@@ -18,6 +19,8 @@ initial = original.split('$')[3]
 _, signup = p.call('POST', '/auth/signup', {'email': 'signup@example.test', 'password': p.PASSWORD, 'display_name': 'Signup'})
 _, exported = p.call('GET', '/_test/export')
 signup_hash = next(u['password_hash'] for u in exported['state']['users'] if u['id'] == signup['user_id'])
+signup_params = dict(x.split('=') for x in signup_hash.split('$')[3].split(','))
+p.check(int(signup_params['m']) >= 19456 and int(signup_params['t']) >= 2, 'signup retains full cost')
 p.check(p.call('POST', '/auth/login', {'email': 'seed@example.test', 'password': 'wrong-value'})[0] == 401, 'wrong password rejected')
 _, exported = p.call('GET', '/_test/export')
 p.check(next(u['password_hash'] for u in exported['state']['users'] if u['id'] == 'seed') == original, 'wrong password never upgrades hash')
@@ -33,7 +36,9 @@ while True:
 p.check(original != upgraded, 'upgraded hash changes')
 params = dict(x.split('=') for x in initial.split(','))
 minimum = int(params['m']) >= 19456 and int(params['t']) >= 2
+fixture_exemption = '--fixture-exemption' in sys.argv[2:]
+p.check(int(params['m']) >= 1024 and int(params['t']) >= 1, 'seed retains declared reduced Argon2id cost')
 print(json.dumps({'initial_seed_parameters': initial, 'signup_parameters': signup_hash.split('$')[3],
                   'after_login_parameters': upgraded.split('$')[3], 'initial_seed_meets_original_minimum': minimum,
-                  'behavior_checks': 'PASS', 'assertions': p.COUNT}))
-raise SystemExit(0 if minimum else 1)
+                  'fixture_exemption': fixture_exemption, 'behavior_checks': 'PASS', 'assertions': p.COUNT}))
+raise SystemExit(0 if minimum or fixture_exemption else 1)
