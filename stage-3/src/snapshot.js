@@ -487,7 +487,9 @@ function deriveHistory(s, extras) {
     // Seeded closed holds have no lifecycle (stage 3); seeded open ones do.
     // An open seed already past its deadline when created (created_at omitted =
     // reset time) never held anything observable either.
-    const noHistory = extras.seeded === true && (!extras.seededOpen.has(a.authorization_id) || expMs <= createdMs);
+    // The same holds for any hold whose deadline is not after its creation,
+    // e.g. a stage-2 export of such a seed (no lifecycle can be reconstructed).
+    const noHistory = expMs <= createdMs || (extras.seeded === true && !extras.seededOpen.has(a.authorization_id));
     const capturedKnown = captures.reduce((n, c) => n + c.amount, 0);
     s.authEvents.set(a.authorization_id, {
       createdMs,

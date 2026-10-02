@@ -452,3 +452,27 @@ test('seeded holds past expiry or closed, created_at omitted: own export re-impo
     }
   }
 });
+
+test('stage-2 exports with seeded past-expiry holds import, and the stage-3 export re-imports', async (t) => {
+  const stage2 = path.join(__dirname, '..', '..', 'stage-2', 'src', 'server.js');
+  if (!fs.existsSync(stage2)) {
+    t.skip('stage-2 service not present');
+    return;
+  }
+  const old = client(await startService(stage2));
+  for (const status of ['expired', 'open', 'voided', 'captured']) {
+    const users = [
+      { id: 'u_a', email: 'a@x.io', password: 'correct horse', display_name: 'A', handle: 'a', balance: 100 },
+      { id: 'u_b', email: 'b@x.io', password: 'correct horse', display_name: 'B', handle: 'b', balance: 0 },
+    ];
+    const authorizations = [{ id: 'a_past', from_user_id: 'u_a', to_user_id: 'u_b', amount: 10, note: '', visibility: 'private', status, expires_at: '2020-01-01T00:00:00+00:00' }];
+    assert.strictEqual((await old('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users, authorizations } })).status, 204, status);
+    const exp2 = await old('GET', '/_test/export');
+    assert.strictEqual((await call('POST', '/_test/import', { raw: exp2.text })).status, 204, `stage-2 ${status}`);
+    const exp3 = await call('GET', '/_test/export');
+    assert.strictEqual((await call('POST', '/_test/import', { raw: exp3.text })).status, 204, `stage-3 re-import ${status}`);
+    const a = (await call('POST', '/auth/login', { body: { email: 'a@x.io', password: 'correct horse' } })).body.token;
+    const m = await me(a, `?as_of=${q('2020-01-02T00:00:00+00:00')}`);
+    assert.deepStrictEqual([m.total, m.held, m.available], [100, 0, 100], status);
+  }
+});
