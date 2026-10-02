@@ -48,9 +48,11 @@ for name, filename, old, new in faults:
         with (scratch/(name+'-check.log')).open('w') as log:
             result = subprocess.run([sys.executable,str(check),url],stdout=log,stderr=log,timeout=60)
         output = (scratch/(name+'-check.log')).read_text()
-        assertions = [line for line in output.splitlines() if line.startswith('AssertionError:')]
-        caught = result.returncode == 1 and bool(assertions)
-        results.append({'fault':name,'exit':result.returncode,'caught':caught,'assertion':assertions[-1] if assertions else 'no semantic assertion'})
+        report = json.loads(output)
+        assertion = report.get('check','')
+        caught = result.returncode == 1 and report.get('result') == 'FAIL' and bool(assertion) and assertion not in [
+            'TimeoutError','URLError','HTTPError','KeyError','TypeError','ValueError','ConnectionError']
+        results.append({'fault':name,'exit':result.returncode,'caught':caught,'assertion':assertion})
     finally:
         subprocess.run(['docker','rm','-f',image],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 print(json.dumps({'planted':len(faults),'caught':sum(x['caught'] for x in results),'results':results}))
