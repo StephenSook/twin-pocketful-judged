@@ -33,3 +33,5 @@ Additional acceptance coverage to complete with the candidate:
 ## Timestamp ruling S3-1
 
 Coordinator c8fc20a6 supersedes the earlier second-precision choice for Stage3. recorded_at, closed_at and correction effective_at echoes may include milliseconds; revision1 effective_at/recorded_at equal the original created_at exactly. Strictly increasing correction recorded times may bump1ms when the clock does not advance. Original Stage1/2 receipt timestamps remain unchanged. Omitted known_at/current reads select everything committed when the read begins, including a revision assigned a bumped visible timestamp; explicit known_at compares visible instants literally and inclusively. Query offsets resolve to exact instants at millisecond resolution. The strict-order assertion in history.py already compares parsed instants without imposing second precision.
+
+S3-2 (coordinator3f6b8219): for as_of, known_at, from and to, a decoded single space exactly at the offset-sign position followed by HH:MM is read as + and echoed with +. Other malformed values remain422. history.py deliberately sends raw + in each of these query parameters and checks the /me echo normalization.

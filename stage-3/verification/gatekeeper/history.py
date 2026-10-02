@@ -91,6 +91,10 @@ def semantics():
 
 def validation():
     tokens=seed()
+    for path,key in [('/me','as_of'),('/me','known_at'),('/statement','from'),('/statement','to')]:
+        status,value=p.call('GET',path+'?'+key+'='+T1,token=tokens['a'])
+        p.check(status==200,'raw plus offset accepted under S3-2')
+        if path=='/me':p.check(value[key]==T1,'raw plus temporal echo restored')
     invalid=['','2026-01-01','2026-01-01T12:00:00','2026-02-30T12:00:00+00:00','not-a-date']
     for value in invalid:
         for key in ['as_of','known_at']:p.check(get('/me',tokens['a'],**{key:value})[0]==422,'invalid temporal instant422')
