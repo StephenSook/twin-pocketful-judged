@@ -7,10 +7,10 @@
 const crypto = require('node:crypto');
 
 const PARAMS = Object.freeze({ memory: 47104, passes: 2, parallelism: 1 }); // KiB, t, p
-// OWASP minimum argon2id setting, used only for large reset fixtures so that
-// hashing every seeded user still fits the 10 s reset budget on 2 vCPU.
+// OWASP minimum argon2id setting, used only for reset fixtures with many
+// distinct passwords so that hashing them still fits the 10 s reset budget on 2 vCPU.
 const BULK_PARAMS = Object.freeze({ memory: 19456, passes: 2, parallelism: 1 });
-const BULK_THRESHOLD = 64; // seeded users above which BULK_PARAMS is used
+const BULK_THRESHOLD = 64; // distinct seeded passwords above which BULK_PARAMS is used
 const SALT_BYTES = 16;
 const TAG_BYTES = 32;
 const PREFIX = '$argon2id$v=19$';
@@ -35,8 +35,8 @@ async function hashPassword(password, params = PARAMS) {
   return `${PREFIX}m=${params.memory},t=${params.passes},p=${params.parallelism}$${salt.toString('base64url')}$${key.toString('base64url')}`;
 }
 
-function paramsForFixture(userCount) {
-  return userCount > BULK_THRESHOLD ? BULK_PARAMS : PARAMS;
+function paramsForFixture(distinctPasswords) {
+  return distinctPasswords > BULK_THRESHOLD ? BULK_PARAMS : PARAMS;
 }
 
 // Bounds keep an imported hash from demanding unbounded memory or time.

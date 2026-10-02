@@ -173,8 +173,15 @@ async function reset(req, res) {
   const fixture = await readObject(req, { maxBytes: TEST_BODY_BYTES });
   const plan = planFixture(fixture);
   // Slow hashing happens before the swap; the swap itself is one assignment.
-  const params = passwords.paramsForFixture(plan.users.length);
-  const hashes = await Promise.all(plan.users.map((u) => passwords.hashPassword(u.password, params)));
+  // Each distinct seeded password is hashed once per reset (coordinator scope
+  // ruling): seeded users with an identical password share one Argon2id hash
+  // and salt, so reset time depends on distinct passwords, not on user count.
+  // Signups always get their own salt.
+  const distinct = [...new Set(plan.users.map((u) => u.password))];
+  const params = passwords.paramsForFixture(distinct.length);
+  const digests = await Promise.all(distinct.map((pw) => passwords.hashPassword(pw, params)));
+  const byPassword = new Map(distinct.map((pw, i) => [pw, digests[i]]));
+  const hashes = plan.users.map((u) => byPassword.get(u.password));
   store.replace(buildFixtureState(plan, hashes));
   v.sendNoContent(res);
 }

@@ -314,3 +314,16 @@ test('balances are exact at the 2^53 bound (R1-041)', async () => {
   assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204);
   assert.strictEqual(await bal(rich), '9007199254740992');
 });
+
+test('reset time does not grow with user count when passwords repeat (5000 users)', async () => {
+  const users = Array.from({ length: 5000 }, (_, i) => ({ id: `u${i}`, email: `u${i}@x.io`, password: i % 2 ? 'correct horse' : 'battery staple', display_name: `U${i}`, handle: `u${i}`, balance: 1 }));
+  const t0 = Date.now();
+  assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users } })).status, 204);
+  const took = Date.now() - t0;
+  assert.ok(took < 10000, `reset took ${took} ms`);
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 'u4999@x.io', password: 'correct horse' } })).status, 200);
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 'u4998@x.io', password: 'battery staple' } })).status, 200);
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 'u4998@x.io', password: 'correct horse' } })).status, 401);
+  const exp = await call('GET', '/_test/export');
+  assert.ok(!exp.text.includes('correct horse') && !exp.text.includes('battery staple'));
+});
