@@ -5,6 +5,9 @@ port in front of it. It forwards every request unchanged except:
   - /_test/* (unauthenticated reset, export and import in the spec) answers 404, so nobody on the
     internet can wipe or read the whole store;
   - each client address is rate limited, and request bodies are capped;
+  - any reply the proxy makes itself closes the connection, because it has not read the body: the
+    host's edge reuses upstream connections, so unread body bytes would otherwise be parsed as the
+    start of the next request on that connection (one visitor's body becoming another's request);
   - every DEMO_RESET_SECONDS the proxy itself reseeds the service from seed.json through the
     service's own reset endpoint, so the demo accounts always work.
 Standard library only. If the service exits, the proxy exits, so the host restarts both.
@@ -151,10 +154,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
         pass
 
     def reply(self, status, obj, extra=None):
+        # Every caller answers before reading the request body, so the connection cannot be reused.
+        self.close_connection = True
         data = json.dumps(obj).encode()
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(data)))
+        self.send_header("Connection", "close")
         for k, v in (extra or {}).items():
             self.send_header(k, v)
         self.end_headers()
@@ -174,7 +180,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if blocked(path):
             return self.reply(404, {"error": "not_found", "detail": "test endpoints are closed on the public demo"})
         target = path + ("?" + query if query else "")
-        length = int(self.headers.get("Content-Length") or 0)
+        if self.headers.get("Transfer-Encoding"):
+            # The proxy frames bodies by Content-Length only; a chunked body would be left unread.
+            return self.reply(411, {"error": "length_required"})
+        lengths = self.headers.get_all("Content-Length") or ["0"]
+        raw_length = lengths[0].strip()
+        if len(lengths) != 1 or not raw_length.isdigit():
+            return self.reply(400, {"error": "bad_content_length"})
+        length = int(raw_length)
         if length > MAX_BODY:
             return self.reply(413, {"error": "body_too_large"})
         body = self.rfile.read(length) if length else b""
