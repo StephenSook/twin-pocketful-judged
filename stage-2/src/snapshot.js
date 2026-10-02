@@ -122,7 +122,8 @@ function planFixture(f) {
     if (a.visibility !== undefined && !VISIBILITIES.has(a.visibility)) fail('authorization visibility is invalid');
     const status = a.status === undefined ? 'open' : a.status;
     if (!AUTH_STATUSES.has(status)) fail('authorization status is invalid');
-    const captured = a.captured_amount === undefined ? 0 : a.captured_amount;
+    // Ruling S2-3: a seeded captured authorization without captured_amount captured its full amount.
+    const captured = a.captured_amount === undefined ? (status === 'captured' ? a.amount : 0) : a.captured_amount;
     if (!Number.isSafeInteger(captured) || captured < 0 || captured > a.amount) fail('authorization captured_amount is invalid');
     if (status === 'open' && captured === a.amount) fail('an open authorization must have a remaining amount');
     if (typeof a.expires_at !== 'string' || !Number.isFinite(Date.parse(a.expires_at))) fail('authorization expires_at is required');

@@ -94,7 +94,18 @@ test('seeded holds: available derived, expired seeds hold nothing, over-held see
   const list = await call('GET', '/authorizations', { token: t.ada });
   assert.deepStrictEqual(list.body.authorizations.map((a) => [a.authorization_id, a.status, a.remaining_amount]).sort(), [['a_1', 'open', 2000], ['a_2', 'expired', 0]]);
   assert.strictEqual((await call('GET', '/authorizations', { token: t.cy })).body.authorizations.length, 0);
-  const over = fixture({ authorizations: [{ ...seeded[0], amount: 10001 }] });
+  // ruling S2-3: closed seeds hold nothing and carry valid fields
+  const closed = ['captured', 'voided', 'expired'].map((status, i) => ({ id: `a_c${i}`, from_user_id: 'u_bob', to_user_id: 'u_cy', amount: 900, status, expires_at: iso(Date.now() + 2 * HOUR) }));
+  const t2 = await reset(fixture({ authorizations: closed }));
+  assert.strictEqual((await me(t2.bob)).held, 0);
+  const got = (await call('GET', '/authorizations', { token: t2.cy })).body.authorizations.sort((x, y) => x.authorization_id.localeCompare(y.authorization_id));
+  assert.deepStrictEqual(got.map((a) => [a.status, a.captured_amount, a.remaining_amount, a.payment_id, a.payment_ids]),
+    [['captured', 900, 0, null, []], ['voided', 0, 0, null, []], ['expired', 0, 0, null, []]]);
+  assert.strictEqual((await call('POST', '/authorizations/a_c0/capture', { token: t2.cy, key: 'z', body: {} })).body.error.code, 'authorization_not_open');
+  assert.strictEqual((await call('POST', '/authorizations/a_c2/capture', { token: t2.cy, key: 'z', body: {} })).body.error.code, 'authorization_expired');
+  assert.strictEqual((await call('POST', '/authorizations/a_c1/void', { token: t2.bob })).status, 200);
+  await reset(fixture({ authorizations: seeded }));
+
   assert.strictEqual((await call('POST', '/_test/reset', { body: over })).status, 422);
   assert.strictEqual((await me(t.ada)).held, 2000, 'a refused reset changes nothing');
   for (const ttl of [0, -5, 1.5, '600', null]) {
