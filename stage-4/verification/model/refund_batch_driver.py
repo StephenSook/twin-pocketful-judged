@@ -222,6 +222,8 @@ def migration(source,base,stage):
         status,revisions=http(base,'GET','/payments/'+p['payment_id']+'/revisions',token=tokens['ada'])
         require(status==200,'R4 legacy correction retained')
         matches(old_revision,revisions['revisions'][-1],'R4 legacy correction fields retained')
+        for revision in revisions['revisions']:
+            matches({'correction_batch_id':None},revision,'S4-3 imported ordinary revision link')
         status,replayed_revision=http(base,'POST','/payments/'+p['payment_id']+'/corrections',
             {'expected_revision':1,'amount':80,'effective_at':p['created_at'],'reason':'legacy correction'},token=tokens['ada'],key='legacy-correction')
         require(status==200 and replayed_revision==old_revision,'R4 legacy correction replay exact')

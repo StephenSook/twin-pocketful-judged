@@ -669,7 +669,7 @@ S3-6 also changes only the stage3 maximum-wallet settlement fixture to outgoing-
 - S4-A2: cumulative refunds compare against latest corrected amount, not immutable original receipt; refunds themselves are immutable payments.
 - S4-A3: item-level validation/resource/revision/cap checks occur per input item before settlement completeness, combined current available, then historical boundaries. No unspecified within-item multi-error precedence is assumed.
 - S4-A4: equivalent effective offsets compare parsed instants for each settlement; distinct ordinary payments need not share an effective instant.
-- S4-A5: ordinary revision responses need not add correction_batch_id unless specified; batch revisions must expose it.
+- S4-A5 superseded by coordinator S4-3: every revision object in correction responses and GET/revisions carries correction_batch_id:null unless made by a batch; batch revisions carry their batch ID. Original stored receipts and replays remain unchanged, including imported stage3 correction responses.
 
 ## R4 entries
 
@@ -729,6 +729,8 @@ S3-6 also changes only the stage3 maximum-wallet settlement fixture to outgoing-
 | R4-052 | “accept exports stages1–3” | Import untouched exports from each frozen service and exercise tokens/receipts/new endpoints. | own model/HTTP check (partial; see limits) |
 | R4-053 | “retain settlement membership corrections snapshots” | Imported settlement needs full batch; imported revisions preserved; old source snapshot keeps frozen entries. | own model/HTTP check (partial; see limits) |
 
+| R4-054 | S4-3: “every revision object ... carries correction_batch_id: null when it was not made by a batch” | Require explicit null on revision1, ordinary correction responses and fresh imported histories; preserve exact legacy replay bodies. | own model/HTTP check |
+
 ## Stage4 coverage limits and verifier corrections
 
 - R4-001: inherited API and temporal suites run; browser/visual regression remains independent gatekeeper work.
@@ -760,3 +762,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 -u stage-4/verification/model/refund_batch_dri
 Exit0: `REFUND BATCH PASS random_operations=40 refunds=pass batches=pass precedence=pass state-import=pass imports=3/3`. The wrapper now includes that extended phase. The two earlier phases were unchanged, so they were not repeated after this isolated extension.
 
 All three `--self-test` commands exited0: inherited `MODEL SELF-TEST PASS operations=663 boundary=pass authorization_operations=736 expiry=pass`, `TEMPORAL MODEL SELF-TEST PASS`, and `REFUND BATCH MODEL SELF-TEST PASS`. These are modeler observations, not independent acceptance. Auditorba4aa55 found no ledger gaps or misreadings in02cefe5.
+
+### S4-3 explicit nullable batch links
+
+The ordinary revision oracle now requires correction_batch_id:null, including revision1 and fresh imported stage3 histories. Legacy correction retries still require the exact original JSON. Against clean product e0a4e34, reran `PYTHONDONTWRITEBYTECODE=1 python3 -u stage-4/verification/model/run_all.py --base-url http://127.0.0.1:18641 --second-url http://127.0.0.1:18642 --stage1-url http://127.0.0.1:18643 --stage2-url http://127.0.0.1:18644 --stage3-url http://127.0.0.1:18645 --no-shrink`: exit0, inherited532, temporal75, refund/batch40, state-import pass, legacy imports3/3. Log `/tmp/modeler-s4-ruling.log`. Both temporal and refund/batch `--self-test` commands also exit0.

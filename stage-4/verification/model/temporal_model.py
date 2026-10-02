@@ -64,7 +64,7 @@ def add_payment(s,p):
     pid=p['payment_id'];s['payments'][pid]=deepcopy(p)
     s['payments'][pid].setdefault('refund_of',None)
     s['revisions'][pid]=[{'payment_id':pid,'revision':1,'amount':p['amount'],
-        'effective_at':p['created_at'],'recorded_at':p['created_at'],'reason':''}]
+        'effective_at':p['created_at'],'recorded_at':p['created_at'],'reason':'','correction_batch_id':None}]
 
 
 def selected(s,known=None):
@@ -217,7 +217,7 @@ def execute(s,op):
         recorded=op['recorded_at']
         assert instant(recorded)>instant(previous['recorded_at'])
         result={'payment_id':pid,'revision':previous['revision']+1,'amount':int(body['amount']),
-            'effective_at':body['effective_at'],'recorded_at':recorded,'reason':reason}
+            'effective_at':body['effective_at'],'recorded_at':recorded,'reason':reason,'correction_batch_id':None}
         history.append(result)
         if not historical_valid(s,now):fail(409,'historical_overdraft')
         s['keys'][ck]=(parsed,deepcopy(result))
