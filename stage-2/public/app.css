@@ -20,11 +20,8 @@
   font-display: swap;
 }
 
-/* Cross-document cross-fade; off under reduced motion (ruling S2-5). */
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
-}
+/* No cross-document view transition: Chromium raises an uncaught "Transition was
+   aborted" page error on rapid navigation, and correctness wins over motion. */
 
 :root {
   --ink: #2B2270;
