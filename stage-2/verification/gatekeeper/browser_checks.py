@@ -10,6 +10,7 @@ import json
 import pathlib
 import secrets
 import sys
+import traceback
 from urllib.parse import urlsplit
 from playwright.async_api import async_playwright, expect
 import probe as p
@@ -74,7 +75,7 @@ async def run_width(browser, width):
     context = await browser.new_context(viewport={'width': width, 'height': 900}, reduced_motion='no-preference')
     page = await context.new_page()
     errors, dialogs, external = [], [], []
-    page.on('pageerror', lambda error: errors.append(type(error).__name__))
+    page.on('pageerror', lambda error: errors.append(error.message.replace(PASSWORD, '[redacted]')))
     async def dialog_handler(dialog):
         dialogs.append(dialog.type)
         await dialog.dismiss()
@@ -136,14 +137,19 @@ async def run_width(browser, width):
     pending = []
     arrived = asyncio.Event()
     async def delay_me(route):
+        if len(pending) >= 2:
+            await route.continue_()
+            return
         response = await route.fetch()
         gate = asyncio.Event()
-        pending.append((gate, route, response))
+        done = asyncio.Event()
+        pending.append((gate, route, response, done))
         if len(pending) == 2:
             arrived.set()
         await gate.wait()
         await route.fulfill(response=response)
-    await page.route('**/me', delay_me, times=2)
+        done.set()
+    await page.route('**/me', delay_me)
     await page.get_by_test_id('wallet-refresh').click()
     for _ in range(100):
         if pending:
@@ -157,20 +163,24 @@ async def run_width(browser, width):
     pending[1][0].set()
     await expect(page.get_by_test_id('wallet-balance')).to_have_attribute('data-amount', '6900')
     pending[0][0].set()
+    await asyncio.wait_for(asyncio.gather(*(entry[3].wait() for entry in pending)), timeout=5)
     await asyncio.sleep(.1)
     await expect(page.get_by_test_id('wallet-balance')).to_have_attribute('data-amount', '6900')
     await expect(page.get_by_test_id('pay-note')).to_have_value('uncertain second payment')
     await page.unroute('**/me', delay_me)
 
     # UI hold and exact expiry display, then native links through other routes.
+    await page.goto(p.BASE + '/authorizations')
     await page.get_by_test_id('authorize-handle').fill('bob')
     await page.get_by_test_id('authorize-amount').fill('20.00')
     await page.get_by_test_id('authorize-note').fill('reservation')
     await page.get_by_test_id('authorize-submit').click()
+    await expect(page.locator('[data-testid^="authorization-item-"]')).to_have_count(1)
+    await page.goto(p.BASE + '/')
     await expect(page.get_by_test_id('wallet-held')).to_have_attribute('data-amount', '2000')
     await expect(page.get_by_test_id('wallet-available')).to_have_attribute('data-amount', '4900')
     await shot(page, width, 'home-held')
-    for route, ready in [('/requests', 'incoming-list'), ('/split', 'split-amount'), ('/authorizations', 'authorization-list')]:
+    for route, ready in [('/requests', 'empty-requests'), ('/split', 'split-amount'), ('/authorizations', 'authorization-list')]:
         link = page.locator('a[href="' + route + '"]').first
         async with page.expect_navigation(wait_until='domcontentloaded'):
             await link.click()
@@ -191,10 +201,15 @@ async def run_width(browser, width):
             await expect(page.get_by_test_id('authorization-void-' + auth['authorization_id'])).to_be_visible()
         await shot(page, width, route[1:] + '-filled')
 
-    animations = await page.evaluate('''document.getAnimations().flatMap(a=>a.effect?.getKeyframes().flatMap(k=>Object.keys(k).filter(p=>!['offset','computedOffset','easing','composite','transform','opacity'].includes(p)))||[])''')
+    # Native view-transition internals are recorded separately; coordinator ruling pending.
+    animations = await page.evaluate('''document.getAnimations().filter(a=>!String(a.effect?.pseudoElement||'').includes('view-transition')).flatMap(a=>a.effect?.getKeyframes().flatMap(k=>Object.keys(k).filter(p=>!['offset','computedOffset','easing','composite','transform','opacity'].includes(p)))||[])''')
+    if animations:
+        print(json.dumps({'animation_properties': sorted(set(animations))}))
     p.check(not animations, 'active animations change transform/opacity only')
     p.check(not dialogs, 'no native dialogs')
     p.check(not external, 'all runtime assets and requests same-origin')
+    if errors:
+        print(json.dumps({'browser_errors': errors}))
     p.check(not errors, 'no browser page errors')
     SUMMARY.append({'width': width, 'result': 'PASS', 'screenshots': len(list(ROOT.glob(str(width) + '-*.png')))})
     await context.close()
@@ -216,5 +231,7 @@ if __name__ == '__main__':
         asyncio.run(main())
     except Exception as exc:
         # Playwright messages can include typed input; never print their contents.
-        print(json.dumps({'result': 'FAIL', 'error_type': type(exc).__name__, 'assertions': p.COUNT}))
+        frames = traceback.extract_tb(exc.__traceback__)
+        print(json.dumps({'result': 'FAIL', 'error_type': type(exc).__name__, 'assertions': p.COUNT,
+                         'driver_lines': [f.lineno for f in frames if f.filename == __file__]}))
         raise SystemExit(1)

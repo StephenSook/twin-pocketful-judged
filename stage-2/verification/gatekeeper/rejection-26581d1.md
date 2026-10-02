@@ -1,0 +1,20 @@
+# REJECT 26581d1
+
+Expected: the desktop signup/login marketing heading remains fully readable and decoration does not obscure it. Observed: at 1440 CSS pixels, the phone-coin illustration covers part of “Money between friends, made easy”, notably “made”. Reproduce: open `/signup` in headless Chromium at 1440×900; evidence `evidence/26581d1-signup-overlap.png`. Surface reports fix8038718; not yet independently verified.
+
+The primary browser driver also observed Chromium native cross-document view-transition page errors (“Transition was aborted because of invalid state. ViewTransition opt-in disabled”) during rapid navigation. Native transition keyframes include width/height/backdropFilter/mixBlendMode. Coordinator ruling requested because the brief both requests native transitions and restricts animations to transform/opacity. Surface removed the feature at e8ffe16; the next candidate and ruling must be checked.
+
+## Observed passing gates on the exact candidate
+
+Clean copy `/tmp/gatekeeper-s2-l0q3ih4a/candidate-26581d1`, image `gatekeeper-s2-26581d1`, primary URL `http://172.24.0.2:18080`, secondary `.3`, browser `.4`, accepted Stage1 `.8`, all container ports18080 on the internal network `gatekeeper-s1-internal`, 2CPUs/2GiB. Build `docker build -t gatekeeper-s2-26581d1 <clean-copy>/stage-2`, exit0.
+
+- Provided tool: from `/home/ubuntu/work/dark-factory-wearedevs`, `.venv/bin/python -m harness run --track pocketful --repo <clean-copy> --stage 2 --mode isolated --out /tmp/gatekeeper-s2-l0q3ih4a/check-26581d1`, exit0. Stage1 147/147, Stage2 35/35; tool ran applicable Stage3: collected6, passed2, failed1(expected), notrun3. Claimed2. Dispatched shared-repo form also exit0, output `/home/ubuntu/work/band-work/checks/pocketful-judged/s2-1`.
+- `PYTHONDONTWRITEBYTECODE=1 python3 -u stage-2/verification/model/driver.py --base-url http://172.24.0.2:18080 --second-url http://172.24.0.3:18080 --stage1-url http://172.24.0.8:18080 --steps 100`: exit0, operations532, persistence/concurrency50/auth-controls/boundary/holds-expiry/migration pass.
+- Gatekeeper scripts invoked with `PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/<script> <URL>`: holds937, probe917, seeded_limits544, security152 (`--fixture-exemption`), password_scope32 (`--fixture-exemption`), boundaries2/2; all exit0. A preliminary password_scope run omitted the exemption and correctly exited1; it is superseded by the scoped invocation, not a product defect.
+- `environment.py gatekeeper-s2-26581d1 gatekeeper-s1-internal`: exit0,422 assertions, startups0.2935/0.3053s, maxrequest2.58s. `cold_login.py` with same image/network: exit0,50×401,max2.6727s.5000distinct reset1.9646s, immediateexport0.0113s, import0.0544s.
+- `mutate.py <clean-copy>/stage-2 gatekeeper-s1-internal /tmp/gatekeeper-s2-l0q3ih4a/mutants`: exit0,8/8 caught (overdraft, missingcredit, replay, requestguard, privatefeed, heldspend, capturelimit, forcedfinal).
+- `integrity.py <clean-copy> /home/ubuntu/work/dark-factory-wearedevs /tmp/gatekeeper-s2-l0q3ih4a/provided-baseline.json`: exit0,30 suppliedfiles unchanged,84trackedfiles scanned,no credential-pattern hits,no check-name branches,zero external package dependencies.
+- Harness-venv Python `browser_states.py http://172.24.0.4:18080 /tmp/gatekeeper-s2-l0q3ih4a/screens`: exit0,286assertions,375/1440screen/state captures. `browser_upgrade.py` with that URL/output plus `gatekeeper-s1-d1ebec2 gatekeeper-s1-internal`: exit0,42assertions,source destroyed before import at both widths; unchanged exact Stage1 retry receipt and pending request UI payment preserved.
+- Harness-venv Python `web_security.py http://172.24.0.2:18080 /tmp/gatekeeper-s2-l0q3ih4a/screens`: exit0,84assertions,8UI/staticheaderpaths,4traversalrefusals,foreignholdisolation and inert markup note.
+
+No acceptance claimed. Contrast/motion review and complete independent rerun belong to the successor candidate. Browser-driver corrections (routed-response completion, authorise form located on `/authorizations`, empty list waiting, unused font loading) are verifier errors, not product failures. Stage1 remains frozen.
