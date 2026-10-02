@@ -52,7 +52,7 @@
 
   <section id="verdicts" class="panel" aria-labelledby="h2v">
     <h2 id="h2v">Every verdict</h2>
-    <p class="muted">Each ACCEPT and REJECT the band posted, with the exact revision it names and the room message it came from.</p>
+    <p class="muted">Each distinct ACCEPT and REJECT decision the gatekeeper posted, with the exact revision it names and the room message it came from.</p>
     <ol class="verdicts" id="verdictList"></ol>
   </section>
 
@@ -71,7 +71,8 @@
     <ul class="method">
       <li><strong>Handoffs</strong> are text messages from a seat that @mention another participant.</li>
       <li><strong>Verdicts</strong> are the words ACCEPT or REJECT followed by a revision hash, as the mandates require.</li>
-      <li><strong>Rejections followed by a seat commit</strong> count REJECT verdicts that a later seat commit followed. Open the room message to see what the rejection asked for, then the commit to see what changed.</li>
+      <li><strong>Rejections that ended in a newer accepted revision</strong> count REJECT verdicts where the gatekeeper later accepted a newer builder or surface revision of the same stage.</li>
+      <li><strong>Rejections with a writer commit after the REJECT</strong> count those where a builder or surface commit on the same stage was made after the REJECT message. A writer can commit the fix before the verdict is posted, so this count can be lower. Open the room message to see what the rejection asked for, then the commit to see what changed.</li>
       <li><strong>Human messages after dispatch</strong> counts messages from any human after the first one. Zero means the run was hands off.</li>
       <li><strong>Retried or undelivered messages</strong> come from BAND's own per-recipient delivery records inside the export, as of the moment it was downloaded.</li>
     </ul>

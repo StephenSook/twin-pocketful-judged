@@ -17,6 +17,10 @@
 
   function render(f) {
     const T = f.totals;
+    if (!Array.isArray(f.rejections) || T.rejects_resolved_by_accepted_revision === undefined
+        || T.rejects_followed_by_seat_commit === undefined) {
+      throw new Error("floor.json predates rejection records; regenerate it with tools/floor_data.py");
+    }
     const hands = T.human_messages_after_dispatch === 0;
     $("h1").textContent = `${f.seats.length} agents built it. ${hands ? "Nobody touched it." : `A human wrote ${T.human_messages_after_dispatch} times.`}`;
     const g = f.generated_from;
@@ -31,7 +35,8 @@
       [T.handoffs, "handoffs between seats"],
       [T.handoff_chars_median.toLocaleString(), "median characters per handoff"],
       [T.rejects, "REJECT verdicts"],
-      [T.rejects_followed_by_seat_commit, "rejections followed by a seat commit"],
+      [`${T.rejects_resolved_by_accepted_revision} / ${T.rejects}`, "rejections that ended in a newer accepted revision"],
+      [`${T.rejects_followed_by_seat_commit} / ${T.rejects}`, "rejections with a writer commit after the REJECT"],
       [T.accepts, "ACCEPT verdicts"],
       [T.human_messages_after_dispatch, "human messages after the dispatch"],
       [`${T.seat_commits} / ${T.commits}`, "commits made by seats"],
@@ -55,7 +60,7 @@
     if (!vs.length) { list.append(el("li", {}, "No verdicts in this room.")); return; }
     const seen = new Set(); // one entry per decision; the same verdict sent to two seats shows once
     for (const e of vs) for (const v of e.verdicts) {
-      const key = `${v.verdict} ${v.rev}`; if (seen.has(key)) continue; seen.add(key);
+      const key = `${v.verdict} ${v.commit || v.rev}`; if (seen.has(key)) continue; seen.add(key);
       const li = el("li");
       const head = el("div");
       head.append(el("span", { class: `chip ${v.verdict === "ACCEPT" ? "ok" : "bad"}` }, v.verdict),

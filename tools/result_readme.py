@@ -19,6 +19,9 @@ def duration(seconds):
 
 
 def build(floor, facts):
+    needed = ("rejects_resolved_by_accepted_revision", "rejects_followed_by_seat_commit")
+    if not isinstance(floor.get("rejections"), list) or any(key not in (floor.get("totals") or {}) for key in needed):
+        sys.exit("floor.json predates rejection records; regenerate it with tools/floor_data.py")
     totals = floor.get("totals") or {}
     stages = need(facts, "stage_claims")
     if not isinstance(stages, dict):
@@ -52,8 +55,10 @@ def build(floor, facts):
         f"- Time from dispatch: {duration(floor.get('duration_s') or 0)}",
         f"- Human messages after dispatch: {totals.get('human_messages_after_dispatch', 0)}",
         f"- Gatekeeper verdicts: {totals.get('rejects', 0)} REJECT and {totals.get('accepts', 0)} ACCEPT",
-        f"- Rejections followed by a same-stage commit from a writer seat: "
-        f"{totals.get('rejects_followed_by_seat_commit', 0)} of {totals.get('rejects', 0)}",
+        f"- Rejections that ended with a newer writer revision the gatekeeper accepted: "
+        f"{totals['rejects_resolved_by_accepted_revision']} of {totals.get('rejects', 0)}",
+        f"- Rejections with a same-stage writer commit after the REJECT itself: "
+        f"{totals['rejects_followed_by_seat_commit']} of {totals.get('rejects', 0)}",
         f"- Commits made by seats: {totals.get('seat_commits', 0)} of {totals.get('commits', 0)}",
         f"- Handoffs between seats: {totals.get('handoffs', 0):,}",
         f"- BAND messages retried or undelivered: "

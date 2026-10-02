@@ -56,7 +56,9 @@
   "handoffs": 331,
   "handoff_chars_median": 730,
   "rejects": 12,
-  "rejects_followed_by_seat_commit": 12,
+  "rejects_followed_by_seat_commit": 9,
+  "rejects_resolved_by_accepted_revision": 12,
+  "rejects_fixed_before_reject": 3,
   "accepts": 4,
   "human_messages_after_dispatch": 0,
   "delivery_retries": 0,
@@ -863,7 +865,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "2299fe8"
+     "rev": "2299fe8",
+     "commit": "2299fe83ee780dc6b1667d4591617a97940a2920"
     }
    ],
    "preview": "@coordinator @builder @surface REJECT 2299fe8: expected reset with balance2^53 to return204 and signup \u0130@example.test to derive i_; observed422 validation_failed and derived _. Reproduce against clean /tmp/gatekeeper-s1-"
@@ -939,7 +942,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "2299fe8"
+     "rev": "2299fe8",
+     "commit": "2299fe83ee780dc6b1667d4591617a97940a2920"
     }
    ],
    "preview": "@coordinator @builder @surface REJECT 2299fe83ee780dc6b1667d4591617a97940a2920 remains open. Evidence/check tools committed db566a1 in /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-2299fe8"
@@ -1210,7 +1214,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "18805af"
+     "rev": "18805af",
+     "commit": "18805af24c11b91e62fff9f7ecb503aaf23f69ac"
     }
    ],
    "preview": "@coordinator @builder REJECT 18805af: expected every request in50-flight unknown-account login burst under5s (\u00a72); observed TimeoutError at5s. Command `PYTHONDONTWRITEBYTECODE=1 python3 /home/ubuntu/work/band-work/curren"
@@ -1240,12 +1245,7 @@
     "coordinator"
    ],
    "chars": 705,
-   "verdicts": [
-    {
-     "verdict": "REJECT",
-     "rev": "18805af"
-    }
-   ],
+   "verdicts": [],
    "preview": "@coordinator @builder REJECT18805af confirmed by fresh minimal reproduction: `PYTHONDONTWRITEBYTECODE=1 python3 /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/cold_login.py gatekeeper-s1-18805af gate"
   },
   {
@@ -1369,7 +1369,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "ed67fb8"
+     "rev": "ed67fb8",
+     "commit": "ed67fb81a641fbce9e9a24a09bf3a8f78b0aaaca"
     }
    ],
    "preview": "@coordinator @builder REJECT ed67fb8: expected valid1000-user reset within10s (\u00a72/\u00a73.3); observed TimeoutError at10.0347s, fixture150750bytes. Exact2CPU/2GiB/internal-network candidate http://172.24.0.5:18080. One-reques"
@@ -1402,7 +1403,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "ed67fb8"
+     "rev": "ed67fb8",
+     "commit": "ed67fb81a641fbce9e9a24a09bf3a8f78b0aaaca"
     }
    ],
    "preview": "@coordinator @builder REJECT ed67fb81a641fbce9e9a24a09bf3a8f78b0aaaca remains open. Evidence committed12ad51c at /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-ed67fb8.md. Committed `reset_"
@@ -1503,7 +1505,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "a7a67ec"
+     "rev": "a7a67ec",
+     "commit": "a7a67ec925a1df1cb70d6bab1fb5a3d8d0b7ad8f"
     }
    ],
    "preview": "@coordinator @builder REJECT a7a67ec: expected immediate export after valid reset within10s (\u00a710 'Test control calls have a10-second timeout'); observed reset204 in0.0266s then export TimeoutError10.0104s for1000 distinc"
@@ -1536,7 +1539,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "a7a67ec"
+     "rev": "a7a67ec",
+     "commit": "a7a67ec925a1df1cb70d6bab1fb5a3d8d0b7ad8f"
     }
    ],
    "preview": "@coordinator @builder REJECT a7a67ec remains open for immediate export timeout after1000 distinct-password reset. Evidence committed2074899: /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-a"
@@ -1705,7 +1709,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "dadabac"
+     "rev": "dadabac",
+     "commit": "dadabacc74b1236f56adae6ff9a5116fc7bcebb0"
     }
    ],
    "preview": "@coordinator @builder REJECT dadabac under the latest security ruling delivered to me: expected OWASP-minimum seeded cost (9358587b: 'C is rejected; the OWASP minimum stays'); observedm=1024,t=1. `PYTHONDONTWRITEBYTECODE"
@@ -1737,7 +1742,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "dadabac"
+     "rev": "dadabac",
+     "commit": "dadabacc74b1236f56adae6ff9a5116fc7bcebb0"
     }
    ],
    "preview": "@coordinator @builder REJECT dadabac security-scope evidence committed255c3f0 in /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-dadabac.md. Everything functional now passes, including1000/5"
@@ -1797,7 +1803,8 @@
    "verdicts": [
     {
      "verdict": "ACCEPT",
-     "rev": "d1ebec2"
+     "rev": "d1ebec2",
+     "commit": "d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1"
     }
    ],
    "preview": "@coordinator @builder @surface ACCEPT d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1. Stage-1 tree c6d424062c5ffab8b21857db3c0310f628effd24. Acceptance manifest committed f0e5147 at /home/ubuntu/work/band-work/current/stage-1/"
@@ -1829,7 +1836,8 @@
    "verdicts": [
     {
      "verdict": "ACCEPT",
-     "rev": "d1ebec2"
+     "rev": "d1ebec2",
+     "commit": "d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1"
     }
    ],
    "preview": "@coordinator @builder ACCEPT d1ebec2 unchanged. Final-ruling supplement committed16542a4 in /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/acceptance-d1ebec2.json. `PYTHONDONTWRITEBYTECODE=1 python3 "
@@ -2687,7 +2695,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "26581d1"
+     "rev": "26581d1",
+     "commit": "26581d1a895c74f6e96f2cab3f60bf266f596837"
     }
    ],
    "preview": "@coordinator @surface @builder REJECT 26581d1: expected readable desktop auth heading, observed phone illustration obscuring 'made' on /signup at1440\u00d7900. Reproduce: headless Chromium GET /signup, screenshot /home/ubuntu"
@@ -2839,7 +2848,8 @@
    "verdicts": [
     {
      "verdict": "ACCEPT",
-     "rev": "8038718"
+     "rev": "8038718",
+     "commit": "803871815fafa082a022c4d418b0cfb43b149530"
     }
    ],
    "preview": "@builder @surface ACCEPT 8038718. Acceptance manifest committed255beef at /home/ubuntu/work/band-work/current/stage-2/verification/gatekeeper/acceptance-8038718.json; review-8038718.md closes all ledger audits and explic"
@@ -2857,7 +2867,8 @@
    "verdicts": [
     {
      "verdict": "ACCEPT",
-     "rev": "8038718"
+     "rev": "8038718",
+     "commit": "803871815fafa082a022c4d418b0cfb43b149530"
     }
    ],
    "preview": "@coordinator ACCEPT 8038718. Acceptance manifest committed255beef at /home/ubuntu/work/band-work/current/stage-2/verification/gatekeeper/acceptance-8038718.json; review-8038718.md closes all ledger audits and explicitly "
@@ -3553,7 +3564,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "8548455"
+     "rev": "8548455",
+     "commit": "85484551dbecc597a1357175c727dba791fbbc7b"
     }
    ],
    "preview": "@builder @coordinator REJECT 8548455: expected historical balance 9007199254740992, observed 9007199254740991 after a valid correction. Minimal fixture: a ending balance 2^53-1, b ending balance 2; original p_in b->a amo"
@@ -3719,7 +3731,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "8548455"
+     "rev": "8548455",
+     "commit": "85484551dbecc597a1357175c727dba791fbbc7b"
     }
    ],
    "preview": "@coordinator REJECT 8548455 evidence and exact-arithmetic regression are committed at 97ba9d6: /home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/reject-8548455.md and history_exact.py. Browser/security "
@@ -3819,7 +3832,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "b0d95f6"
+     "rev": "b0d95f6",
+     "commit": "b0d95f69ec608fd52889d217dbace036e96217bc"
     }
    ],
    "preview": "@builder @coordinator REJECT b0d95f6 preflight: expected valid historical available and own-export import204; observed available=-100 and unchanged-export import422. Minimal: a100,b0; authorize a->b100; void; immediately"
@@ -4042,7 +4056,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "30a5e90"
+     "rev": "30a5e90",
+     "commit": "30a5e906628d47cc8ed0b12b067ba4fc3f52eb3f"
     }
    ],
    "preview": "@builder @coordinator REJECT 30a5e90 provided-check gate: dispatched shared harness at verification-only HEAD5ba69bc exited1; stage1 147/147, stage2 35/35, stage3 5/6. test_a_statement_walks_the_balance_forward now expec"
@@ -4102,7 +4117,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "5e403de"
+     "rev": "5e403de",
+     "commit": "5e403deed4cfcb6b511dc68faf224b71d65e95de"
     }
    ],
    "preview": "@builder @coordinator REJECT 5e403de: unchanged own export fails for valid past-expiry seeded authorizations. Minimal fixture: users a100,b0; authorization {id:a_past,from_user_id:a,to_user_id:b,amount:10,note:'',visibil"
@@ -4202,7 +4218,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "c4b5c5f"
+     "rev": "c4b5c5f",
+     "commit": "c4b5c5f543ddf1aa57bdbf4be15c7db2454c5d3a"
     }
    ],
    "preview": "@builder @coordinator REJECT c4b5c5f: expected legacy seeded past-expiry exports and their re-exports to import204, observed422 (fix e33b85a is in history, retest pending). Also expected422 for an open authorization's ex"
@@ -4262,7 +4279,8 @@
    "verdicts": [
     {
      "verdict": "ACCEPT",
-     "rev": "b67e03c"
+     "rev": "b67e03c",
+     "commit": "b67e03ca55327b506096b2d6da35c45447199097"
     }
    ],
    "preview": "@coordinator @builder ACCEPT b67e03c. Repository /home/ubuntu/work/band-work/current. Exact revision b67e03ca55327b506096b2d6da35c45447199097; stage-3 tree37785abd9264e46290eec77e837810a295251cda. Acceptance manifest and"
@@ -4613,7 +4631,8 @@
    "verdicts": [
     {
      "verdict": "REJECT",
-     "rev": "e0a4e34"
+     "rev": "e0a4e34",
+     "commit": "e0a4e34ffdde7abcf822114be0a924bd2be9222c"
     }
    ],
    "preview": "@builder @coordinator REJECT e0a4e34: expected 422 validation_failed with unchanged destination for invalid stage-4 imports, observed 204 in five cases. Reproduce on a clean e0a4e34 service: seed a=200,b=0,c=0 operator c"
@@ -4725,7 +4744,8 @@
    "verdicts": [
     {
      "verdict": "ACCEPT",
-     "rev": "a288cc4"
+     "rev": "a288cc4",
+     "commit": "a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9"
     }
    ],
    "preview": "@coordinator @builder ACCEPT a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9. Stage-4 tree37810a489fdcfd6335464527a1d9f5b935f2bbc0. Manifest/evidence committed f34fd29 at /home/ubuntu/work/band-work/current/stage-4/verification"
@@ -4772,6 +4792,233 @@
    "chars": 3744,
    "verdicts": [],
    "preview": "FINAL REPORT\nPocketful, all four stages accepted by the gatekeeper. Repository: /home/ubuntu/work/band-work/current (branch main).\n\nAccepted revisions (each folder frozen after acceptance):\n- stage-1: d1ebec2 (manifest f"
+  }
+ ],
+ "rejections": [
+  {
+   "rev": "2299fe8",
+   "t": 1359.3,
+   "message_id": "5a0d74b8-b5b0-4348-999d-40ffbbf13bf5",
+   "stages": [
+    1
+   ],
+   "followup": {
+    "sha": "9a272adcfdab91c0068e5c0b2e6f1cb8447c4bf3",
+    "t": 1429.5,
+    "author": "surface",
+    "subject": "stage-1: derive handles on the fully lowercased local part; reject inexact integer literals"
+   },
+   "resolved_by": {
+    "rev": "d1ebec2",
+    "t": 3789.4,
+    "message_id": "1ede5df6-aee8-4471-9a29-c6e7d21dd715"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "18805af",
+   "t": 1795.7,
+   "message_id": "67fb5559-a107-434a-b695-c19faa658bc4",
+   "stages": [
+    1
+   ],
+   "followup": {
+    "sha": "ed67fb81a641fbce9e9a24a09bf3a8f78b0aaaca",
+    "t": 1830.5,
+    "author": "builder",
+    "subject": "stage-1: compute the login dummy hash once at startup behind one shared promise (\u00a72 5 s limit with 50 in flight; REJECT 18805af)"
+   },
+   "resolved_by": {
+    "rev": "d1ebec2",
+    "t": 3789.4,
+    "message_id": "1ede5df6-aee8-4471-9a29-c6e7d21dd715"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "ed67fb8",
+   "t": 2323.3,
+   "message_id": "7d3c8ccc-30a5-42f7-84c4-e8c42ad83ae5",
+   "stages": [
+    1
+   ],
+   "followup": {
+    "sha": "a7a67ec925a1df1cb70d6bab1fb5a3d8d0b7ad8f",
+    "t": 2514.5,
+    "author": "builder",
+    "subject": "stage-1: large reset fixtures hash seeded passwords in the background (\u00a72 10 s reset, \u00a73.3 immediate login; REJECT ed67fb8, coordinator option b)"
+   },
+   "resolved_by": {
+    "rev": "d1ebec2",
+    "t": 3789.4,
+    "message_id": "1ede5df6-aee8-4471-9a29-c6e7d21dd715"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "a7a67ec",
+   "t": 2872.2,
+   "message_id": "4fc5b434-b8e6-440b-a03f-2f335df0b78a",
+   "stages": [
+    1
+   ],
+   "followup": {
+    "sha": "dadabacc74b1236f56adae6ff9a5116fc7bcebb0",
+    "t": 3009.5,
+    "author": "builder",
+    "subject": "stage-1: seeded passwords hashed per user at reduced Argon2id cost, rehashed with full params after first login (\u00a72, \u00a76, \u00a710 10 s test-control limit; REJECT a7a67ec, coordinator ruling)"
+   },
+   "resolved_by": {
+    "rev": "d1ebec2",
+    "t": 3789.4,
+    "message_id": "1ede5df6-aee8-4471-9a29-c6e7d21dd715"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "dadabac",
+   "t": 3379.7,
+   "message_id": "2ec064e1-40dc-4a5d-a9be-937a6e0fc8bf",
+   "stages": [
+    1
+   ],
+   "followup": null,
+   "resolved_by": {
+    "rev": "d1ebec2",
+    "t": 3789.4,
+    "message_id": "1ede5df6-aee8-4471-9a29-c6e7d21dd715"
+   },
+   "fixed_before_reject": true
+  },
+  {
+   "rev": "26581d1",
+   "t": 5739.1,
+   "message_id": "229fcf6a-c5f7-4f27-ba32-955c9f2d5d45",
+   "stages": [
+    2
+   ],
+   "followup": null,
+   "resolved_by": {
+    "rev": "8038718",
+    "t": 6550.5,
+    "message_id": "c4499c2f-ebce-4b63-89ba-e3a9c2620cb7"
+   },
+   "fixed_before_reject": true
+  },
+  {
+   "rev": "8548455",
+   "t": 7786.4,
+   "message_id": "837dd787-aef2-470d-aa36-19807164c107",
+   "stages": [
+    3
+   ],
+   "followup": {
+    "sha": "fce49aceb564aa3c2400f8b26a3c6640c3abc30b",
+    "t": 7848.5,
+    "author": "builder",
+    "subject": "stage-3: exact BigInt accumulation for historical balances, statements, openings and the overdraft sweep (R2; REJECT 8548455 history_exact reproduction)"
+   },
+   "resolved_by": {
+    "rev": "b67e03c",
+    "t": 10329.6,
+    "message_id": "679c6f4b-61ac-4724-a9e6-bf0ba38eb0f4"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "b0d95f6",
+   "t": 8548.4,
+   "message_id": "71fb9ecc-2858-450f-88e0-0a60b1c5e659",
+   "stages": [
+    3
+   ],
+   "followup": {
+    "sha": "30a5e906628d47cc8ed0b12b067ba4fc3f52eb3f",
+    "t": 8686.5,
+    "author": "builder",
+    "subject": "stage-3: one monotonic millisecond clock for every new event (ruling S3-5; REJECT b0d95f6)"
+   },
+   "resolved_by": {
+    "rev": "b67e03c",
+    "t": 10329.6,
+    "message_id": "679c6f4b-61ac-4724-a9e6-bf0ba38eb0f4"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "30a5e90",
+   "t": 8947.1,
+   "message_id": "9171bfbb-65fa-4f64-ab5b-6ca377671d9c",
+   "stages": [
+    3
+   ],
+   "followup": {
+    "sha": "5e403deed4cfcb6b511dc68faf224b71d65e95de",
+    "t": 8988.5,
+    "author": "builder",
+    "subject": "stage-3: read-time defaults follow committed event times (REJECT 30a5e90 provided-check timing)"
+   },
+   "resolved_by": {
+    "rev": "b67e03c",
+    "t": 10329.6,
+    "message_id": "679c6f4b-61ac-4724-a9e6-bf0ba38eb0f4"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "5e403de",
+   "t": 9227.0,
+   "message_id": "e904c798-f6ce-4e02-b0d5-611d8011ec88",
+   "stages": [
+    3
+   ],
+   "followup": {
+    "sha": "c4b5c5f543ddf1aa57bdbf4be15c7db2454c5d3a",
+    "t": 9303.5,
+    "author": "builder",
+    "subject": "stage-3: own exports with seeded past-expiry or closed holds re-import (REJECT 5e403de)"
+   },
+   "resolved_by": {
+    "rev": "b67e03c",
+    "t": 10329.6,
+    "message_id": "679c6f4b-61ac-4724-a9e6-bf0ba38eb0f4"
+   },
+   "fixed_before_reject": false
+  },
+  {
+   "rev": "c4b5c5f",
+   "t": 9637.6,
+   "message_id": "3946da61-7648-41f6-a41c-c0dddafca759",
+   "stages": [
+    3
+   ],
+   "followup": null,
+   "resolved_by": {
+    "rev": "b67e03c",
+    "t": 10329.6,
+    "message_id": "679c6f4b-61ac-4724-a9e6-bf0ba38eb0f4"
+   },
+   "fixed_before_reject": true
+  },
+  {
+   "rev": "e0a4e34",
+   "t": 11245.0,
+   "message_id": "8548df3a-526f-45c7-9033-70cf0ca56055",
+   "stages": [
+    4
+   ],
+   "followup": {
+    "sha": "a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9",
+    "t": 11316.5,
+    "author": "builder",
+    "subject": "stage-4: import checks refund copies and batch consistency (REJECT e0a4e34)"
+   },
+   "resolved_by": {
+    "rev": "a288cc4",
+    "t": 11983.5,
+    "message_id": "f7d76376-a407-42bb-a7ba-99aa2a615b35"
+   },
+   "fixed_before_reject": false
   }
  ],
  "commits": [

@@ -8,7 +8,8 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 - Time from dispatch: 3h 21m
 - Human messages after dispatch: 0
 - Gatekeeper verdicts: 12 REJECT and 4 ACCEPT
-- Rejections followed by a same-stage commit from a writer seat: 12 of 12
+- Rejections that ended with a newer writer revision the gatekeeper accepted: 12 of 12
+- Rejections with a same-stage writer commit after the REJECT itself: 9 of 12
 - Commits made by seats: 117 of 117
 - Handoffs between seats: 331
 - BAND messages retried or undelivered: 0

@@ -81,7 +81,7 @@ contain no word from either track's vocabulary. Mandate fingerprints (sha256) fo
 
 ## How it catches and recovers from bad work
 
-12 rejections and 4 acceptances over 331 handoffs; 12 of the 12 rejections were followed by a same-stage writer commit. 117 of 117 commits were made by seats.
+12 rejections and 4 acceptances over 331 handoffs. 12 of the 12 rejections ended with a newer writer revision of the same stage that the gatekeeper later accepted; 9 had a same-stage writer commit after the REJECT itself, and in the other 3 the fixes in the accepted revision were committed before the REJECT was posted. 117 of 117 commits were made by seats.
 
 | At | Verdict | Revision | What the gatekeeper said | Room message |
 |---|---|---|---|---|
@@ -102,7 +102,7 @@ contain no word from either track's vocabulary. Mandate fingerprints (sha256) fo
 | 3h 07m | REJECT | `e0a4e34` | expected 422 validation_failed with unchanged destination for invalid stage-4 imports, observed 204 in five cases. | `8548df3a` |
 | 3h 19m | ACCEPT | `a288cc4` | Stage-4 tree37810a489fdcfd6335464527a1d9f5b935f2bbc0. Manifest/evidence committed f34fd29 at ... | `f7d76376` |
 
-A bad result it caught, in full: at 22m the gatekeeper rejected `2299fe8`: "expected reset with balance2^53 to return204 and signup İ@example.test to derive i_; observed422 validation_failed and derived _." (room message `5a0d74b8-b5b0-4348-999d-40ffbbf13bf5`). builder followed with a same-stage commit 0m later in `145a95f` ("stage-1: balances valid up to and including 2^53, checked in BigInt (§4, ledger R1-041, coordinator ruling)").
+A bad result it caught, in full: at 2h 09m the gatekeeper rejected `8548455`: "expected historical balance 9007199254740992, observed 9007199254740991 after a valid correction." (room message `837dd787-aef2-470d-aa36-19807164c107`). builder followed with a same-stage commit 1 minute later in `fce49ac` ("stage-3: exact BigInt accumulation for historical balances, statements, openings and the overdraft sweep (R2; REJECT 8548455 history_exact reproduction)").
 
 Recovery rules the band follows without a human: resend a handoff that errors; read the repository
 instead of waiting for a message about it; keep a handoff open until the receiver answers, and

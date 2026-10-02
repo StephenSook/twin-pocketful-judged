@@ -7,6 +7,7 @@ check_room.py and the sealed holdout digest. Every id below is copied from those
 stop has a command that shows it from a fresh clone.
 """
 import json
+import pathlib
 import re
 import sys
 
@@ -42,19 +43,26 @@ def validate_holdout(facts):
     return digest
 
 
-def followup_commit(commits, revision):
-    matches = [index for index, commit in enumerate(commits) if commit["sha"].startswith(revision)]
-    if len(matches) != 1:
-        return None
-    index = matches[0]
-    rejected_stages = set(commits[index]["stages"])
-    return next(
-        (candidate for candidate in commits[index + 1:]
-         if candidate["by_seat"]
-         and candidate["author"] in ("builder", "surface")
-         and rejected_stages.intersection(candidate["stages"])),
-        None,
-    )
+def _floor_tools():
+    """floor_data.py ships beside this file and owns the rejection logic."""
+    import importlib.util
+    path = pathlib.Path(__file__).resolve().with_name("floor_data.py")
+    spec = importlib.util.spec_from_file_location("floor_data", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def rejection_summary(T):
+    """Both rejection counts, worded so neither overstates what followed a REJECT."""
+    rejects = T["rejects"]
+    followed = T["rejects_followed_by_seat_commit"]
+    resolved = T["rejects_resolved_by_accepted_revision"]
+    if resolved == rejects:
+        head = f"The run had {rejects} rejections; every one ended with a newer writer revision the gatekeeper accepted"
+    else:
+        head = f"The run had {rejects} rejections; {resolved} ended with a newer writer revision the gatekeeper accepted"
+    return f"{head}, and {followed} had a same-stage writer commit after the REJECT itself."
 
 
 def main():
@@ -66,13 +74,12 @@ def main():
     coordinator = facts.get("coordinator_handle", "coordinator")
     if not re.fullmatch(r"[A-Za-z0-9_-]+", coordinator):
         sys.exit("facts coordinator_handle contains unsupported characters")
-    ev, commits, T = floor["events"], floor["commits"], floor["totals"]
-    rejects = [(e, v["rev"]) for e in ev for v in e["verdicts"] if v["verdict"] == "REJECT"]
+    ev, T = floor["events"], floor["totals"]
     seen, accepts = set(), []
     for e in ev:
         for v in e["verdicts"]:
-            if v["verdict"] == "ACCEPT" and v["rev"] not in seen:
-                seen.add(v["rev"])
+            if v["verdict"] == "ACCEPT" and v.get("commit", v["rev"]) not in seen:
+                seen.add(v.get("commit", v["rev"]))
                 accepts.append((e, v["rev"]))
     final = next((e for e in reversed(ev) if e["from"] == coordinator and "FINAL REPORT" in e["preview"]), None)
     show = "jq '.messages[] | select(.id==\"{}\") | .content' room.json"
@@ -83,24 +90,19 @@ def main():
       "fresh clone of this repository.\n")
     w(f"**0:00 What it is.** {facts.get('one_line', 'Twin: six agents, three model families; the builder never grades its own work.')} "
       "Read the seat table at the top of `FACTORY.md`, then the mandates in `mandates/`.\n")
-    if rejects:
-        e, rev = rejects[0]
-        text = re.sub(r"^(\s*@\S+\s*)+", "", e["preview"])
-        text = re.sub(r"^`?REJECT`?\s*`?[0-9a-f]{7,40}`?:?\s*", "", text)
-        text = re.split(r"\s+Reproduce\b", text)[0][:200]
-        fix = followup_commit(commits, rev)
+    tools = _floor_tools()
+    featured = tools.featured_rejection(floor, facts)
+    if featured:
+        e = next(item for item in ev if item["id"] == featured["message_id"])
+        rev, fix = featured["rev"], featured["followup"]
         w(f"**0:30 A bad result the factory caught.** At {mmss(e['t'])} the gatekeeper rejected revision "
-          f"`{rev}`: \"{text.strip()}\"")
+          f"`{rev}`: \"{tools.rejection_quote(e['preview'])}\"")
         w(f"```\n{show.format(e['id'])}\n```")
         if fix:
             w(f"{fix['author']} followed with a same-stage commit "
-              f"{mmss(max(0, fix['t'] - e['t']))} later in `{fix['sha'][:7]}` "
+              f"{tools.gap_phrase(fix['t'] - e['t'])} later in `{fix['sha'][:7]}` "
               f"(\"{fix['subject']}\"):\n```\ngit show --stat {fix['sha'][:7]}\n```")
-        followed = T["rejects_followed_by_seat_commit"]
-        if followed == T["rejects"]:
-            w(f"The run had {T['rejects']} rejections; every one was followed by a same-stage writer commit.\n")
-        else:
-            w(f"The run had {T['rejects']} rejections; {followed} had a later same-stage writer commit.\n")
+        w(rejection_summary(T) + "\n")
     w("**1:15 Every stage accepted by a different model family than the one that wrote it.**\n")
     w("| Stage | Accepted at | Revision | Room message |\n|---|---|---|---|")
     for i, (e, rev) in enumerate(accepts, 1):

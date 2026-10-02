@@ -31,7 +31,10 @@ LEAN_AT = 6_000
 ROOM_COUNT = re.compile(
     rf"\bROOM COUNT\s+([0-9][0-9,]*)\s+OF\s+10000\s+AFTER\s+({UUID_TEXT})\b"
 )
-ACCEPT = re.compile(r"\bACCEPT\s+([0-9a-f]{7,40})\b")
+# The same rule as tools/floor_data.py: a verdict is what a gatekeeper text message starts with,
+# after any @mentions and Markdown emphasis on its first line. A quoted or later ACCEPT never counts.
+LEAD = re.compile(r"^(?:[ \t]*@\[\[[0-9a-f-]{36}\]\])*[ \t*_#-]*")
+ACCEPT = re.compile(r"^(?:`ACCEPT`|ACCEPT(?!`))[ \t]+(?:`(?P<r1>[0-9a-f]{7,40})`|(?P<r2>[0-9a-f]{7,40})(?!`))(?!\w)")
 
 
 def main():
@@ -112,7 +115,8 @@ def main():
                 continue
             if (m.get("senderName") or "").split("/")[-1] != "gatekeeper":
                 continue
-            for rev in ACCEPT.findall(m.get("content") or ""):
+            head = ACCEPT.match(LEAD.sub("", m.get("content") or "", count=1))
+            for rev in ([head["r1"] or head["r2"]] if head else []):
                 same_revision = any(old.startswith(rev) or rev.startswith(old)
                                     for old in seen_revs)
                 if not same_revision:

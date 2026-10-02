@@ -4,15 +4,15 @@ Every stop below is a real room message or commit. Paste the command to see it y
 
 **0:00 What it is.** Six seats on three model families built all four Pocketful stages in BAND from one dispatch, with no human message after it. Read the seat table at the top of `FACTORY.md`, then the mandates in `mandates/`.
 
-**0:30 A bad result the factory caught.** At 22m the gatekeeper rejected revision `2299fe8`: "expected reset with balance2^53 to return204 and signup İ@example.test to derive i_; observed422 validation_failed and derived _."
+**0:30 A bad result the factory caught.** At 2h 09m the gatekeeper rejected revision `8548455`: "expected historical balance 9007199254740992, observed 9007199254740991 after a valid correction."
 ```
-jq '.messages[] | select(.id=="5a0d74b8-b5b0-4348-999d-40ffbbf13bf5") | .content' room.json
+jq '.messages[] | select(.id=="837dd787-aef2-470d-aa36-19807164c107") | .content' room.json
 ```
-builder followed with a same-stage commit 0m later in `145a95f` ("stage-1: balances valid up to and including 2^53, checked in BigInt (§4, ledger R1-041, coordinator ruling)"):
+builder followed with a same-stage commit 1 minute later in `fce49ac` ("stage-3: exact BigInt accumulation for historical balances, statements, openings and the overdraft sweep (R2; REJECT 8548455 history_exact reproduction)"):
 ```
-git show --stat 145a95f
+git show --stat fce49ac
 ```
-The run had 12 rejections; every one was followed by a same-stage writer commit.
+The run had 12 rejections; every one ended with a newer writer revision the gatekeeper accepted, and 9 had a same-stage writer commit after the REJECT itself.
 
 **1:15 Every stage accepted by a different model family than the one that wrote it.**
 

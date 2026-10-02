@@ -25,5 +25,9 @@
     "Concurrency and history checks are sampled, not proofs.",
     "Two untracked auditor placeholder files stayed in the build machine's working tree and are not part of this repository."
   ],
-  "measurements": []
+  "measurements": [],
+  "featured_reject_rev": "8548455",
+  "outside_band_families": {
+    "auditor": "DeepSeek"
+  }
 }

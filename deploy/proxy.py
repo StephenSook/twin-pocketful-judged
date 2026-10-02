@@ -78,8 +78,8 @@ def canonical(raw):
         if decoded == path:
             break
         path = decoded
-    if "%" in path or any(ord(c) < 32 for c in path):
-        return None
+    if "%" in path or "\\" in path or ";" in path or any(ord(c) < 32 for c in path):
+        return None  # a backslash can also arrive nested-encoded (%255C), so check after decoding
     trailing = path.endswith("/")
     # normpath keeps a leading "//" (POSIX allows it), so collapse slashes after normalizing too.
     path = re.sub(r"/+", "/", posixpath.normpath(re.sub(r"/+", "/", "/" + path)))
@@ -164,7 +164,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
         for k, v in (extra or {}).items():
             self.send_header(k, v)
         self.end_headers()
-        self.wfile.write(data)
+        if self.command != "HEAD":  # a HEAD response carries headers only
+            self.wfile.write(data)
 
     def handle_any(self):
         # The request can forge forwarding headers. Rate-limit on the socket peer instead.
@@ -173,6 +174,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self.reply(429, {"error": "rate_limited"}, {"Retry-After": "10"})
         if self.path == "/__demo/status":
             return self.reply(200, {"reset_every_seconds": RESET_SECONDS, **state})
+        if self.headers.defects or any("\r" in v or "\n" in v for v in self.headers.values()):
+            # The stdlib stops reading headers at a malformed line, so a body length the edge
+            # honoured may be missing here, and it keeps an obsolete folded line inside the value,
+            # which forwarding would turn back into a separate header. Refuse both.
+            return self.reply(400, {"error": "bad_headers"})
         canon = canonical(self.path)
         if canon is None:
             return self.reply(400, {"error": "bad_path"})
@@ -180,17 +186,19 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if blocked(path):
             return self.reply(404, {"error": "not_found", "detail": "test endpoints are closed on the public demo"})
         target = path + ("?" + query if query else "")
-        if self.headers.get("Transfer-Encoding"):
+        if self.headers.get_all("Transfer-Encoding") is not None:
             # The proxy frames bodies by Content-Length only; a chunked body would be left unread.
             return self.reply(411, {"error": "length_required"})
         lengths = self.headers.get_all("Content-Length") or ["0"]
-        raw_length = lengths[0].strip()
-        if len(lengths) != 1 or not raw_length.isdigit():
+        raw_length = lengths[0].strip(" \t")  # HTTP whitespace only; any other control byte is refused
+        if len(lengths) != 1 or re.fullmatch(r"[0-9]{1,12}", raw_length) is None:
             return self.reply(400, {"error": "bad_content_length"})
         length = int(raw_length)
         if length > MAX_BODY:
             return self.reply(413, {"error": "body_too_large"})
         body = self.rfile.read(length) if length else b""
+        if len(body) != length:
+            return self.reply(400, {"error": "incomplete_body"})  # never forward a truncated request
         headers = {k: v for k, v in self.headers.items() if k.lower() not in HOP}
         try:
             c, r = upstream(self.command, target, body, headers)
@@ -202,7 +210,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
         for k, v in r.getheaders():
             if k.lower() not in HOP and k.lower() not in ("date", "server"):
                 self.send_header(k, v)
-        self.send_header("Content-Length", str(len(data)))
+        # A HEAD response has no body but keeps the length the service reported for GET.
+        upstream_length = r.getheader("Content-Length")
+        head_length = self.command == "HEAD" and upstream_length and upstream_length.isascii() \
+            and upstream_length.isdigit()
+        if head_length:
+            self.send_header("Content-Length", upstream_length)
+        elif self.command != "HEAD":
+            self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(data)
