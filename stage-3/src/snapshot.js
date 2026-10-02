@@ -250,7 +250,9 @@ function buildFixtureState(plan, hashes) {
   let lastMs = now;
   for (const list of [payments, requests, auths]) for (const x of list) if (x.ms > lastMs) lastMs = x.ms;
   s.lastMs = lastMs;
-  deriveHistory(s, { seeded: true });
+  // Holds seeded as open have a lifecycle (created, then expiry at expires_at)
+  // even when already expired at reset time; seeded closed holds do not.
+  deriveHistory(s, { seeded: true, seededOpen: new Set(plan.authorizations.filter((x) => x.status === 'open').map((x) => x.id)) });
   return s;
 }
 
@@ -460,8 +462,8 @@ function deriveHistory(s, extras) {
       s.authEvents.set(a.authorization_id, events.get(a.authorization_id));
       continue;
     }
-    // Seeded closed holds (and seeded open holds already past expiry) have no lifecycle (stage 3).
-    const noHistory = extras.seeded === true && a.status !== 'open';
+    // Seeded closed holds have no lifecycle (stage 3); seeded open ones do.
+    const noHistory = extras.seeded === true && !extras.seededOpen.has(a.authorization_id);
     const capturedKnown = captures.reduce((n, c) => n + c.amount, 0);
     s.authEvents.set(a.authorization_id, {
       createdMs,

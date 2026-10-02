@@ -300,3 +300,22 @@ test('snapshot tokens survive export/import (ruling S3-3); destination tokens an
   const fresh = (await call('POST', '/auth/login', { body: { email: 'ada@example.com', password: 'correct horse' } })).body.token;
   assert.strictEqual((await call('GET', `/statement?snapshot=${q(first.snapshot)}`, { token: fresh })).status, 404);
 });
+
+test('a seeded open hold already expired at reset still held funds between creation and expiry', async () => {
+  const day = (d) => `2020-01-0${d}T00:00:00+00:00`;
+  const users = ['ada', 'bob', 'cy', 'op'].map((h) => ({ id: `u_${h}`, email: `${h}@example.com`, password: 'correct horse', display_name: h, handle: h, balance: 300 }));
+  const t = await reset({
+    currency: 'EUR', minor_units: 2, users,
+    payments: [
+      { id: 'p_out', from_user_id: 'u_ada', to_user_id: 'u_bob', amount: 200, created_at: day(5) },
+      { id: 'p_in', from_user_id: 'u_bob', to_user_id: 'u_ada', amount: 200, created_at: day(6) },
+    ],
+    authorizations: [{ id: 'a_old', from_user_id: 'u_ada', to_user_id: 'u_bob', amount: 250, status: 'open', created_at: day(2), expires_at: day(4) }],
+  });
+  const at = await me(t.ada, `?as_of=${q(day(2))}&known_at=${q(day(2))}`);
+  assert.deepStrictEqual([at.total, at.held, at.available], [300, 250, 50]);
+  assert.strictEqual((await me(t.ada, `?as_of=${q(day(4))}`)).held, 0, 'released at expires_at');
+  assert.strictEqual((await me(t.ada)).held, 0);
+  const a = (await call('GET', '/authorizations', { token: t.ada })).body.authorizations[0];
+  assert.deepStrictEqual([a.status, a.closed_at], ['expired', day(4)]);
+});
