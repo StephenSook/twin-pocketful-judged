@@ -354,3 +354,20 @@ test('historical balances are exact around 2^53 (R2)', async () => {
   const st = (await call('GET', '/statement', { token: a })).text;
   assert.match(st, /"closing_balance":9007199254740992/);
 });
+
+test('a correction credit above 2^53 is 422 and changes nothing', async () => {
+  const MAX = 9007199254740992;
+  const users = [
+    { id: 'u_a', email: 'a@x.io', password: 'correct horse', display_name: 'A', handle: 'a', balance: 100 },
+    { id: 'u_b', email: 'b@x.io', password: 'correct horse', display_name: 'B', handle: 'b', balance: MAX },
+  ];
+  assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users, payments: [
+    { id: 'p', from_user_id: 'u_a', to_user_id: 'u_b', amount: 1, created_at: '2020-01-01T00:00:00+00:00' }] } })).status, 204);
+  const a = (await call('POST', '/auth/login', { body: { email: 'a@x.io', password: 'correct horse' } })).body.token;
+  const b = (await call('POST', '/auth/login', { body: { email: 'b@x.io', password: 'correct horse' } })).body.token;
+  const r = await call('POST', '/payments/p/corrections', { token: a, key: 'k', body: { expected_revision: 1, amount: 2, effective_at: '2020-01-01T00:00:00+00:00', reason: 'more' } });
+  assert.deepStrictEqual([r.status, r.body.error.code], [422, 'validation_failed']);
+  assert.match((await call('GET', '/me', { token: a })).text, /"balance":100,/);
+  assert.match((await call('GET', '/me', { token: b })).text, /"balance":9007199254740992,/);
+  assert.strictEqual((await call('GET', '/payments/p/revisions', { token: a })).body.revisions.length, 1);
+});
