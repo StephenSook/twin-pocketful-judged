@@ -1,0 +1,595 @@
+{
+  "revision": "803871815fafa082a022c4d418b0cfb43b149530",
+  "stage_tree": "092fe21f0383e184e0c8f7636e55a15474b89021",
+  "status": "gates passed; pending coordinator transition ruling and combined-candidate confirmation",
+  "verifier_revision": "8f18bd9 plus seeded UI terminal-state extension in this evidence commit",
+  "clean_copy": "/tmp/gatekeeper-s2-l0q3ih4a/candidate-8038718",
+  "build": {
+    "command": "docker build -t gatekeeper-s2-8038718 /tmp/gatekeeper-s2-l0q3ih4a/candidate-8038718/stage-2",
+    "exit_status": 0
+  },
+  "provided": {
+    "command": "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python -m harness run --track pocketful --repo /tmp/gatekeeper-s2-l0q3ih4a/candidate-8038718 --stage 2 --mode isolated --out /tmp/gatekeeper-s2-l0q3ih4a/check-8038718",
+    "exit_status": 0,
+    "own_and_previous": {
+      "1": {
+        "collected": 147,
+        "passed": 147,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_1/test_me_payments.py": {
+            "passed": 24,
+            "total": 24
+          },
+          "stage_1/test_requests_splits_feed.py": {
+            "passed": 39,
+            "total": 39
+          },
+          "stage_1/test_retries_splits_input.py": {
+            "passed": 51,
+            "total": 51
+          },
+          "stage_1/test_sample.py": {
+            "passed": 19,
+            "total": 19
+          },
+          "stage_1/test_seeded_state.py": {
+            "passed": 14,
+            "total": 14
+          }
+        }
+      },
+      "2": {
+        "collected": 35,
+        "passed": 35,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_2/test_sample.py": {
+            "passed": 10,
+            "total": 10
+          },
+          "stage_2/test_ui.py": {
+            "passed": 25,
+            "total": 25
+          }
+        }
+      }
+    },
+    "next_stage": {
+      "collected": 6,
+      "passed": 2,
+      "failed": 1,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_3/test_sample.py": {
+          "passed": 2,
+          "total": 6
+        }
+      },
+      "not_run": 3,
+      "applicable": "run by provided tool; no exemption",
+      "failure_expected": true
+    },
+    "claimed_stage": "2",
+    "shared_command": "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python -m harness run --track pocketful --repo /home/ubuntu/work/band-work/current --stage 2 --mode isolated --out /home/ubuntu/work/band-work/checks/pocketful-judged/s2-2",
+    "shared_exit_status": 0,
+    "shared_revision": "8f18bd9",
+    "shared_product_diff_from_candidate": "empty"
+  },
+  "model": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -u stage-2/verification/model/driver.py --base-url http://172.24.0.2:18080 --second-url http://172.24.0.3:18080 --stage1-url http://172.24.0.8:18080 --steps 100",
+    "exit_status": 0,
+    "output": "DIFFERENTIAL PASS operations=532 seed=20261001 persistence=pass concurrency=50 auth-controls=pass boundary=pass holds-expiry=pass migration=pass"
+  },
+  "checks": [
+    {
+      "name": "holds",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/holds.py http://172.24.0.2:18080",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 1165,
+          "max_request_seconds": 0.0256
+        }
+      ]
+    },
+    {
+      "name": "probe",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/probe.py http://172.24.0.2:18080",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 917,
+          "max_request_seconds": 0.025
+        }
+      ]
+    },
+    {
+      "name": "environment",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/environment.py gatekeeper-s2-8038718 gatekeeper-s1-internal",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 423,
+          "startup_seconds": [
+            0.3265,
+            0.3501
+          ],
+          "max_request_seconds": 2.7109,
+          "origin": "plain HTTP on non-loopback container IP"
+        }
+      ]
+    },
+    {
+      "name": "seeded",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/seeded_limits.py http://172.24.0.2:18080",
+      "exit_status": 0,
+      "output": [
+        {
+          "users": 1000,
+          "reset_seconds": 0.3967,
+          "immediate_export_seconds": 0.0038,
+          "login_200": 49,
+          "wrong_password_401": 1,
+          "max_login_seconds": 0.0419,
+          "signup_201": 50,
+          "import_seconds": 0.0294,
+          "seed_hash_parameters": [
+            "m=1024,t=1,p=1"
+          ]
+        },
+        {
+          "users": 5000,
+          "reset_seconds": 1.9912,
+          "immediate_export_seconds": 0.0123,
+          "login_200": 49,
+          "wrong_password_401": 1,
+          "max_login_seconds": 0.0252,
+          "signup_201": 50,
+          "import_seconds": 0.0525,
+          "seed_hash_parameters": [
+            "m=1024,t=1,p=1"
+          ]
+        },
+        {
+          "result": "PASS",
+          "assertions": 544,
+          "cases": 2
+        }
+      ]
+    },
+    {
+      "name": "security",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/security.py http://172.24.0.3:18080 --fixture-exemption",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 152,
+          "fixture_exemption": true,
+          "identifier_kinds": [
+            "bearer token",
+            "request ID",
+            "recipient/payer handle",
+            "settlement handles",
+            "idempotency key"
+          ],
+          "authorization_ruling": "known request wrong role 403; unknown request 404",
+          "pages": "not applicable; API-only"
+        }
+      ]
+    },
+    {
+      "name": "password",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/password_scope.py http://172.24.0.3:18080 --fixture-exemption",
+      "exit_status": 0,
+      "output": [
+        {
+          "initial_seed_parameters": "m=1024,t=1,p=1",
+          "signup_parameters": "m=47104,t=2,p=1",
+          "after_login_parameters": "m=47104,t=2,p=1",
+          "initial_seed_meets_original_minimum": false,
+          "fixture_exemption": true,
+          "unique_seed_salts_before_login": true,
+          "behavior_checks": "PASS",
+          "assertions": 35
+        }
+      ]
+    },
+    {
+      "name": "boundaries",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/boundaries.py http://172.24.0.3:18080",
+      "exit_status": 0,
+      "output": [
+        {
+          "checks": [
+            {
+              "case": "inclusive 2^53 balance",
+              "expected_status": 204,
+              "observed_status": 204,
+              "passed": true
+            },
+            {
+              "case": "lowercase then replace",
+              "expected_handle": "i_",
+              "observed_handle": "i_",
+              "passed": true
+            }
+          ],
+          "passed": 2,
+          "failed": 0
+        }
+      ]
+    },
+    {
+      "name": "cold",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/cold_login.py gatekeeper-s2-8038718 gatekeeper-s1-internal",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "requests": 50,
+          "statuses": {
+            "401": 50
+          },
+          "max_seconds": 2.697
+        }
+      ]
+    },
+    {
+      "name": "mutants",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/mutate.py /tmp/gatekeeper-s2-l0q3ih4a/candidate-8038718/stage-2 gatekeeper-s1-internal /tmp/gatekeeper-s2-l0q3ih4a/mutants-8038718",
+      "exit_status": 0,
+      "output": [
+        {
+          "planted": 8,
+          "caught": 8,
+          "results": [
+            {
+              "fault": "overdraft",
+              "caught": true,
+              "exit": 1,
+              "check": "every snapshot nonnegative"
+            },
+            {
+              "fault": "credit",
+              "caught": true,
+              "exit": 1,
+              "check": "every snapshot conserves total"
+            },
+            {
+              "fault": "idempotency",
+              "caught": true,
+              "exit": 1,
+              "check": "one original among 50 identical writes"
+            },
+            {
+              "fault": "request_guard",
+              "caught": true,
+              "exit": 1,
+              "check": "request paid once among 50 distinct keys"
+            },
+            {
+              "fault": "private_feed",
+              "caught": true,
+              "exit": 1,
+              "check": "private visibility including operator"
+            },
+            {
+              "fault": "held_spend",
+              "caught": true,
+              "exit": 1,
+              "check": "error /payments insufficient_funds"
+            },
+            {
+              "fault": "capture_limit",
+              "caught": true,
+              "exit": 1,
+              "check": "error /authorizations/a_MBwH2SgmYK5VqPwu/capture capture_exceeds_authorization"
+            },
+            {
+              "fault": "nonfinal",
+              "caught": true,
+              "exit": 1,
+              "check": "wallet total/held/available exact"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "integrity",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/gatekeeper/integrity.py /tmp/gatekeeper-s2-l0q3ih4a/candidate-8038718 /home/ubuntu/work/dark-factory-wearedevs /tmp/gatekeeper-s2-l0q3ih4a/provided-baseline.json",
+      "exit_status": 0,
+      "output": [
+        {
+          "provided_files": 30,
+          "provided_changed": [],
+          "tracked_files_scanned": 86,
+          "credential_pattern_hit_files": [],
+          "product_files": 7,
+          "check_identifier_hit_files": [],
+          "declared_package_dependencies": 0,
+          "advisory_audit": "empty package inventory",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "name": "browser",
+      "command": "PYTHONDONTWRITEBYTECODE=1 /home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python stage-2/verification/gatekeeper/browser_checks.py http://172.24.0.4:18080 /tmp/gatekeeper-s2-l0q3ih4a/screens-8038718",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 88,
+          "viewports": [
+            {
+              "width": 375,
+              "result": "PASS",
+              "screenshots": 11
+            },
+            {
+              "width": 1440,
+              "result": "PASS",
+              "screenshots": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "states",
+      "command": "PYTHONDONTWRITEBYTECODE=1 /home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python stage-2/verification/gatekeeper/browser_states.py http://172.24.0.4:18080 /tmp/gatekeeper-s2-l0q3ih4a/screens-8038718",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 330,
+          "viewports": [
+            {
+              "width": 375,
+              "result": "PASS"
+            },
+            {
+              "width": 1440,
+              "result": "PASS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "upgrade",
+      "command": "PYTHONDONTWRITEBYTECODE=1 /home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python stage-2/verification/gatekeeper/browser_upgrade.py http://172.24.0.4:18080 /tmp/gatekeeper-s2-l0q3ih4a/screens-8038718 gatekeeper-s1-d1ebec2 gatekeeper-s1-internal",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 42,
+          "viewports": [
+            375,
+            1440
+          ],
+          "source_destroyed_before_import": true
+        }
+      ]
+    },
+    {
+      "name": "visual",
+      "command": "PYTHONDONTWRITEBYTECODE=1 /home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python stage-2/verification/gatekeeper/visual_rules.py http://172.24.0.4:18080 /tmp/gatekeeper-s2-l0q3ih4a/screens-8038718",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 178,
+          "contrast": [
+            {
+              "width": 375,
+              "route": "/",
+              "count": 47,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/requests",
+              "count": 28,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/split",
+              "count": 24,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/authorizations",
+              "count": 42,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/signup",
+              "count": 31,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/login",
+              "count": 28,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/",
+              "count": 47,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/requests",
+              "count": 28,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/split",
+              "count": 24,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/authorizations",
+              "count": 42,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/signup",
+              "count": 31,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/login",
+              "count": 28,
+              "bad": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "web-security",
+      "command": "PYTHONDONTWRITEBYTECODE=1 /home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python stage-2/verification/gatekeeper/web_security.py http://172.24.0.3:18080 /tmp/gatekeeper-s2-l0q3ih4a/screens-8038718",
+      "exit_status": 0,
+      "output": [
+        {
+          "result": "PASS",
+          "assertions": 84,
+          "headers": 8,
+          "traversals": 4,
+          "xss": "inert"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    "evidence/8038718/1440-authorizations-filled.png",
+    "evidence/8038718/1440-home-empty.png",
+    "evidence/8038718/1440-home-filled.png",
+    "evidence/8038718/1440-home-held.png",
+    "evidence/8038718/1440-home-refused-decimal.png",
+    "evidence/8038718/1440-home-uncertain.png",
+    "evidence/8038718/1440-login-empty.png",
+    "evidence/8038718/1440-login-filled.png",
+    "evidence/8038718/1440-requests-filled.png",
+    "evidence/8038718/1440-split-filled.png",
+    "evidence/8038718/1440-split-preview.png",
+    "evidence/8038718/1440-states-all-hold-statuses.png",
+    "evidence/8038718/1440-states-authorizations-empty.png",
+    "evidence/8038718/1440-states-authorizations-filled.png",
+    "evidence/8038718/1440-states-authorizations-loading.png",
+    "evidence/8038718/1440-states-authorizations-refused.png",
+    "evidence/8038718/1440-states-authorize-refused.png",
+    "evidence/8038718/1440-states-currency-BHD.png",
+    "evidence/8038718/1440-states-currency-JPY.png",
+    "evidence/8038718/1440-states-home-empty.png",
+    "evidence/8038718/1440-states-home-loading.png",
+    "evidence/8038718/1440-states-home-refused.png",
+    "evidence/8038718/1440-states-login-empty.png",
+    "evidence/8038718/1440-states-login-filled.png",
+    "evidence/8038718/1440-states-login-loading.png",
+    "evidence/8038718/1440-states-login-refused.png",
+    "evidence/8038718/1440-states-request-form-refused.png",
+    "evidence/8038718/1440-states-requests-empty.png",
+    "evidence/8038718/1440-states-requests-filled.png",
+    "evidence/8038718/1440-states-requests-loading.png",
+    "evidence/8038718/1440-states-requests-refused.png",
+    "evidence/8038718/1440-states-signup-empty.png",
+    "evidence/8038718/1440-states-signup-filled.png",
+    "evidence/8038718/1440-states-signup-loading.png",
+    "evidence/8038718/1440-states-signup-refused.png",
+    "evidence/8038718/1440-states-split-empty.png",
+    "evidence/8038718/1440-states-split-filled.png",
+    "evidence/8038718/1440-states-split-refused.png",
+    "evidence/8038718/1440-upgrade-recovered.png",
+    "evidence/8038718/1440-upgrade-request-paid.png",
+    "evidence/8038718/1440-upgrade-uncertain.png",
+    "evidence/8038718/375-authorizations-filled.png",
+    "evidence/8038718/375-home-empty.png",
+    "evidence/8038718/375-home-filled.png",
+    "evidence/8038718/375-home-held.png",
+    "evidence/8038718/375-home-refused-decimal.png",
+    "evidence/8038718/375-home-uncertain.png",
+    "evidence/8038718/375-login-empty.png",
+    "evidence/8038718/375-login-filled.png",
+    "evidence/8038718/375-requests-filled.png",
+    "evidence/8038718/375-split-filled.png",
+    "evidence/8038718/375-split-preview.png",
+    "evidence/8038718/375-states-all-hold-statuses.png",
+    "evidence/8038718/375-states-authorizations-empty.png",
+    "evidence/8038718/375-states-authorizations-filled.png",
+    "evidence/8038718/375-states-authorizations-loading.png",
+    "evidence/8038718/375-states-authorizations-refused.png",
+    "evidence/8038718/375-states-authorize-refused.png",
+    "evidence/8038718/375-states-currency-BHD.png",
+    "evidence/8038718/375-states-currency-JPY.png",
+    "evidence/8038718/375-states-home-empty.png",
+    "evidence/8038718/375-states-home-loading.png",
+    "evidence/8038718/375-states-home-refused.png",
+    "evidence/8038718/375-states-login-empty.png",
+    "evidence/8038718/375-states-login-filled.png",
+    "evidence/8038718/375-states-login-loading.png",
+    "evidence/8038718/375-states-login-refused.png",
+    "evidence/8038718/375-states-request-form-refused.png",
+    "evidence/8038718/375-states-requests-empty.png",
+    "evidence/8038718/375-states-requests-filled.png",
+    "evidence/8038718/375-states-requests-loading.png",
+    "evidence/8038718/375-states-requests-refused.png",
+    "evidence/8038718/375-states-signup-empty.png",
+    "evidence/8038718/375-states-signup-filled.png",
+    "evidence/8038718/375-states-signup-loading.png",
+    "evidence/8038718/375-states-signup-refused.png",
+    "evidence/8038718/375-states-split-empty.png",
+    "evidence/8038718/375-states-split-filled.png",
+    "evidence/8038718/375-states-split-refused.png",
+    "evidence/8038718/375-upgrade-recovered.png",
+    "evidence/8038718/375-upgrade-request-paid.png",
+    "evidence/8038718/375-upgrade-uncertain.png"
+  ],
+  "known_limitations": [
+    "Public fixture passwords use Argon2id m1024KiB,t1,p1 with unique salts until successful-login upgrade; signups use m47104KiB,t2,p1, per coordinator scope ruling.",
+    "Finite black-box histories and mutation tests do not prove all possible internal schedules."
+  ],
+  "stage1_frozen": "git diff --stat 16542a4 HEAD -- stage-1 is empty",
+  "prior_stage2_rejections": [
+    {
+      "revision": "26581d1",
+      "finding": "auth heading obscured by art",
+      "fixed": "8038718",
+      "evidence": "desktop screenshot visually reviewed; new art is in flow beneath heading"
+    },
+    {
+      "revision": "26581d1",
+      "finding": "native view-transition pageerror and non-transform UA keyframes",
+      "fixed": "e8ffe16",
+      "ruling": "pending direct delivery"
+    }
+  ]
+}
