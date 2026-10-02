@@ -30,6 +30,9 @@ def fixture():
 
 
 async def shot(page, width, name):
+    # Capture the actual screen, not the permitted sub-700ms brand overlay.
+    # Separate motion checks still exercise controls during that overlay.
+    await page.locator('.intro').wait_for(state='detached',timeout=2000)
     await page.screenshot(path=str(ROOT / (str(width) + '-' + name + '.png')), full_page=True)
 
 
