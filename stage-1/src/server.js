@@ -78,12 +78,13 @@ async function login(req, res) {
   if (typeof body.email !== 'string' || typeof body.password !== 'string') throw new ApiError(400, 'malformed_request', 'email and password must be strings');
   const state = store.s;
   const user = store.userByEmail(v.emailKey(body.email));
-  // A seeded user's hash may still be pending after a large reset: compute it first.
-  const hash = user ? await seeding.hashFor(state, user).catch(() => null) : null;
-  const good = hash ? await passwords.verifyPassword(body.password, hash) : await passwords.dummyVerify(body.password);
+  const hash = user ? user.password_hash : null;
+  const good = user ? await passwords.verifyPassword(body.password, hash) : await passwords.dummyVerify(body.password);
   // Re-read after the async verify: a reset/import may have replaced the state.
   const current = good ? store.userByEmail(v.emailKey(body.email)) : null;
   if (!current || current !== user) throw new ApiError(401, 'unauthenticated', 'wrong email or password');
+  // Seeded users carry a reduced-cost hash until their first login: upgrade it.
+  seeding.upgradeAfterLogin(current, body.password, hash, () => store.s === state);
   const token = store.issueToken(current);
   v.sendJson(res, 200, { user_id: current.id, display_name: current.display_name, token });
 }
@@ -176,23 +177,15 @@ function createSettlement(req, res) {
 async function reset(req, res) {
   const fixture = await readObject(req, { maxBytes: TEST_BODY_BYTES });
   const plan = planFixture(fixture);
-  // Slow hashing never runs inside the swap, which is one assignment. Small
-  // fixtures are hashed first; large ones finish in the background (seeding.js).
-  const { hashes, attach } = await seeding.hashFixturePasswords(plan);
-  const state = buildFixtureState(plan, hashes);
-  store.replace(state);
-  attach(state, () => store.s === state);
+  // Hashing runs before the swap, which is one assignment (seeding.js).
+  const hashes = await seeding.hashFixturePasswords(plan);
+  store.replace(buildFixtureState(plan, hashes));
   v.sendNoContent(res);
 }
 
-async function exportState(req, res) {
+function exportState(req, res) {
   req.resume();
-  // Never export a pending seeded password: wait until every hash is done.
-  // The snapshot itself is taken synchronously, so it is atomic.
-  for (let state = store.s; ; state = store.s) {
-    await seeding.allHashed(state);
-    if (store.s === state) break;
-  }
+  // Synchronous, so the snapshot is atomic.
   sendText(res, 200, JSON.stringify(store.exportSnapshot()));
 }
 

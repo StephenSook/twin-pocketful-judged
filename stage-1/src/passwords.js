@@ -7,10 +7,11 @@
 const crypto = require('node:crypto');
 
 const PARAMS = Object.freeze({ memory: 47104, passes: 2, parallelism: 1 }); // KiB, t, p
-// OWASP minimum argon2id setting, used only for reset fixtures with many
-// distinct passwords so that hashing them still fits the 10 s reset budget on 2 vCPU.
-const BULK_PARAMS = Object.freeze({ memory: 19456, passes: 2, parallelism: 1 });
-const BULK_THRESHOLD = 64; // distinct seeded passwords above which BULK_PARAMS is used
+// Seeded fixture passwords are public test input (coordinator ruling on §2/§6/
+// §10): they are hashed with this reduced-cost Argon2id so that a 5000-user
+// reset plus an immediate export stays well under 10 s on 2 vCPU, and are
+// rehashed with PARAMS after the user's first successful login.
+const SEED_PARAMS = Object.freeze({ memory: 1024, passes: 1, parallelism: 1 });
 const SALT_BYTES = 16;
 const TAG_BYTES = 32;
 const PREFIX = '$argon2id$v=19$';
@@ -35,8 +36,10 @@ async function hashPassword(password, params = PARAMS) {
   return `${PREFIX}m=${params.memory},t=${params.passes},p=${params.parallelism}$${salt.toString('base64url')}$${key.toString('base64url')}`;
 }
 
-function paramsForFixture(distinctPasswords) {
-  return distinctPasswords > BULK_THRESHOLD ? BULK_PARAMS : PARAMS;
+// True when a stored hash uses weaker parameters than PARAMS.
+function needsRehash(stored) {
+  const p = parse(stored);
+  return p !== null && (p.params.memory < PARAMS.memory || p.params.passes < PARAMS.passes);
 }
 
 // Bounds keep an imported hash from demanding unbounded memory or time.
@@ -83,4 +86,4 @@ async function dummyVerify(password) {
   return false;
 }
 
-module.exports = { BULK_THRESHOLD, dummyHashReady, hashPassword, verifyPassword, isPasswordHash, dummyVerify, paramsForFixture, PARAMS, BULK_PARAMS };
+module.exports = { dummyHashReady, hashPassword, verifyPassword, isPasswordHash, needsRehash, dummyVerify, PARAMS, SEED_PARAMS };

@@ -328,14 +328,18 @@ test('reset time does not grow with user count when passwords repeat (5000 users
   assert.ok(!exp.text.includes('correct horse') && !exp.text.includes('battery staple'));
 });
 
-test('large reset with distinct passwords returns at once; seeded users log in immediately; export waits for hashes', async () => {
+test('reset plus immediate export with 5000 distinct passwords stays under 5 s; seeded logins work at once', async () => {
   for (const n of [1000, 5000]) {
     const users = Array.from({ length: n }, (_, i) => ({ id: `u${i}`, email: `u${i}@x.io`, password: `secret-${i}-pw`, display_name: `U${i}`, handle: `u${i}`, balance: 1 }));
     const t0 = Date.now();
     assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users } })).status, 204);
+    const exp = await call('GET', '/_test/export');
     const took = Date.now() - t0;
-    assert.ok(took < 10000, `${n}-user reset took ${took} ms`);
-    // immediately: 50 concurrent logins of seeded users deep in the list, plus a wrong password
+    assert.strictEqual(exp.status, 200);
+    assert.ok(took < 5000, `${n}-user reset + export took ${took} ms`);
+    assert.ok(!exp.text.includes('secret-'));
+    const salts = new Set(exp.body.state.users.map((u) => u.password_hash.split('$')[4]));
+    assert.strictEqual(salts.size, n, 'every seeded user has its own salt');
     const t1 = Date.now();
     const rs = await Promise.all(Array.from({ length: 50 }, (_, i) => {
       const k = n - 1 - i * 3;
@@ -344,16 +348,25 @@ test('large reset with distinct passwords returns at once; seeded users log in i
     assert.ok(Date.now() - t1 < 5000, `burst took ${Date.now() - t1} ms`);
     assert.strictEqual(rs[0].status, 401);
     assert.ok(rs.slice(1).every((r) => r.status === 200));
+    assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204);
+    assert.strictEqual((await call('POST', '/auth/login', { body: { email: 'u777@x.io', password: 'secret-777-pw' } })).status, 200);
   }
-  // export after a 1000-distinct reset contains every hash and no plaintext; import restores logins
-  const users = Array.from({ length: 1000 }, (_, i) => ({ id: `u${i}`, email: `u${i}@x.io`, password: `secret-${i}-pw`, display_name: `U${i}`, handle: `u${i}`, balance: 1 }));
+});
+
+test('a seeded password is rehashed with full parameters after the first login', async () => {
+  const users = [{ id: 'u_s', email: 's@x.io', password: 'seed secret', display_name: 'S', handle: 's', balance: 0 }];
   assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users } })).status, 204);
-  // Export waits until every seeded hash is done (CPU-bound, ~13 ms per
-  // distinct password on 2 vCPU), so it is not timed here.
-  const exp = await call('GET', '/_test/export');
-  assert.strictEqual(exp.status, 200);
-  assert.ok(!exp.text.includes('secret-'));
-  assert.ok(!exp.text.includes('"password_hash":null'));
-  assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204);
-  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 'u777@x.io', password: 'secret-777-pw' } })).status, 200);
+  const hashOf = async () => (await call('GET', '/_test/export')).body.state.users[0].password_hash;
+  assert.match(await hashOf(), /\$m=1024,t=1,p=1\$/);
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 's@x.io', password: 'wrong one' } })).status, 401);
+  assert.match(await hashOf(), /\$m=1024,t=1,p=1\$/, 'a failed login does not rehash');
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 's@x.io', password: 'seed secret' } })).status, 200);
+  let upgraded = '';
+  for (let i = 0; i < 50 && !/\$m=47104,t=2,p=1\$/.test(upgraded); i++) {
+    await new Promise((r) => setTimeout(r, 100));
+    upgraded = await hashOf();
+  }
+  assert.match(upgraded, /\$m=47104,t=2,p=1\$/);
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 's@x.io', password: 'seed secret' } })).status, 200);
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 's@x.io', password: 'seed secretx' } })).status, 401);
 });
