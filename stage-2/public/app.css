@@ -484,9 +484,9 @@ a { color: var(--ink); }
 .tilt-4 { --rest: -3deg; transform: rotate(-3deg); }
 .tilt-5 { --rest: 2deg; transform: rotate(2deg); }
 .tilt-6 { --rest: -5deg; transform: rotate(-5deg); }
-.art-auth { width: 120px; justify-self: end; margin-top: -8px; --rest: 8deg; transform: rotate(8deg); }
-@media (min-width: 900px) { .art-auth { position: absolute; right: 28px; top: 28px; width: 170px; } }
-.scribble-auth { color: var(--sun); }
+.art-auth { width: 120px; justify-self: end; margin: 0; --rest: 8deg; transform: rotate(8deg); }
+@media (min-width: 900px) { .art-auth { width: 150px; } }
+.scribble-auth { color: var(--sun); margin: 0; justify-self: end; }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 @media (min-width: 640px) { .steps { grid-template-columns: repeat(3, 1fr); } }
 .step-card { background: var(--white); color: var(--ink); border-radius: var(--radius-card); padding: 14px; display: grid; gap: 4px; }
