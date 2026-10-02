@@ -319,3 +319,16 @@ test('a seeded open hold already expired at reset still held funds between creat
   const a = (await call('GET', '/authorizations', { token: t.ada })).body.authorizations[0];
   assert.deepStrictEqual([a.status, a.closed_at], ['expired', day(4)]);
 });
+
+test('payments created in the same second appear in creation order in statements', async () => {
+  const t = await reset();
+  const deltas = [];
+  for (const amount of [300, 200, 100, 50]) {
+    await call('POST', '/payments', { token: t.ada, key: `o${amount}`, body: { to_handle: 'cy', amount } });
+    deltas.push(-amount);
+  }
+  const st = (await call('GET', `/statement?from=${q(iso(T0))}`, { token: t.ada })).body;
+  const ids = st.entries.map((e) => e.payment.payment_id);
+  assert.deepStrictEqual(ids, [...ids].sort(), 'ordered by payment id');
+  assert.deepStrictEqual(st.entries.map((e) => e.delta), deltas);
+});

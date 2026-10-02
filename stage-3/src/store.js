@@ -115,9 +115,15 @@ class Store {
     return ms;
   }
 
+  // Opaque ids that sort in creation order (stage 3: statement entries at the
+  // same effective instant are ordered by payment id): fixed-width base-36 time
+  // and per-millisecond counter, then a random suffix.
   newId(prefix, taken) {
     for (;;) {
-      const id = `${prefix}_${crypto.randomBytes(12).toString('base64url')}`;
+      const now = Math.max(Date.now(), this.idMs || 0);
+      this.idSeq = now === this.idMs ? this.idSeq + 1 : 0;
+      this.idMs = now;
+      const id = `${prefix}_${now.toString(36).padStart(9, '0')}${this.idSeq.toString(36).padStart(4, '0')}${crypto.randomBytes(5).toString('hex')}`;
       if (!taken(id)) return id;
     }
   }
