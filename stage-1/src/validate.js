@@ -120,9 +120,11 @@ function parseJsonBuffer(buf) {
   }
 }
 
-// A number literal whose exact decimal value is not an integer but which
-// rounds to one as a double (1000.0000000000001 -> 1000). Kept as an object so
-// no number check accepts it and canonicalJson keeps it distinct.
+// A number literal whose exact decimal value differs from the integer it
+// parses to: a fraction that rounds away (1000.0000000000001 -> 1000) or an
+// integer beyond double precision (9007199254740993 -> 9007199254740992).
+// Kept as an object so no number check accepts it and canonicalJson keeps it
+// distinct.
 class InexactNumber {
   constructor(source) {
     this.source = source;
@@ -132,23 +134,27 @@ class InexactNumber {
 
 const NUMBER_LITERAL_RE = /^-?([0-9]+)(?:\.([0-9]+))?(?:[eE]([+-]?[0-9]+))?$/;
 
-// True when the JSON number literal denotes an exact integer, e.g. "1000",
-// "1000.0", "1e3", "1500e-3".
-function isIntegralLiteral(source) {
+// Exact value of a JSON number literal as a BigInt when it denotes an integer
+// (e.g. "1000", "1000.0", "1e3", "1500000e-3"); null when it does not.
+function integralLiteralValue(source) {
   const m = NUMBER_LITERAL_RE.exec(source);
-  if (!m) return false;
+  if (!m) return null;
   const frac = m[2] || '';
-  const digits = (m[1] + frac).replace(/^0+/, '');
-  if (digits === '') return true;
-  const trimmed = digits.replace(/0+$/, '');
-  const scale = frac.length - Number(m[3] || 0) - (digits.length - trimmed.length);
-  return scale <= 0;
+  const all = (m[1] + frac).replace(/^0+/, '');
+  if (all === '') return 0n;
+  const digits = all.replace(/0+$/, '');
+  const scale = Number(m[3] || 0) - frac.length + (all.length - digits.length);
+  if (scale < 0) return null;
+  const magnitude = BigInt(digits) * 10n ** BigInt(scale);
+  return source.startsWith('-') ? -magnitude : magnitude;
 }
 
+// Parsed integers are kept only when the literal denotes exactly that integer.
+// Non-integral and non-finite parses are left to the field validators.
 function exactNumbers(key, value, ctx) {
-  if (typeof value === 'number' && Number.isInteger(value) && ctx && typeof ctx.source === 'string'
-      && !isIntegralLiteral(ctx.source)) {
-    return new InexactNumber(ctx.source);
+  if (typeof value === 'number' && Number.isInteger(value) && ctx && typeof ctx.source === 'string') {
+    const exact = integralLiteralValue(ctx.source);
+    if (exact === null || exact !== BigInt(value)) return new InexactNumber(ctx.source);
   }
   return value;
 }
@@ -230,16 +236,17 @@ function validateDisplayName(v) {
   return ok(v);
 }
 
-// §4: local part, lowercased, every character outside [a-z0-9_] replaced by
-// "_", truncated to 20 characters. Expects an email accepted by validateEmail.
+// §4, in order: take the local part, lowercase it, replace every character
+// (code point) outside [a-z0-9_] with "_", truncate to 20 characters.
+// Lowercasing may lengthen the text ("İ" -> "i" + U+0307 -> "i_").
+// Expects an email accepted by validateEmail.
 function deriveHandle(email) {
-  const local = email.slice(0, email.indexOf('@'));
+  const lowered = email.slice(0, email.indexOf('@')).toLowerCase();
   let out = '';
   let n = 0;
-  for (const ch of local) {
+  for (const ch of lowered) {
     if (n === 20) break;
-    const lower = ch.toLowerCase();
-    out += /^[a-z0-9_]$/.test(lower) ? lower : '_';
+    out += /^[a-z0-9_]$/.test(ch) ? ch : '_';
     n++;
   }
   return out;
