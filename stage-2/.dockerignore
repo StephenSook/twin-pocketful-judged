@@ -1,0 +1,7 @@
+.git
+node_modules
+verification
+Dockerfile
+.dockerignore
+RUN.md
+*.log
