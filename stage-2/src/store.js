@@ -55,7 +55,23 @@ function emptyState() {
     idem: new Map(), // scope -> {body, response} for completed 2xx idempotent writes
     operators: new Set(),
     lastMs: 0,
+    // stage 2: authorizations (holds)
+    authorizationTtlSeconds: 600,
+    authorizations: [], // {ms, a} oldest first; a is the public authorization object
+    authorizationById: new Map(),
+    openAuthorizations: new Set(), // a objects with status 'open' (possibly past expiry until expireDue runs)
   };
+}
+
+// Authorization expiry instant in ms (expires_at has second precision).
+function expiryMs(a) {
+  return Date.parse(a.expires_at);
+}
+
+// Public shape of an authorization (a copy, so later changes do not alter
+// responses already stored for idempotent replay).
+function authorizationView(a) {
+  return { ...a, payment_ids: a.payment_ids.slice() };
 }
 
 class Store {
@@ -101,11 +117,15 @@ class Store {
   }
 
   me(user) {
+    const held = this.held(user);
     return {
       user_id: user.id,
       display_name: user.display_name,
       handle: user.handle,
       balance: user.balance,
+      total: user.balance,
+      available: user.balance - held,
+      held,
       currency: this.s.currency,
       minor_units: this.s.minor_units,
     };
@@ -157,12 +177,39 @@ class Store {
     return { status: 201, text };
   }
 
+  // ---- holds -------------------------------------------------------------------
+
+  // Materialises clock expiry: every open authorization whose expires_at is at
+  // or before now becomes 'expired' and holds nothing. Called before any read
+  // or write that depends on holds, so expiry shows even if no request
+  // happened at the deadline.
+  expireDue(now = Date.now()) {
+    for (const a of this.s.openAuthorizations) {
+      if (expiryMs(a) <= now) {
+        a.status = 'expired';
+        a.remaining_amount = 0;
+        this.s.openAuthorizations.delete(a);
+      }
+    }
+  }
+
+  // Sum of the user's open holds (after expiry).
+  held(user) {
+    this.expireDue();
+    let sum = 0;
+    for (const a of this.s.openAuthorizations) if (a.from_user_id === user.id) sum += a.remaining_amount;
+    return sum;
+  }
+
   // ---- money: the single state-change point ---------------------------------
 
   // entries: [{from, to, amount, note, visibility}] with user objects.
-  // All-or-nothing: validates the resulting balance of every touched wallet,
-  // then creates all payments and applies all balance changes.
-  commitTransfers(entries, { requestId = null, settlementId = null } = {}) {
+  // All-or-nothing: validates the resulting total and available amount of
+  // every touched wallet, then creates all payments and applies all changes.
+  // `release` (stage 2 captures) lowers the payer's held amount in the same
+  // step: the capture spends the money reserved for it.
+  commitTransfers(entries, { requestId = null, settlementId = null, authorizationId = null, release = null } = {}) {
+    this.expireDue();
     const delta = new Map();
     for (const e of entries) {
       // amount 0 is legal only for paying a zero split share (§9); callers
@@ -177,7 +224,9 @@ class Store {
     const nextBalance = new Map();
     for (const [user, d] of delta) {
       const next = BigInt(user.balance) + d;
-      if (next < 0n) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
+      const heldAfter = BigInt(this.held(user)) - BigInt(release && release.user === user ? release.amount : 0);
+      // available = total - held must stay >= 0: held funds cannot pay.
+      if (next < 0n || next - heldAfter < 0n) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
       if (next > MAX_BALANCE_BIG) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
       nextBalance.set(user, Number(next));
     }
@@ -196,6 +245,7 @@ class Store {
         visibility: e.visibility,
         request_id: requestId,
         settlement_id: settlementId,
+        authorization_id: authorizationId,
         created_at: createdAt,
       };
       this.s.payments.push({ ms, p });
@@ -360,6 +410,109 @@ class Store {
     return { settlement_id: settlementId, committed_at: createdAt, payments: payments.map((p) => ({ ...p })) };
   }
 
+  // ---- authorizations (stage 2) -------------------------------------------------
+
+  createAuthorization(caller, { to_handle, amount, note, visibility }) {
+    if (to_handle === caller.handle) throw new ApiError(422, 'self_payment', 'cannot authorize a payment to yourself');
+    const to = this.s.byHandle.get(to_handle);
+    if (!to) throw notFound();
+    // The hold must fit in the caller's available funds (total - held).
+    if (caller.balance - this.held(caller) < amount) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
+    const ms = this.tick();
+    const createdSec = Math.floor(ms / 1000);
+    const a = {
+      authorization_id: this.newId('a', (x) => this.s.authorizationById.has(x)),
+      from_user_id: caller.id,
+      from_handle: caller.handle,
+      to_user_id: to.id,
+      to_handle: to.handle,
+      amount,
+      captured_amount: 0,
+      remaining_amount: amount,
+      currency: this.s.currency,
+      note,
+      visibility,
+      status: 'open',
+      expires_at: rfc3339((createdSec + this.s.authorizationTtlSeconds) * 1000),
+      payment_id: null,
+      payment_ids: [],
+      created_at: rfc3339(createdSec * 1000),
+    };
+    this.s.authorizations.push({ ms, a });
+    this.s.authorizationById.set(a.authorization_id, a);
+    this.s.openAuthorizations.add(a);
+    return authorizationView(a);
+  }
+
+  // 404 only for an unknown id; the permitted-party check (403) is the caller's.
+  existingAuthorization(id) {
+    this.expireDue();
+    const a = this.s.authorizationById.get(id);
+    if (!a) throw notFound();
+    return a;
+  }
+
+  // amount: integer >= 1 or undefined (= the remaining amount); final: boolean.
+  captureAuthorization(caller, id, { amount, final }) {
+    const a = this.existingAuthorization(id);
+    if (a.to_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the receiver may capture this authorization');
+    if (a.status === 'expired') throw new ApiError(409, 'authorization_expired', 'authorization has expired');
+    if (a.status !== 'open') throw new ApiError(409, 'authorization_not_open', 'authorization is not open');
+    const take = amount === undefined ? a.remaining_amount : amount;
+    if (take > a.remaining_amount) {
+      throw new ApiError(422, 'capture_exceeds_authorization', 'amount exceeds the remaining authorized amount');
+    }
+    const payer = this.s.users.get(a.from_user_id);
+    const receiver = this.s.users.get(a.to_user_id);
+    const closes = final || take === a.remaining_amount;
+    const released = closes ? a.remaining_amount : take;
+    const { payments } = this.commitTransfers(
+      [{ from: payer, to: receiver, amount: take, note: a.note, visibility: a.visibility }],
+      { authorizationId: a.authorization_id, release: { user: payer, amount: released } },
+    );
+    const p = payments[0];
+    a.captured_amount += take;
+    a.remaining_amount -= released;
+    a.payment_id = p.payment_id;
+    a.payment_ids.push(p.payment_id);
+    if (closes) {
+      a.status = 'captured';
+      this.s.openAuthorizations.delete(a);
+    }
+    return { ...p };
+  }
+
+  voidAuthorization(caller, id) {
+    const a = this.existingAuthorization(id);
+    if (a.from_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the payer may void this authorization');
+    if (a.status === 'open') {
+      a.status = 'voided';
+      a.remaining_amount = 0;
+      this.s.openAuthorizations.delete(a);
+    } else if (a.status !== 'voided') {
+      throw new ApiError(409, 'authorization_not_open', 'authorization is not open');
+    }
+    return authorizationView(a);
+  }
+
+  listAuthorizations(caller, { direction, status, limit, offset }) {
+    this.expireDue();
+    const out = [];
+    let skipped = 0;
+    let hasMore = false;
+    for (let i = this.s.authorizations.length - 1; i >= 0; i--) {
+      const { a } = this.s.authorizations[i];
+      const outgoing = a.from_user_id === caller.id;
+      const incoming = a.to_user_id === caller.id;
+      if (direction === 'incoming' ? !incoming : direction === 'outgoing' ? !outgoing : !(incoming || outgoing)) continue;
+      if (status !== null && a.status !== status) continue;
+      if (skipped < offset) { skipped++; continue; }
+      if (out.length === limit) { hasMore = true; break; }
+      out.push(authorizationView(a));
+    }
+    return { authorizations: out, has_more: hasMore };
+  }
+
   // ---- reset / export / import -----------------------------------------------------
 
   replace(state) {
@@ -367,6 +520,7 @@ class Store {
   }
 
   exportSnapshot() {
+    this.expireDue();
     const s = this.s;
     return {
       track: 'pocketful',
@@ -386,9 +540,11 @@ class Store {
         idempotency: [...s.idem].map(([scope, v]) => ({ scope, body: v.body, response: v.response })),
         settlement_operator_ids: [...s.operators],
         last_ms: s.lastMs,
+        authorization_ttl_seconds: s.authorizationTtlSeconds,
+        authorizations: s.authorizations.map(({ ms, a }) => ({ ms, authorization: authorizationView(a) })),
       },
     };
   }
 }
 
-module.exports = { Store, ApiError, emptyState, rfc3339, tokenDigest, MAX_ID, MAX_BALANCE };
+module.exports = { Store, ApiError, emptyState, authorizationView, rfc3339, tokenDigest, MAX_ID, MAX_BALANCE };

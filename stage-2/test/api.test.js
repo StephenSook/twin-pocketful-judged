@@ -95,7 +95,7 @@ test('cold burst of 50 unknown-email logins answers every request within 5 s', a
 test('auth, me and errors', async () => {
   const t = await resetAndLogin();
   const me = await call('GET', '/me', { token: t.ada });
-  assert.deepStrictEqual(me.body, { user_id: 'u_ada', display_name: 'Ada', handle: 'ada', balance: 10000, currency: 'EUR', minor_units: 2 });
+  assert.deepStrictEqual(me.body, { user_id: 'u_ada', display_name: 'Ada', handle: 'ada', balance: 10000, total: 10000, available: 10000, held: 0, currency: 'EUR', minor_units: 2 });
   assert.strictEqual((await call('GET', '/me')).body.error.code, 'unauthenticated');
   assert.strictEqual((await call('GET', '/me', { token: 'nope' })).status, 401);
   assert.strictEqual((await call('POST', '/auth/login', { body: { email: 'ada@example.com', password: 'wrong pass' } })).status, 401);

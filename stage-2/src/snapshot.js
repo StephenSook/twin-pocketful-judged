@@ -7,6 +7,8 @@
 
 const v = require('./validate');
 const { ApiError, emptyState, rfc3339, MAX_ID, MAX_BALANCE } = require('./store');
+
+const AUTH_STATUSES = new Set(['open', 'captured', 'voided', 'expired']);
 const { isPasswordHash } = require('./passwords');
 
 const STATUSES = new Set(['pending', 'paid', 'declined', 'cancelled']);
@@ -100,7 +102,45 @@ function planFixture(f) {
     return id;
   });
 
-  return { currency: f.currency, minor_units: f.minor_units, users, payments, requests, operators };
+  // stage 2: authorization_ttl_seconds (default 600) and seeded authorizations
+  let ttl = 600;
+  if (f.authorization_ttl_seconds !== undefined) {
+    if (!Number.isSafeInteger(f.authorization_ttl_seconds) || f.authorization_ttl_seconds < 1) {
+      fail('authorization_ttl_seconds must be a positive integer');
+    }
+    ttl = f.authorization_ttl_seconds;
+  }
+  const authIds = new Set();
+  const now = Date.now();
+  const heldBy = new Map();
+  const authorizations = optArray(f.authorizations, 'authorizations').map((a) => {
+    if (!isObj(a)) fail('authorization must be an object');
+    if (!isId(a.id) || authIds.has(a.id)) fail('authorization id must be a unique string of 1..64 characters');
+    if (!ids.has(a.from_user_id) || !ids.has(a.to_user_id) || a.from_user_id === a.to_user_id) fail('authorization references invalid users');
+    if (!isAmount(a.amount) || a.amount > 1000000000) fail('authorization amount is invalid');
+    if (a.note !== undefined && !isNote(a.note)) fail('authorization note must be a string');
+    if (a.visibility !== undefined && !VISIBILITIES.has(a.visibility)) fail('authorization visibility is invalid');
+    const status = a.status === undefined ? 'open' : a.status;
+    if (!AUTH_STATUSES.has(status)) fail('authorization status is invalid');
+    const captured = a.captured_amount === undefined ? 0 : a.captured_amount;
+    if (!Number.isSafeInteger(captured) || captured < 0 || captured > a.amount) fail('authorization captured_amount is invalid');
+    if (status === 'open' && captured === a.amount) fail('an open authorization must have a remaining amount');
+    if (typeof a.expires_at !== 'string' || !Number.isFinite(Date.parse(a.expires_at))) fail('authorization expires_at is required');
+    if (a.payment_id !== undefined && a.payment_id !== null && !paymentIds.has(a.payment_id)) fail('authorization payment_id is unknown');
+    if (a.payment_ids !== undefined && (!Array.isArray(a.payment_ids) || !a.payment_ids.every((x) => paymentIds.has(x)))) fail('authorization payment_ids is invalid');
+    const expMs = Math.floor(Date.parse(a.expires_at) / 1000) * 1000;
+    if (status === 'open' && expMs > now) {
+      heldBy.set(a.from_user_id, (heldBy.get(a.from_user_id) || 0) + (a.amount - captured));
+    }
+    authIds.add(a.id);
+    return { ...a, status, captured, expMs };
+  });
+  // Seeded unexpired open holds may not exceed the payer's seeded balance (total).
+  for (const u of users) {
+    if ((heldBy.get(u.id) || 0) > u.balance) fail('seeded open holds exceed the user balance');
+  }
+
+  return { currency: f.currency, minor_units: f.minor_units, users, payments, requests, operators, ttl, authorizations };
 }
 
 // hashes[i] is the password hash for plan.users[i].
@@ -136,6 +176,7 @@ function buildFixtureState(plan, hashes) {
         visibility: p.visibility === undefined ? 'public' : p.visibility,
         request_id: typeof p.request_id === 'string' ? p.request_id : requestByPayment.get(p.id) || null,
         settlement_id: typeof p.settlement_id === 'string' ? p.settlement_id : null,
+        authorization_id: typeof p.authorization_id === 'string' ? p.authorization_id : null,
         created_at: rfc3339(ms),
       },
     };
@@ -169,14 +210,54 @@ function buildFixtureState(plan, hashes) {
     s.requestById.set(r.request_id, r);
   }
   for (const id of plan.operators) s.operators.add(id);
-  s.lastMs = Math.max(now, ...payments.map((x) => x.ms), ...requests.map((x) => x.ms));
+  s.authorizationTtlSeconds = plan.ttl;
+  const auths = plan.authorizations.map((x, seq) => {
+    const ms = Math.floor(timestampMs(x.created_at, now) / 1000) * 1000;
+    const from = s.users.get(x.from_user_id);
+    const to = s.users.get(x.to_user_id);
+    const paymentIdsList = Array.isArray(x.payment_ids) ? x.payment_ids.slice()
+      : typeof x.payment_id === 'string' ? [x.payment_id] : [];
+    const open = x.status === 'open' && x.expMs > now;
+    return {
+      ms, seq,
+      a: {
+        authorization_id: x.id,
+        from_user_id: from.id, from_handle: from.handle,
+        to_user_id: to.id, to_handle: to.handle,
+        amount: x.amount,
+        captured_amount: x.captured,
+        remaining_amount: open ? x.amount - x.captured : 0,
+        currency: s.currency,
+        note: x.note === undefined ? '' : x.note,
+        visibility: x.visibility === undefined ? 'public' : x.visibility,
+        status: x.status === 'open' && !open ? 'expired' : x.status,
+        expires_at: rfc3339(x.expMs),
+        payment_id: typeof x.payment_id === 'string' ? x.payment_id : paymentIdsList.length ? paymentIdsList[paymentIdsList.length - 1] : null,
+        payment_ids: paymentIdsList,
+        created_at: rfc3339(ms),
+      },
+    };
+  });
+  for (const { ms, a } of auths.sort((p, q) => p.ms - q.ms || p.seq - q.seq)) {
+    s.authorizations.push({ ms, a });
+    s.authorizationById.set(a.authorization_id, a);
+    if (a.status === 'open') s.openAuthorizations.add(a);
+  }
+  let lastMs = now;
+  for (const list of [payments, requests, auths]) for (const x of list) if (x.ms > lastMs) lastMs = x.ms;
+  s.lastMs = lastMs;
   return s;
 }
 
 // ---- import (§10) -------------------------------------------------------------------
 
 const PAYMENT_KEYS = ['payment_id', 'from_user_id', 'from_handle', 'to_user_id', 'to_handle', 'amount',
-  'currency', 'note', 'visibility', 'request_id', 'settlement_id', 'created_at'];
+  'currency', 'note', 'visibility', 'request_id', 'settlement_id', 'authorization_id', 'created_at'];
+// A stage-1 export has payments without authorization_id (§10 upgrade: accepted, filled with null).
+const STAGE1_PAYMENT_KEYS = PAYMENT_KEYS.filter((k) => k !== 'authorization_id');
+const AUTH_KEYS = ['authorization_id', 'from_user_id', 'from_handle', 'to_user_id', 'to_handle', 'amount',
+  'captured_amount', 'remaining_amount', 'currency', 'note', 'visibility', 'status', 'expires_at', 'payment_id',
+  'payment_ids', 'created_at'];
 const REQUEST_KEYS = ['request_id', 'requester_id', 'requester_handle', 'payer_id', 'payer_handle', 'amount',
   'currency', 'note', 'status', 'payment_id', 'created_at'];
 
@@ -234,7 +315,10 @@ function buildImportedState(doc) {
   for (const item of st.payments) {
     if (!isObj(item) || !isMs(item.ms) || item.ms < prevMs || !isObj(item.payment)) fail('state payment is invalid');
     const p = item.payment;
-    if (Object.keys(p).length !== PAYMENT_KEYS.length || !PAYMENT_KEYS.every((k) => k in p)) fail('state payment fields are invalid');
+    const keys = 'authorization_id' in p ? PAYMENT_KEYS : STAGE1_PAYMENT_KEYS;
+    if (Object.keys(p).length !== keys.length || !keys.every((k) => k in p)) fail('state payment fields are invalid');
+    if (p.authorization_id === undefined) p.authorization_id = null;
+    if (p.authorization_id !== null && !isId(p.authorization_id)) fail('state payment authorization_id is invalid');
     if (!isId(p.payment_id) || s.paymentById.has(p.payment_id)) fail('state payment id is invalid');
     if (!userMatches(p.from_user_id, p.from_handle) || !userMatches(p.to_user_id, p.to_handle)) fail('state payment user is invalid');
     if (!isShare(p.amount) || p.currency !== s.currency || !isNote(p.note) || !VISIBILITIES.has(p.visibility)) fail('state payment is invalid');
@@ -287,8 +371,43 @@ function buildImportedState(doc) {
     if (!s.users.has(id)) fail('state settlement operator is invalid');
     s.operators.add(id);
   }
+  // stage 2 additions; a stage-1 export has none of them.
+  if (st.authorization_ttl_seconds !== undefined) {
+    if (!Number.isSafeInteger(st.authorization_ttl_seconds) || st.authorization_ttl_seconds < 1) fail('state.authorization_ttl_seconds is invalid');
+    s.authorizationTtlSeconds = st.authorization_ttl_seconds;
+  }
+  const authList = st.authorizations === undefined ? [] : st.authorizations;
+  if (!Array.isArray(authList)) fail('state.authorizations must be an array');
+  prevMs = 0;
+  const heldBy = new Map();
+  for (const item of authList) {
+    if (!isObj(item) || !isMs(item.ms) || item.ms < prevMs || !isObj(item.authorization)) fail('state authorization is invalid');
+    const a = item.authorization;
+    if (Object.keys(a).length !== AUTH_KEYS.length || !AUTH_KEYS.every((k) => k in a)) fail('state authorization fields are invalid');
+    if (!isId(a.authorization_id) || s.authorizationById.has(a.authorization_id)) fail('state authorization id is invalid');
+    if (!userMatches(a.from_user_id, a.from_handle) || !userMatches(a.to_user_id, a.to_handle) || a.from_user_id === a.to_user_id) fail('state authorization user is invalid');
+    if (!isAmount(a.amount) || a.currency !== s.currency || !isNote(a.note) || !VISIBILITIES.has(a.visibility) || !AUTH_STATUSES.has(a.status)) fail('state authorization is invalid');
+    if (!Number.isSafeInteger(a.captured_amount) || !Number.isSafeInteger(a.remaining_amount) || a.captured_amount < 0 || a.remaining_amount < 0
+      || a.captured_amount + a.remaining_amount > a.amount) fail('state authorization amounts are invalid');
+    if ((a.status === 'open') !== (a.remaining_amount > 0)) fail('state authorization remaining_amount is invalid');
+    if (!Array.isArray(a.payment_ids) || !a.payment_ids.every((x) => s.paymentById.has(x))) fail('state authorization payment_ids is invalid');
+    if (a.payment_id !== (a.payment_ids.length ? a.payment_ids[a.payment_ids.length - 1] : null)) fail('state authorization payment_id is invalid');
+    for (const k of ['expires_at', 'created_at']) {
+      if (typeof a[k] !== 'string' || !Number.isFinite(Date.parse(a[k]))) fail(`state authorization ${k} is invalid`);
+    }
+    prevMs = item.ms;
+    const copy = {};
+    for (const k of AUTH_KEYS) copy[k] = k === 'payment_ids' ? a[k].slice() : a[k];
+    s.authorizations.push({ ms: item.ms, a: copy });
+    s.authorizationById.set(copy.authorization_id, copy);
+    if (copy.status === 'open') {
+      s.openAuthorizations.add(copy);
+      heldBy.set(copy.from_user_id, (heldBy.get(copy.from_user_id) || 0) + copy.remaining_amount);
+    }
+  }
+  for (const [id, h] of heldBy) if (h > s.users.get(id).balance) fail('state holds exceed a balance');
   const lastOf = (arr) => (arr.length ? arr[arr.length - 1].ms : 0);
-  s.lastMs = Math.max(s.lastMs, lastOf(s.payments), lastOf(s.requests));
+  s.lastMs = Math.max(s.lastMs, lastOf(s.payments), lastOf(s.requests), lastOf(s.authorizations));
   return s;
 }
 

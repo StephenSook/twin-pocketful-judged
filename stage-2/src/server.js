@@ -6,6 +6,7 @@ const { Store, ApiError } = require('./store');
 const { planFixture, buildFixtureState, buildImportedState } = require('./snapshot');
 const passwords = require('./passwords');
 const seeding = require('./seeding');
+const web = require('./web');
 
 const TEST_BODY_BYTES = 64 * 1024 * 1024;
 
@@ -195,9 +196,56 @@ async function importState(req, res) {
   v.sendNoContent(res);
 }
 
+// ---- authorizations (stage 2) ---------------------------------------------------
+
+const AUTH_STATUSES = ['open', 'captured', 'voided', 'expired'];
+
+function createAuthorization(req, res) {
+  return idempotentWrite(req, res, '/authorizations', {}, (caller, body) => {
+    const toHandle = take(v.validateHandleRef(body.to_handle, 'to_handle'));
+    const amount = take(v.validateAmount(body.amount));
+    const note = take(v.validateNote(body.note));
+    const visibility = take(v.validateVisibility(body.visibility));
+    return store.createAuthorization(caller, { to_handle: toHandle, amount, note, visibility });
+  });
+}
+
+// Capture amount: optional; an integer >= 1 (values above the remaining amount,
+// including above 1000000000, are 422 capture_exceeds_authorization in the store).
+function captureAmount(value) {
+  if (value === undefined) return undefined;
+  if (typeof value === 'number' && Number.isInteger(value) && value > 1000000000) return value;
+  return take(v.validateAmount(value));
+}
+
+function captureAuthorization(req, res, id, path) {
+  return idempotentWrite(req, res, path, { emptyAsObject: true }, (caller, body) => {
+    const amount = captureAmount(body.amount);
+    if (body.final !== undefined && typeof body.final !== 'boolean') throw new ApiError(400, 'malformed_request', 'final must be a boolean');
+    const final = body.final === undefined ? true : body.final;
+    return store.captureAuthorization(caller, id, { amount, final });
+  });
+}
+
+async function voidAuthorization(req, res, id) {
+  const user = requireUser(req);
+  await v.readJsonBody(req);
+  v.sendJson(res, 200, store.voidAuthorization(user, id));
+}
+
+function listAuthorizations(req, res, url) {
+  const user = requireUser(req);
+  const direction = take(v.parseDirection(url.searchParams));
+  const status = url.searchParams.get('status');
+  if (status !== null && !AUTH_STATUSES.includes(status)) throw new ApiError(422, 'validation_failed', 'status must be open, captured, voided or expired');
+  const { limit, offset } = take(v.parsePagination(url.searchParams));
+  v.sendJson(res, 200, store.listAuthorizations(user, { direction, status, limit, offset }));
+}
+
 // ---- routing ------------------------------------------------------------------------
 
 const REQUEST_ACTION = /^\/requests\/([^/]+)\/(pay|decline|cancel)$/;
+const AUTHORIZATION_ACTION = /^\/authorizations\/([^/]+)\/(capture|void)$/;
 
 async function route(req, res) {
   let url;
@@ -208,6 +256,15 @@ async function route(req, res) {
   }
   const path = url.pathname;
   const m = req.method;
+  // Browser UI (stage 2): HTML for Accept: text/html on UI routes, JSON otherwise.
+  if (web.wantsHtml(req, path)) {
+    if (await web.sendShell(req, res)) return;
+    throw new ApiError(404, 'not_found', 'not found');
+  }
+  if (m === 'GET' && path.startsWith('/static/')) {
+    if (await web.sendStatic(req, res, path)) return;
+    throw new ApiError(404, 'not_found', 'not found');
+  }
   const routes = {
     '/health': { GET: () => { req.resume(); v.sendJson(res, 200, { status: 'ok' }); } },
     '/_test/reset': { POST: () => reset(req, res) },
@@ -221,6 +278,7 @@ async function route(req, res) {
     '/splits': { POST: () => createSplit(req, res) },
     '/activity': { GET: () => listActivity(req, res, url) },
     '/settlements': { POST: () => createSettlement(req, res) },
+    '/authorizations': { POST: () => createAuthorization(req, res), GET: () => listAuthorizations(req, res, url) },
   };
   let handlers = routes[path];
   if (!handlers) {
@@ -242,6 +300,27 @@ async function route(req, res) {
           if (action === 'pay') return payRequest(req, res, id, path);
           if (action === 'decline') return declineRequest(req, res, id);
           return cancelRequest(req, res, id);
+        },
+      };
+    }
+  }
+  if (!handlers) {
+    const a = AUTHORIZATION_ACTION.exec(path);
+    if (a) {
+      let id;
+      try {
+        id = decodeURIComponent(a[1]);
+      } catch {
+        id = null;
+      }
+      handlers = {
+        POST: () => {
+          if (id === null) {
+            requireUser(req);
+            throw new ApiError(404, 'not_found', 'not found');
+          }
+          if (a[2] === 'capture') return captureAuthorization(req, res, id, path);
+          return voidAuthorization(req, res, id);
         },
       };
     }
