@@ -7,7 +7,6 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["stage-4/**", "deploy/**"]
 permissions:
   contents: read
   packages: write
