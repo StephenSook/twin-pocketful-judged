@@ -12,6 +12,7 @@ Source: supplied Pocketful Stage 1 §§1–11. IDs are permanent; later stages c
 - A6: generic errors do not establish global precedence among multiple independent invalid fields; test one fault at a time except explicit idempotency and settlement-entry precedence.
 - A7: test-control export/import are exceptions to §6's earlier authentication list, as explicitly stated in §10.
 - A8: no acceptance rule rejects optional extra response fields. Compare required fields; replay compares complete JSON responses exactly.
+- A9 (coordinator ruling, R1-041): “outside ±2⁵³” excludes neither endpoint. Reset/import accept nonnegative balances through 9007199254740992 inclusive. Aggregate wallet totals remain exact even above 2^53. Boundary checks debit one unit, restore it, execute a net-zero settlement at the upper boundary, and export/import that state.
 
 ## Entries
 
@@ -185,6 +186,7 @@ The executable check is `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/
 - R1-025/028/064: successful derived handle and collision code checked; proof of immutable handle and no account after failed collision is incomplete.
 - R1-029: initial zero balance checked; immediate incoming payment/request for newly signed-up user remains unchecked.
 - R1-041: high balances and 1e9 edge checked; arbitrary decimal lexical precision beyond Python float precision is unchecked.
+- R1-041 inclusive-boundary extension: reset at exactly 2^53, one-unit debit and credit, net-zero settlement with incoming entry first, totals above 2^53, and repeat cross-process import are checked by `balance_boundary`.
 - R1-065: unauthenticated reads and ordinary modeled user checks covered; full unauthenticated write matrix remains unchecked.
 - R1-066: two active sessions checked; unbounded token lifetime is not empirically established.
 - R1-067: password storage intentionally unchecked by modeler, who cannot read product source.
@@ -198,3 +200,5 @@ The executable check is `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/
 **Observed evidence:** at verification revision e8dfb7d, `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/model/driver.py --self-test` exited 0 with `MODEL SELF-TEST PASS operations=663`. Against product b5fac7f, the live command above with URL `http://127.0.0.1:18081 --steps 100` exited 1: `operation status /requests/rq_seed/decline: expected 403, observed 404 not_found`. Deletion shrinking found one operation after 14 attempts. This refutes R1-033/R1-095 on that revision; remaining later checks were not verified. The builder subsequently committed 2299fe8 to correct request-action authorization; recheck pending.
 
 **Completed recheck:** product 2299fe8, built into two isolated containers with `--cpus=2 --memory=2g`, passed `PYTHONDONTWRITEBYTECODE=1 python3 -u stage-1/verification/model/driver.py --base-url http://127.0.0.1:18081 --second-url http://127.0.0.1:18082 --steps 100` with exit 0 and `DIFFERENTIAL PASS operations=263 seed=20261001 persistence=pass concurrency=50 auth-controls=pass`. This includes R1-119 cross-process import. The verifier first required two corrections: exact URL-segment binding (67dbebc), and removal of one excess character from its hardcoded 20-character signup-handle expectation. Neither verifier error was attributed to the product. The coverage limits above still apply; this result is not independent gatekeeper acceptance.
+
+**Inclusive-boundary recheck:** product 145a95f was built from a clean clone and run in two isolated containers limited to 2 CPU/2 GiB. `PYTHONDONTWRITEBYTECODE=1 python3 -u stage-1/verification/model/driver.py --base-url http://127.0.0.1:18231 --second-url http://127.0.0.1:18232 --steps 100` exited 0: `DIFFERENTIAL PASS operations=263 seed=20261001 persistence=pass concurrency=50 auth-controls=pass boundary=pass`. The model self-test also exited 0: `MODEL SELF-TEST PASS operations=663 boundary=pass`.

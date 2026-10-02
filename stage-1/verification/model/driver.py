@@ -491,6 +491,27 @@ def auth_and_controls(base):
     r.run(op('ada', '/payments', {'to_handle': 'bob', 'amount': 999999999}, 'large'))
 
 
+def boundary_case():
+    fixture = deepcopy(FIXTURE)
+    fixture['users'][0]['balance'] = 2 ** 53
+    operations = [
+        op('ada', '/payments', {'to_handle': 'bob', 'amount': 1}, 'boundary-out'),
+        op('bob', '/payments', {'to_handle': 'ada', 'amount': 1}, 'boundary-back'),
+        op('ada', '/settlements', {'transfers': [
+            {'from_handle': 'bob', 'to_handle': 'ada', 'amount': 1},
+            {'from_handle': 'ada', 'to_handle': 'bob', 'amount': 1}
+        ]}, 'boundary-net')]
+    return fixture, operations
+
+
+def balance_boundary(base, second_url=None):
+    fixture, operations = boundary_case()
+    runner = Runner(base, fixture)
+    for operation in operations:
+        runner.run(operation)
+    persistence(runner, second_url)
+
+
 def self_test():
     require(bind_path('/requests/@id:request:71/pay', {'@id:request:7': 'wrong', '@id:request:71': 'correct'})
             == '/requests/correct/pay', 'adapter exact segment binding')
@@ -519,7 +540,15 @@ def self_test():
     for request in response['body']['requests']:
         zero, paid = transition(zero, op(request['payer_handle'], '/requests/' + request['request_id'] + '/pay', {}, 'z'))
         require(paid['status'] == 201 and paid['body']['amount'] == 0, 'R1-114 payable zero')
-    print('MODEL SELF-TEST PASS operations=' + str(count))
+    fixture, operations = boundary_case()
+    boundary = initial(fixture)
+    for operation in operations:
+        boundary, response = transition(boundary, operation)
+        require(response['status'] == 201, 'R1-041 boundary operation')
+    require(boundary['users']['ada']['balance'] == 2 ** 53 and
+            boundary['total'] == sum(u['balance'] for u in fixture['users']),
+            'R1-041 inclusive boundary and exact aggregate')
+    print('MODEL SELF-TEST PASS operations=' + str(count) + ' boundary=pass')
 
 
 def main():
@@ -563,11 +592,12 @@ def main():
             persistence(runner, args.second_url)
             concurrency(args.base_url)
             auth_and_controls(args.base_url)
+            balance_boundary(args.base_url, args.second_url)
         except Mismatch as error:
             print('CONTRACT FAIL ' + str(error))
             raise SystemExit(1)
     print('DIFFERENTIAL PASS operations=' + str(len(operations)) + ' seed=' + str(args.seed) +
-          (' replay-only' if args.replay else ' persistence=pass concurrency=50 auth-controls=pass'))
+          (' replay-only' if args.replay else ' persistence=pass concurrency=50 auth-controls=pass boundary=pass'))
 
 
 if __name__ == '__main__':
