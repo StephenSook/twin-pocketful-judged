@@ -1,0 +1,11 @@
+{
+  "provided_files": 30,
+  "provided_changed": [],
+  "tracked_files_scanned": 256,
+  "credential_pattern_hit_files": [],
+  "product_files": 9,
+  "check_identifier_hit_files": [],
+  "declared_package_dependencies": 0,
+  "advisory_audit": "empty package inventory",
+  "result": "PASS"
+}

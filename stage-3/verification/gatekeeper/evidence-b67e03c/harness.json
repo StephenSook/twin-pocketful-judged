@@ -1,0 +1,226 @@
+[
+  {
+    "name": "clean",
+    "command": [
+      "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+      "-m",
+      "harness",
+      "run",
+      "--track",
+      "pocketful",
+      "--repo",
+      "/tmp/gatekeeper-s3-x6k0z8vs/candidate-b67e03c",
+      "--stage",
+      "3",
+      "--mode",
+      "isolated",
+      "--out",
+      "/tmp/gatekeeper-s3-x6k0z8vs/check-b67e03c"
+    ],
+    "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+    "exit": 0,
+    "reported_revision": "b67e03ca55327b506096b2d6da35c45447199097",
+    "suite_digest": "fbe2aeab11b79fd3d36ed815b24c8879274830a9996b647671e62ab610a297d0",
+    "claimed_stage": 3,
+    "own_and_earlier_stages": {
+      "1": {
+        "collected": 147,
+        "passed": 147,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_1/test_me_payments.py": {
+            "passed": 24,
+            "total": 24
+          },
+          "stage_1/test_requests_splits_feed.py": {
+            "passed": 39,
+            "total": 39
+          },
+          "stage_1/test_retries_splits_input.py": {
+            "passed": 51,
+            "total": 51
+          },
+          "stage_1/test_sample.py": {
+            "passed": 19,
+            "total": 19
+          },
+          "stage_1/test_seeded_state.py": {
+            "passed": 14,
+            "total": 14
+          }
+        }
+      },
+      "2": {
+        "collected": 35,
+        "passed": 35,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_2/test_sample.py": {
+            "passed": 10,
+            "total": 10
+          },
+          "stage_2/test_ui.py": {
+            "passed": 25,
+            "total": 25
+          }
+        }
+      },
+      "3": {
+        "collected": 6,
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_3/test_sample.py": {
+            "passed": 6,
+            "total": 6
+          }
+        }
+      }
+    },
+    "next_stage": {
+      "stage": 4,
+      "applicability": "applicable: the tool invoked the suite; no exemption reported",
+      "expected": "fail",
+      "observed": {
+        "collected": 5,
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_4/test_sample.py": {
+            "passed": 0,
+            "total": 5
+          }
+        },
+        "not_run": 4
+      }
+    }
+  },
+  {
+    "name": "dispatched",
+    "command": [
+      "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+      "-m",
+      "harness",
+      "run",
+      "--track",
+      "pocketful",
+      "--repo",
+      "/home/ubuntu/work/band-work/current",
+      "--stage",
+      "3",
+      "--mode",
+      "isolated",
+      "--out",
+      "/home/ubuntu/work/band-work/checks/pocketful-judged/s3-5"
+    ],
+    "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+    "exit": 0,
+    "reported_revision": "f122623a133cbf4eb53f01aa3491612b982c84b1",
+    "suite_digest": "fbe2aeab11b79fd3d36ed815b24c8879274830a9996b647671e62ab610a297d0",
+    "claimed_stage": 3,
+    "own_and_earlier_stages": {
+      "1": {
+        "collected": 147,
+        "passed": 147,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_1/test_me_payments.py": {
+            "passed": 24,
+            "total": 24
+          },
+          "stage_1/test_requests_splits_feed.py": {
+            "passed": 39,
+            "total": 39
+          },
+          "stage_1/test_retries_splits_input.py": {
+            "passed": 51,
+            "total": 51
+          },
+          "stage_1/test_sample.py": {
+            "passed": 19,
+            "total": 19
+          },
+          "stage_1/test_seeded_state.py": {
+            "passed": 14,
+            "total": 14
+          }
+        }
+      },
+      "2": {
+        "collected": 35,
+        "passed": 35,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_2/test_sample.py": {
+            "passed": 10,
+            "total": 10
+          },
+          "stage_2/test_ui.py": {
+            "passed": 25,
+            "total": 25
+          }
+        }
+      },
+      "3": {
+        "collected": 6,
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_3/test_sample.py": {
+            "passed": 6,
+            "total": 6
+          }
+        }
+      }
+    },
+    "next_stage": {
+      "stage": 4,
+      "applicability": "applicable: the tool invoked the suite; no exemption reported",
+      "expected": "fail",
+      "observed": {
+        "collected": 5,
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_4/test_sample.py": {
+            "passed": 0,
+            "total": 5
+          }
+        },
+        "not_run": 4
+      }
+    }
+  }
+]

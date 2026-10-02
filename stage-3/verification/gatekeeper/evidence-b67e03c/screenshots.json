@@ -1,0 +1,346 @@
+[
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-all-hold-statuses.png",
+    "sha256": "9020ddaf6d8dd2514d60d5ab75776446d1536d4e4d4ba438778d5b3a3b78be09"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-authorizations-empty.png",
+    "sha256": "3a6513229922c38456892cac0f1cd0592e2990c5194d8f60178ecbadba289321"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-authorizations-filled.png",
+    "sha256": "2bf055904906fa2df9df06bb80a33158f47ee0b3ea605c5bc558569d24e9fe77"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-authorizations-loading.png",
+    "sha256": "b3e4e3cef727d723d96d86635da87200e2ee37e9cbdbdec07100837b36382d80"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-authorizations-refused.png",
+    "sha256": "b90bbe3112cb2359157fc8e870d641f7d421f1bee29819e854dd8fb469ee5bc2"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-authorize-refused.png",
+    "sha256": "1785a35cf8cec946d796da134e94970b75e5b5c34dacb093f8c9144d855789fe"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-currency-BHD.png",
+    "sha256": "9cc53fbef6292cd75e141e5a434e5cfdf530d088b98d52afc9b79b4e4794d8ee"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-currency-JPY.png",
+    "sha256": "1bd918abdf7482aa89f2c854f512edaa948eea61578dc352da87f647e11342ef"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-home-empty.png",
+    "sha256": "655fcc8e41f79910be6f269788758f4804e2530e63eec37dce49e694648c3b3f"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-home-loading.png",
+    "sha256": "18734292753df095c21a2d7cb39c8daeb44422fae2fcb49d2c1bf86cc17cd938"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-home-refused.png",
+    "sha256": "a1ce2ed5802af4e4e03d89f919ae984fbe2291c07ea4577bf1d6e169746ba5d6"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-login-empty.png",
+    "sha256": "f4eec60be3725b289abddaf385860e423214f758a019781f41d4c2c74628fbd5"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-login-filled.png",
+    "sha256": "deffdb9ce30df92d39f70b5752e66455135fdf18d75ded1164405bdbac9d8cf5"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-login-loading.png",
+    "sha256": "de2d83ee7355f466cbc1cb341c57e4551d1c8ef40e2942ceb9d5dde1b89354de"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-login-refused.png",
+    "sha256": "e2be9cf2f3f479d7e014f16b014f96e70aeef6e71c925f83e33ae4b50982b961"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-request-form-refused.png",
+    "sha256": "03e4b2ec37afabecc4d822a362660acd228906401c153aa1fbf4a78e5a597621"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-requests-empty.png",
+    "sha256": "8656f5860c0ea0b6abb1b51d83169b6b189a37b203033d8e560339e37d84e8c5"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-requests-filled.png",
+    "sha256": "0fa6b74018f3bf95ee32e2e60722f3afbae58cc533205af9dd3820022572025b"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-requests-loading.png",
+    "sha256": "bad6dbc91efbd80a15a9dc43a09d8bfee3493f296fe3d5e5434bd8c00d9b74da"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-requests-refused.png",
+    "sha256": "08f99218accd041f978f2a947a3925fe38626eb66f7b6371d8e52842d07c18c7"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-signup-empty.png",
+    "sha256": "4e3ab18fe8608ad6d02c921521a5d61d292e9894fe3467e0ac742957f49b7d6b"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-signup-filled.png",
+    "sha256": "6e4997198650a407be1da4e784ec3bc9a134a0bd03898205f2e3a44056d4d6af"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-signup-loading.png",
+    "sha256": "b99cc0bbfe5fa84339fb3209d5d3fd05a491b77bc5e5b54e178b8101f2057513"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-signup-refused.png",
+    "sha256": "c059aa903e0bffa9bf0b7361f44b1f7ae913e71e632804a3460c9394d9ef034a"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-split-empty.png",
+    "sha256": "648e2cb4d0313bd4ea1f2ecf7b73ae4569c158ab4301cfc95ad1e712966807a3"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-split-filled.png",
+    "sha256": "6c1fd13ee6db8382527b0f25a77b209490f968478a31725b3c80969c38e23e54"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/1440-states-split-refused.png",
+    "sha256": "4a6e0142f2bfdbda8313ba191858617bcda1bdcf7abf4eddfee5785c8ba9fced"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-all-hold-statuses.png",
+    "sha256": "6c0483a599d713e8fb8d866df532ecf4fdbe253932e2f3851a09d26a31551842"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-authorizations-empty.png",
+    "sha256": "ecaa657d79692786937225ef11fb99e7e799616cc035b941556a2af8e04fec12"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-authorizations-filled.png",
+    "sha256": "7f098656a41ecb0b264684a0f9f973bc77d877da3bde2344356fbdb88f27f140"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-authorizations-loading.png",
+    "sha256": "c36b69cf004037234e71826b23cdec2c865d9259a08c810b79c5d2f2840d3054"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-authorizations-refused.png",
+    "sha256": "fbb9b0b8cdbb45d85ad81745a8460df300775256d877ef3a85870fb919c9ac83"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-authorize-refused.png",
+    "sha256": "2201cccce952e08547b2bf4b1fb3c9805f16b16e53ae5238dd782ca33f8b965f"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-currency-BHD.png",
+    "sha256": "95001cd1eccc064ba44a5b07fd34a95f341c674a215f7ee05048578684c0a4c1"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-currency-JPY.png",
+    "sha256": "ada9feb116c9c21ffdf0c9657cd262d192b09cf922aa9ae47e90a470201d2254"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-home-empty.png",
+    "sha256": "3550a8dd593cd8aac029b5cd57cab71c68201537335118a7e7f324ff5e4e707c"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-home-loading.png",
+    "sha256": "c11fda748eb83a11feb2169e4ae701788679f56bdc4473935c874201cba937b4"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-home-refused.png",
+    "sha256": "66cd3b9f74d8d85efdc1ec80682aa9b8f17f3a6b3e7a156fe8d7c790fbd4f65d"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-login-empty.png",
+    "sha256": "39987c0eda82234f40a1beffb0ea2753277137b68a01fb7067233dc70a54a2fd"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-login-filled.png",
+    "sha256": "3f3fea1d932e8e6c43694399b1fc569c2f0889c33bd3b755e81baf95d195402e"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-login-loading.png",
+    "sha256": "f060a84bdd7917c354497d5d695477a60c0d53b8ab1b8931fee1c1ab3f90a7df"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-login-refused.png",
+    "sha256": "5e06a24f4a2ad52b26029ff5f4ee0ece60c96b163467a45eb1a2408ea52b3031"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-request-form-refused.png",
+    "sha256": "a88974964de148af306d4ce9314d42ec03b21f1de95d930bf452dbe166b74b1f"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-requests-empty.png",
+    "sha256": "e4ab7f86e73976b31447f9537af3647e4f6d4a504e70b6d93762ddaf29e813b2"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-requests-filled.png",
+    "sha256": "494f8cda83e41ebfb09b8b350a2bb1857f832ff50d495c5f6cd95e671b08d2e5"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-requests-loading.png",
+    "sha256": "60fa4de018c17a6a9bc64ee511b9f79602884f9a4bb888cbe0703041a1baed52"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-requests-refused.png",
+    "sha256": "95bf82c0ae09362505a47644f74b4ca37018f804c0d7b2b3d008388f3b93f459"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-signup-empty.png",
+    "sha256": "c8fb21bdcb983f52dbfbc6003f898729ec4b553009eebb42a6120b662c738b08"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-signup-filled.png",
+    "sha256": "bde53bd394fe101b8daeb0ebdf5f01604bffa35f9a241c366d4c15dc7d2433f3"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-signup-loading.png",
+    "sha256": "89e95dc2f3e335205e0f19a39771a7673ccf64f970f97d8e9c38583ce04295a8"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-signup-refused.png",
+    "sha256": "5424ef174e52b583564370ca41f3e46e0fce36a8f8f25137f420a28e79039239"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-split-empty.png",
+    "sha256": "37602b219464490604901425ec2072c12041457fd22a7ad882f987795c8edfa3"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-split-filled.png",
+    "sha256": "2e83f3b16e7dc3d421d6844df650a9cf10c86c5c16dc3468d6ccc339f7312370"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_states/375-states-split-refused.png",
+    "sha256": "b3db8932e99b3879b557930a33485e62579aaf0b4acd3cb5044f267facb05859"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-authorizations-filled.png",
+    "sha256": "deb6caf78741dd29e44947a6859e918009576121f036aa894f687f30acbacebf"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-home-empty.png",
+    "sha256": "3e0700027ca613c9bad91e40406b1ac71634d4e2ee9d8cc4502aa8296b6017e8"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-home-filled.png",
+    "sha256": "05cc0c8a10ddc799755e0d06fa3be9afed7a61fef7433bf9df5ba48b186f6f12"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-home-held.png",
+    "sha256": "05a9fe658dcd91b2ab1ad5249ede30430ddcfb13731ad05d139c31614681dbb5"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-home-refused-decimal.png",
+    "sha256": "df4f80e0a8572938e5f652fc29c32c658b95284f9a99150677bcb6429c02c487"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-home-uncertain.png",
+    "sha256": "03c7e5a21bce14c34349ffea7ae0233d617b1943438535009c0d676b230f0dbf"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-login-empty.png",
+    "sha256": "b555628a252b10cef8e99990edd524b948a2b2940856b8b6c39781efb0e0861e"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-login-filled.png",
+    "sha256": "0b8ef639dfba559ce1f83d754049d043df99ae6501770d23c5f82c444458b71d"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-requests-filled.png",
+    "sha256": "bfc2e7a1d086e9c1eb7bc8da5664ff83a393c6bf6ecc6d92612276ed46403a7e"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-split-filled.png",
+    "sha256": "4fffec0e49d8f20f3e0bc8e4df88b0bd75f21c7c2411ce67e362fbb04128ec7f"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/1440-split-preview.png",
+    "sha256": "aab0ebed3a5745fec9d544d16ed524e1ad1ad72d26a6a2ae2623058f1e725634"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-authorizations-filled.png",
+    "sha256": "8141c27263f2c8339c976d27e5c8e32acb9cad8969f515d40dc1dc4c2514a444"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-home-empty.png",
+    "sha256": "3b6502850f8f153ffee16e6b696f0413d45d0ba5666fd640d34aa7efc236809f"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-home-filled.png",
+    "sha256": "32c2cb6b91c85b8561216a2601d21cec816caea89b85dc080774988ee814c3e9"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-home-held.png",
+    "sha256": "cf4e118bb8fc07106aaafdf231468f4b56f7574a9211f7a010e02ca962cc093d"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-home-refused-decimal.png",
+    "sha256": "b516b5b2c89a251109ebcec72672b61b2519c1d3f205af14b59b2fd2b56b417f"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-home-uncertain.png",
+    "sha256": "1db7042c4e88ad1f56737b83c6c728b50371f29051a0eaf572e29b1bfaf665b8"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-login-empty.png",
+    "sha256": "c75daf8f57b6796553235f4b0a9f0a5fe9a652032cbf237033907c629382a4b4"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-login-filled.png",
+    "sha256": "cfd6e9cc4615b4131e0fedfb87367da1fe3e9b0a36e1d3e50c67b6ac8994c9e7"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-requests-filled.png",
+    "sha256": "1dc7230b3a0f6a011fd2bb5a6dc6531406fd3e3d3829d4be55324ca961127095"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-split-filled.png",
+    "sha256": "9a64a064eeae0770a522ce8e45bc5cf9d8c65d7415f524374951d0dccec4999e"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_checks/375-split-preview.png",
+    "sha256": "9cbad48b11118c58c08d036abc677c4d19a99346f312064da58b491fa930e7b6"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/1440-login-empty.png",
+    "sha256": "2ecf306114338af1acc81bb07da987bebd204cd0cb3918075215d5c594e7e6e0"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/1440-login-filled.png",
+    "sha256": "ec5d755344894a6ab48f44f095df6d408a99686c254e47aa5c523579aa042a7a"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/1440-upgrade-recovered.png",
+    "sha256": "d91049e88597214306d135f99f6c0b43a68fc9feb52dc4106d021c978cd7bd4d"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/1440-upgrade-request-paid.png",
+    "sha256": "0d03ed29ff976459d0e04ebb017e9b1f490442e5a002f6a1d07d9dea4fc50a1d"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/1440-upgrade-uncertain.png",
+    "sha256": "09395c05d986a385f301f4afc08293be5c79f8e9a267a918aa4601aa635550c5"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/375-login-empty.png",
+    "sha256": "7a5d3a52d00f4bc074a4fd1c515ffe60e45474b663cc89712a41a5bdbbed64c8"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/375-login-filled.png",
+    "sha256": "290b2e5aee0e483d92ccc000720dc8ba259d06287892f64eadf6711afe22d64d"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/375-upgrade-recovered.png",
+    "sha256": "60b7b30611a287024f0c38b7bb430d83f048f2dac0d1526fc4ce4c1b20258ac3"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/375-upgrade-request-paid.png",
+    "sha256": "75a44dae6a2fb6fa3e3c1cbda57665feaf074b75ca64a8f53835a0dd071b9295"
+  },
+  {
+    "path": "evidence-b67e03c/screens/browser_upgrade/375-upgrade-uncertain.png",
+    "sha256": "8e1613a4e48e49e11867efeb26afc2f9052e659ef78c539ef861603bc659a287"
+  }
+]

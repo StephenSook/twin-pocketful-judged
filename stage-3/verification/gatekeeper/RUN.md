@@ -1,6 +1,6 @@
 # Stage3 independent gates
 
-Preparation only: no candidate has passed these checks yet. Stage1 and Stage2 are frozen. All writable checks/evidence live here; scratch clones, builds, sensitive in-memory exports and temporary logs remain under `/tmp`.
+Acceptance evidence for the tested candidate is recorded in `acceptance-b67e03c.json`, with commands, exits, counts, audit closure and limitations. Stage1 and Stage2 are frozen. All writable checks/evidence live here; scratch clones, builds, sensitive in-memory exports and temporary logs remain under `/tmp`.
 
 Run the supplied isolated harness first on a clean exact candidate and with the dispatched shared-repository command. Count stages1–3 separately from the tool-applicable Stage4 probe. Never write a custom Stage4 probe.
 
@@ -17,7 +17,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 stage-3/verification/gatekeeper/historical_hol
 
 Inherited probes/browser scripts are copied here from accepted Stage2 verification without changing the frozen folder. Inspect export adapters and mutation source anchors against the exact Stage3 candidate before running them. `integrity.py` inventories Stage3 product sources and compares supplied-check hashes. Use the existing harness venv for browser scripts, plain non-loopback HTTP,375/1440screenshots, all six routes and eight brief rules. No application dependency is introduced by these verification tools.
 
-Additional acceptance coverage to complete with the candidate:
+Coverage targets (see the acceptance manifest for observed evidence and its limits):
 
 - Equal-effective-time combined movements avoid transient/order-dependent historical overdrafts; statement ties use payment id.
 - Corrections move payments into/out of windows while prior snapshots remain frozen; concurrently paged snapshots keep one full-window balance chain.
@@ -37,3 +37,7 @@ Coordinator c8fc20a6 supersedes the earlier second-precision choice for Stage3. 
 S3-2 (coordinator3f6b8219): for as_of, known_at, from and to, a decoded single space exactly at the offset-sign position followed by HH:MM is read as + and echoed with +. Other malformed values remain422. history.py deliberately sends raw + in each of these query parameters and checks the /me echo normalization.
 
 S3-3 (coordinator7465c99b) supersedes the initial handoff's import-epoch invalidation: snapshots are exported service state. Source tokens retain their frozen result after import; destination-only tokens are removed; reset clears all tokens. history.py now checks replacement through a real export/reset/import round trip. Cross-process coverage remains part of acceptance. The same ruling confirms aggregate nonnegativity at each effective/event instant, not an arbitrary sequential ordering of movements tied at that instant.
+
+The later regressions are executable with `python3 <script> URL`: `history_exact.py` (exact temporal sums and correction overflow), `history_import.py` (seven inconsistent-state edits), `lifecycle_clock.py` (void followed immediately by spending/reserving), `read_clock.py` (50 sequential writes followed by a default statement), `correction_races.py` (50 mixed operations and atomic export invariants), and `history_limits.py` (5000 payments, 200 statement snapshots, 50 corrections). `seeded_history_import.py URL STAGE2_IMAGE INTERNAL_NETWORK` additionally removes a real Stage2 source before importing all four past-expiry seed statuses. `upgrade_holds.py` accepts the same arguments for partial captures and retries. Never log the opaque exports these scripts hold in memory.
+
+S3-4 uses plain string ID ordering. S3-5 uses one monotonic millisecond clock for new events, retaining original seeded/imported receipt strings. S3-6 bounds accepted statement intermediates to ±2^53; the excluded-input case is not claimed as covered here. `mutate_history.py CLEAN_STAGE_FOLDER INTERNAL_NETWORK SCRATCH` plants seven temporal faults, supplementing the eight inherited faults in `mutate.py`.

@@ -1,0 +1,1464 @@
+{
+  "verdict": "ACCEPT b67e03ca55327b506096b2d6da35c45447199097",
+  "accepted_revision": "b67e03ca55327b506096b2d6da35c45447199097",
+  "stage": 3,
+  "stage_folder": "stage-3",
+  "stage_tree": "37785abd9264e46290eec77e837810a295251cda",
+  "verified_at": "2026-10-02T02:35:23.230030+00:00",
+  "verifier_revision": "f122623a133cbf4eb53f01aa3491612b982c84b1",
+  "clean_copy": "/tmp/gatekeeper-s3-x6k0z8vs/candidate-b67e03c",
+  "image": "gatekeeper-s3-b67e03c",
+  "build": {
+    "command": [
+      "docker",
+      "build",
+      "-t",
+      "gatekeeper-s3-b67e03c",
+      "/tmp/gatekeeper-s3-x6k0z8vs/candidate-b67e03c/stage-3"
+    ],
+    "exit": 0,
+    "log": "/tmp/gatekeeper-s3-x6k0z8vs/build-b67e03c.log"
+  },
+  "runtime": {
+    "cpus": 2,
+    "memory_bytes": 2147483648,
+    "network": "gatekeeper-s1-internal",
+    "network_internal": true,
+    "origins": [
+      "http://172.24.0.5:18080",
+      "http://172.24.0.6:18080",
+      "http://172.24.0.7:18080"
+    ]
+  },
+  "provided_checks": [
+    {
+      "name": "clean",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "-m",
+        "harness",
+        "run",
+        "--track",
+        "pocketful",
+        "--repo",
+        "/tmp/gatekeeper-s3-x6k0z8vs/candidate-b67e03c",
+        "--stage",
+        "3",
+        "--mode",
+        "isolated",
+        "--out",
+        "/tmp/gatekeeper-s3-x6k0z8vs/check-b67e03c"
+      ],
+      "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+      "exit": 0,
+      "reported_revision": "b67e03ca55327b506096b2d6da35c45447199097",
+      "suite_digest": "fbe2aeab11b79fd3d36ed815b24c8879274830a9996b647671e62ab610a297d0",
+      "claimed_stage": 3,
+      "own_and_earlier_stages": {
+        "1": {
+          "collected": 147,
+          "passed": 147,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_1/test_me_payments.py": {
+              "passed": 24,
+              "total": 24
+            },
+            "stage_1/test_requests_splits_feed.py": {
+              "passed": 39,
+              "total": 39
+            },
+            "stage_1/test_retries_splits_input.py": {
+              "passed": 51,
+              "total": 51
+            },
+            "stage_1/test_sample.py": {
+              "passed": 19,
+              "total": 19
+            },
+            "stage_1/test_seeded_state.py": {
+              "passed": 14,
+              "total": 14
+            }
+          }
+        },
+        "2": {
+          "collected": 35,
+          "passed": 35,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_2/test_sample.py": {
+              "passed": 10,
+              "total": 10
+            },
+            "stage_2/test_ui.py": {
+              "passed": 25,
+              "total": 25
+            }
+          }
+        },
+        "3": {
+          "collected": 6,
+          "passed": 6,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_3/test_sample.py": {
+              "passed": 6,
+              "total": 6
+            }
+          }
+        }
+      },
+      "next_stage": {
+        "stage": 4,
+        "applicability": "applicable: the tool invoked the suite; no exemption reported",
+        "expected": "fail",
+        "observed": {
+          "collected": 5,
+          "passed": 0,
+          "failed": 1,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_4/test_sample.py": {
+              "passed": 0,
+              "total": 5
+            }
+          },
+          "not_run": 4
+        }
+      }
+    },
+    {
+      "name": "dispatched",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "-m",
+        "harness",
+        "run",
+        "--track",
+        "pocketful",
+        "--repo",
+        "/home/ubuntu/work/band-work/current",
+        "--stage",
+        "3",
+        "--mode",
+        "isolated",
+        "--out",
+        "/home/ubuntu/work/band-work/checks/pocketful-judged/s3-5"
+      ],
+      "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+      "exit": 0,
+      "reported_revision": "f122623a133cbf4eb53f01aa3491612b982c84b1",
+      "suite_digest": "fbe2aeab11b79fd3d36ed815b24c8879274830a9996b647671e62ab610a297d0",
+      "claimed_stage": 3,
+      "own_and_earlier_stages": {
+        "1": {
+          "collected": 147,
+          "passed": 147,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_1/test_me_payments.py": {
+              "passed": 24,
+              "total": 24
+            },
+            "stage_1/test_requests_splits_feed.py": {
+              "passed": 39,
+              "total": 39
+            },
+            "stage_1/test_retries_splits_input.py": {
+              "passed": 51,
+              "total": 51
+            },
+            "stage_1/test_sample.py": {
+              "passed": 19,
+              "total": 19
+            },
+            "stage_1/test_seeded_state.py": {
+              "passed": 14,
+              "total": 14
+            }
+          }
+        },
+        "2": {
+          "collected": 35,
+          "passed": 35,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_2/test_sample.py": {
+              "passed": 10,
+              "total": 10
+            },
+            "stage_2/test_ui.py": {
+              "passed": 25,
+              "total": 25
+            }
+          }
+        },
+        "3": {
+          "collected": 6,
+          "passed": 6,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_3/test_sample.py": {
+              "passed": 6,
+              "total": 6
+            }
+          }
+        }
+      },
+      "next_stage": {
+        "stage": 4,
+        "applicability": "applicable: the tool invoked the suite; no exemption reported",
+        "expected": "fail",
+        "observed": {
+          "collected": 5,
+          "passed": 0,
+          "failed": 1,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_4/test_sample.py": {
+              "passed": 0,
+              "total": 5
+            }
+          },
+          "not_run": 4
+        }
+      }
+    }
+  ],
+  "model": {
+    "command": [
+      "python3",
+      "-u",
+      "stage-3/verification/model/run_all.py",
+      "--base-url",
+      "http://172.24.0.5:18080",
+      "--second-url",
+      "http://172.24.0.6:18080",
+      "--stage1-url",
+      "http://172.24.0.8:18080",
+      "--stage2-url",
+      "http://172.24.0.2:18080",
+      "--no-shrink"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit": 0,
+    "inherited_operations": 532,
+    "temporal_operations": 75,
+    "output": [
+      "DIFFERENTIAL PASS operations=532 seed=20261001 persistence=pass concurrency=50 auth-controls=pass boundary=pass holds-expiry=pass migration=pass",
+      "TEMPORAL DIFFERENTIAL PASS operations=75 revisions=pass known-effective=pass snapshots=pass holds=pass stage1-import=pass stage2-import=pass",
+      "STAGE3 MODEL SUITE PASS inherited=pass temporal=pass both-legacy-imports=pass"
+    ]
+  },
+  "checks": [
+    {
+      "check": "history_exact",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/history_exact.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "status": 200,
+          "expected": 9007199254740992,
+          "observed": 9007199254740992
+        },
+        {
+          "status": 200,
+          "expected": 9007199254740992,
+          "observed": 9007199254740992
+        },
+        {
+          "overflow_expected_status": 422,
+          "observed_status": 422,
+          "expected_balances": [
+            100,
+            9007199254740992
+          ],
+          "observed_balances": [
+            100,
+            9007199254740992
+          ]
+        },
+        {
+          "result": "PASS",
+          "assertions": 36,
+          "cases": 3
+        }
+      ]
+    },
+    {
+      "check": "history_import",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/history_import.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "case": "negative opening",
+          "expected_status": 422,
+          "observed_status": 422,
+          "unchanged_current_wallet": true
+        },
+        {
+          "case": "opening disagrees with current ledger",
+          "expected_status": 422,
+          "observed_status": 422,
+          "unchanged_current_wallet": true
+        },
+        {
+          "case": "negative initial historical hold",
+          "expected_status": 422,
+          "observed_status": 422,
+          "unchanged_current_wallet": true
+        },
+        {
+          "case": "negative historical capture",
+          "expected_status": 422,
+          "observed_status": 422,
+          "unchanged_current_wallet": true
+        },
+        {
+          "case": "original recorded time differs from created time",
+          "expected_status": 422,
+          "observed_status": 422,
+          "unchanged_current_wallet": true
+        },
+        {
+          "case": "open hold cannot omit its lifecycle",
+          "expected_status": 422,
+          "observed_status": 422,
+          "unchanged_current_wallet": true
+        },
+        {
+          "case": "initial historical hold differs from authorization",
+          "expected_status": 422,
+          "observed_status": 422,
+          "unchanged_current_wallet": true
+        },
+        {
+          "result": "PASS",
+          "assertions": 80
+        }
+      ]
+    },
+    {
+      "check": "lifecycle_clock",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/lifecycle_clock.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "case": "payment after void",
+          "causal_timestamps": true,
+          "historical_total": 0,
+          "historical_held": 0,
+          "historical_available": 0,
+          "own_export_import_status": 204
+        },
+        {
+          "case": "authorization after void",
+          "causal_timestamps": true,
+          "historical_total": 100,
+          "historical_held": 100,
+          "historical_available": 0,
+          "own_export_import_status": 204
+        },
+        {
+          "result": "PASS",
+          "assertions": 57
+        }
+      ]
+    },
+    {
+      "check": "read_clock",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/read_clock.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "expected_committed_entries": 50,
+          "observed_entries": 50,
+          "expected_closing_balance": 50,
+          "observed_closing_balance": 50
+        },
+        {
+          "result": "PASS",
+          "assertions": 63
+        }
+      ]
+    },
+    {
+      "check": "seeded_history_import",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/seeded_history_import.py",
+        "http://172.24.0.7:18080",
+        "gatekeeper-s2-8038718",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "seeded_status": "open",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "seeded_status": "expired",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "seeded_status": "voided",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "seeded_status": "captured",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "open",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "open",
+          "upgraded_reimport_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "expired",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "expired",
+          "upgraded_reimport_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "voided",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "voided",
+          "upgraded_reimport_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "captured",
+          "expected_import_status": 204,
+          "observed_import_status": 204
+        },
+        {
+          "source_stage": 2,
+          "seeded_status": "captured",
+          "upgraded_reimport_status": 204
+        },
+        {
+          "result": "PASS",
+          "assertions": 191,
+          "cases": 8
+        }
+      ]
+    },
+    {
+      "check": "history",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/history.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 786,
+          "max_request_seconds": 0.0407
+        }
+      ]
+    },
+    {
+      "check": "historical_holds",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/historical_holds.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 90,
+          "max_request_seconds": 0.0297
+        }
+      ]
+    },
+    {
+      "check": "correction_races",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/correction_races.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "in_flight": 50,
+          "assertions": 341,
+          "atomic_snapshots": 6,
+          "linearization": "one winning correction plus commuting affordable payments, holds and captures; nine stale corrections after winner"
+        }
+      ]
+    },
+    {
+      "check": "holds",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/holds.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 1141,
+          "max_request_seconds": 0.0486
+        }
+      ]
+    },
+    {
+      "check": "probe",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/probe.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 917,
+          "max_request_seconds": 0.0464
+        }
+      ]
+    },
+    {
+      "check": "boundaries",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/boundaries.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "checks": [
+            {
+              "case": "inclusive 2^53 balance",
+              "expected_status": 204,
+              "observed_status": 204,
+              "passed": true
+            },
+            {
+              "case": "lowercase then replace",
+              "expected_handle": "i_",
+              "observed_handle": "i_",
+              "passed": true
+            }
+          ],
+          "passed": 2,
+          "failed": 0
+        }
+      ]
+    },
+    {
+      "check": "history_limits",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/history_limits.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "payments": 5000,
+          "statement_snapshots": 200,
+          "corrections": 50,
+          "assertions": 997,
+          "reset_seconds": 0.1351,
+          "export_seconds": 0.0558,
+          "import_seconds": 0.2116,
+          "max_request_seconds": 0.1927
+        }
+      ]
+    },
+    {
+      "check": "seeded_limits",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/seeded_limits.py",
+        "http://172.24.0.7:18080"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "users": 1000,
+          "reset_seconds": 0.5167,
+          "immediate_export_seconds": 0.0095,
+          "login_200": 49,
+          "wrong_password_401": 1,
+          "max_login_seconds": 0.0454,
+          "signup_201": 50,
+          "import_seconds": 0.0261,
+          "seed_hash_parameters": [
+            "m=1024,t=1,p=1"
+          ]
+        },
+        {
+          "users": 5000,
+          "reset_seconds": 2.3076,
+          "immediate_export_seconds": 0.0228,
+          "login_200": 49,
+          "wrong_password_401": 1,
+          "max_login_seconds": 0.029,
+          "signup_201": 50,
+          "import_seconds": 0.07,
+          "seed_hash_parameters": [
+            "m=1024,t=1,p=1"
+          ]
+        },
+        {
+          "result": "PASS",
+          "assertions": 544,
+          "cases": 2
+        }
+      ]
+    },
+    {
+      "check": "upgrade_holds",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/upgrade_holds.py",
+        "http://172.24.0.7:18080",
+        "gatekeeper-s2-8038718",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 67,
+          "source_destroyed_before_import": true,
+          "source_stage": 2
+        }
+      ]
+    },
+    {
+      "check": "security",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/security.py",
+        "http://172.24.0.7:18080",
+        "--fixture-exemption"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 152,
+          "fixture_exemption": true,
+          "identifier_kinds": [
+            "bearer token",
+            "request ID",
+            "recipient/payer handle",
+            "settlement handles",
+            "idempotency key"
+          ],
+          "authorization_ruling": "known request wrong role 403; unknown request 404",
+          "pages": "not applicable; API-only"
+        }
+      ]
+    },
+    {
+      "check": "password_scope",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/password_scope.py",
+        "http://172.24.0.7:18080",
+        "--fixture-exemption"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "initial_seed_parameters": "m=1024,t=1,p=1",
+          "signup_parameters": "m=47104,t=2,p=1",
+          "after_login_parameters": "m=47104,t=2,p=1",
+          "initial_seed_meets_original_minimum": false,
+          "fixture_exemption": true,
+          "unique_seed_salts_before_login": true,
+          "behavior_checks": "PASS",
+          "assertions": 32
+        }
+      ]
+    },
+    {
+      "check": "environment",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/environment.py",
+        "gatekeeper-s3-b67e03c",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 422,
+          "startup_seconds": [
+            0.3289,
+            0.4098
+          ],
+          "max_request_seconds": 2.8972,
+          "origin": "plain HTTP on non-loopback container IP"
+        }
+      ]
+    },
+    {
+      "check": "cold_login",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/cold_login.py",
+        "gatekeeper-s3-b67e03c",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "requests": 50,
+          "statuses": {
+            "401": 50
+          },
+          "max_seconds": 2.8796
+        }
+      ]
+    },
+    {
+      "check": "mutate",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/mutate.py",
+        "/tmp/gatekeeper-s3-x6k0z8vs/candidate-b67e03c/stage-3",
+        "gatekeeper-s1-internal",
+        "/tmp/gatekeeper-s3-x6k0z8vs/mutate-b67e03c"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "planted": 8,
+          "caught": 8,
+          "results": [
+            {
+              "fault": "overdraft",
+              "caught": true,
+              "exit": 1,
+              "check": "every snapshot nonnegative"
+            },
+            {
+              "fault": "credit",
+              "caught": true,
+              "exit": 1,
+              "check": "every snapshot conserves total"
+            },
+            {
+              "fault": "idempotency",
+              "caught": true,
+              "exit": 1,
+              "check": "one original among 50 identical writes"
+            },
+            {
+              "fault": "request_guard",
+              "caught": true,
+              "exit": 1,
+              "check": "request paid once among 50 distinct keys"
+            },
+            {
+              "fault": "private_feed",
+              "caught": true,
+              "exit": 1,
+              "check": "private visibility including operator"
+            },
+            {
+              "fault": "held_spend",
+              "caught": true,
+              "exit": 1,
+              "check": "error /payments insufficient_funds"
+            },
+            {
+              "fault": "capture_limit",
+              "caught": true,
+              "exit": 1,
+              "check": "error /authorizations/a_0muqcfjc40000691ccfbaa1/capture capture_exceeds_authorization"
+            },
+            {
+              "fault": "nonfinal",
+              "caught": true,
+              "exit": 1,
+              "check": "wallet total/held/available exact"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check": "mutate_history",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/mutate_history.py",
+        "/tmp/gatekeeper-s3-x6k0z8vs/candidate-b67e03c/stage-3",
+        "gatekeeper-s1-internal",
+        "/tmp/gatekeeper-s3-x6k0z8vs/mutate_history-b67e03c"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "planted": 7,
+          "caught": 7,
+          "results": [
+            {
+              "fault": "stale_revision",
+              "exit": 1,
+              "caught": true,
+              "assertion": "stale expected revision"
+            },
+            {
+              "fault": "historical_overdraft",
+              "exit": 1,
+              "caught": true,
+              "assertion": "future-effective funding removal rejected"
+            },
+            {
+              "fault": "known_at",
+              "exit": 1,
+              "caught": true,
+              "assertion": "historical balances expected"
+            },
+            {
+              "fault": "snapshot_cutoff",
+              "exit": 1,
+              "caught": true,
+              "assertion": "snapshot frozen after correction"
+            },
+            {
+              "fault": "snapshot_owner",
+              "exit": 1,
+              "caught": true,
+              "assertion": "snapshot bound to user"
+            },
+            {
+              "fault": "inclusive_boundary",
+              "exit": 1,
+              "caught": true,
+              "assertion": "historical balances expected"
+            },
+            {
+              "fault": "original_receipt",
+              "exit": 1,
+              "caught": true,
+              "assertion": "original activity unchanged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check": "browser_checks",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/browser_checks.py",
+        "http://172.24.0.6:18080",
+        "/tmp/gatekeeper-s3-x6k0z8vs/screens-b67e03c-browser_checks"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 88,
+          "viewports": [
+            {
+              "width": 375,
+              "result": "PASS",
+              "screenshots": 11
+            },
+            {
+              "width": 1440,
+              "result": "PASS",
+              "screenshots": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check": "browser_states",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/browser_states.py",
+        "http://172.24.0.6:18080",
+        "/tmp/gatekeeper-s3-x6k0z8vs/screens-b67e03c-browser_states"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 330,
+          "viewports": [
+            {
+              "width": 375,
+              "result": "PASS"
+            },
+            {
+              "width": 1440,
+              "result": "PASS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check": "visual_rules",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/visual_rules.py",
+        "http://172.24.0.6:18080",
+        "/tmp/gatekeeper-s3-x6k0z8vs/screens-b67e03c-visual_rules"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 178,
+          "contrast": [
+            {
+              "width": 375,
+              "route": "/",
+              "count": 47,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/requests",
+              "count": 28,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/split",
+              "count": 24,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/authorizations",
+              "count": 42,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/signup",
+              "count": 31,
+              "bad": []
+            },
+            {
+              "width": 375,
+              "route": "/login",
+              "count": 28,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/",
+              "count": 47,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/requests",
+              "count": 28,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/split",
+              "count": 24,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/authorizations",
+              "count": 42,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/signup",
+              "count": 31,
+              "bad": []
+            },
+            {
+              "width": 1440,
+              "route": "/login",
+              "count": 28,
+              "bad": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check": "web_security",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/web_security.py",
+        "http://172.24.0.6:18080",
+        "/tmp/gatekeeper-s3-x6k0z8vs/screens-b67e03c-web_security"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 84,
+          "headers": 8,
+          "traversals": 4,
+          "xss": "inert"
+        }
+      ]
+    },
+    {
+      "check": "browser_upgrade",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/browser_upgrade.py",
+        "http://172.24.0.6:18080",
+        "/tmp/gatekeeper-s3-x6k0z8vs/screens-b67e03c-browser_upgrade",
+        "gatekeeper-s1-d1ebec2",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "observations": [
+        {
+          "result": "PASS",
+          "assertions": 42,
+          "viewports": [
+            375,
+            1440
+          ],
+          "source_destroyed_before_import": true
+        }
+      ]
+    }
+  ],
+  "integrity": {
+    "command": [
+      "python3",
+      "stage-3/verification/gatekeeper/integrity.py",
+      "/tmp/gatekeeper-s3-x6k0z8vs/candidate-b67e03c",
+      "/home/ubuntu/work/dark-factory-wearedevs",
+      "/tmp/gatekeeper-s3-x6k0z8vs/provided-baseline.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit": 0,
+    "result": {
+      "provided_files": 30,
+      "provided_changed": [],
+      "tracked_files_scanned": 256,
+      "credential_pattern_hit_files": [],
+      "product_files": 9,
+      "check_identifier_hit_files": [],
+      "declared_package_dependencies": 0,
+      "advisory_audit": "empty package inventory",
+      "result": "PASS"
+    },
+    "additional_source_review": "No webdriver/headless/playwright/selenium/puppeteer/userAgent matches in product src/app.js; no authored test-client branches found. No outside application packages declared, so package advisory inventory is empty."
+  },
+  "frozen_folders": {
+    "command": [
+      "git",
+      "diff",
+      "7be9798",
+      "b67e03c",
+      "--stat",
+      "--",
+      "stage-1",
+      "stage-2"
+    ],
+    "exit": 0,
+    "output": "empty; no tracked changes since Stage3 base"
+  },
+  "product_equivalence": {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "b67e03c",
+      "f122623a133cbf4eb53f01aa3491612b982c84b1",
+      "--",
+      "stage-3",
+      ":!stage-3/verification"
+    ],
+    "exit": 0,
+    "output": "empty; verification-only changes after accepted product"
+  },
+  "ledger": {
+    "path": "stage-3/verification/ledger.md",
+    "entries": {
+      "R1": 145,
+      "R2": 202,
+      "R3": 112
+    },
+    "total": 459,
+    "audit_closure": [
+      {
+        "audit": "de870bb",
+        "item": "S3-2 offset-space parsing had no entry",
+        "closure": "Fixed in 0d718f6, R3-109; quote: a decoded space in the offset-sign position of a query instant is read as +. history.py checks all four query parameters."
+      },
+      {
+        "audit": "de870bb",
+        "item": "R3-077 import could invalidate source snapshots",
+        "closure": "Ruled by coordinator S3-3 (7465c99b): Snapshots are part of service state. Export includes them, and import restores them. Ledger fixed in 0d718f6; source tokens preserved, destination-only tokens removed, reset clears all."
+      },
+      {
+        "audit": "de870bb",
+        "item": "R3-019 quoted superseded created_at ordering",
+        "closure": "Fixed in 0d718f6 to quote Statement ordering is now by selected effective_at, then payment id. R3-066 agrees; S3-4 records plain string ID comparison."
+      },
+      {
+        "audit": "de870bb",
+        "item": "S3-A2 aggregate-boundary interpretation",
+        "closure": "Confirmed by coordinator 7465c99b and recorded in 6e24461: Balances at a boundary include the combined effect of all movements at that instant."
+      },
+      {
+        "audit": "de870bb",
+        "item": "S3-A5 sender-only correction authorization",
+        "closure": "Confirmed by coordinator 7465c99b and recorded in 6e24461: corrections require an idempotency key and the original sender; authenticated non-sender gets 403."
+      },
+      {
+        "audit": "0d718f6",
+        "item": "incremental audit",
+        "closure": "All de870bb concerns resolved, no new issues or overstated coverage; report committed 87a64b6."
+      },
+      {
+        "audit": "8e48598",
+        "item": "evidence-only diff and S3-4",
+        "closure": "No issues or overstated coverage; plain-string tie ordering confirmed; report f658ef2."
+      },
+      {
+        "audit": "5ba69bc",
+        "item": "S3-5/S3-6 and R3-111/112",
+        "closure": "No misreadings, gaps or overstated coverage; report 50a8376. Excluded statement-intermediate case remains explicitly unchecked, not an acceptance-input claim."
+      }
+    ],
+    "open_blocking_items": []
+  },
+  "brief_rules": [
+    {
+      "rule": 1,
+      "result": "PASS",
+      "evidence": "browser_checks/browser_states/visual_rules: required controls visible when data is ready; no required zero-opacity ancestor; interactions do not wait for decorative effects."
+    },
+    {
+      "rule": 2,
+      "result": "PASS",
+      "evidence": "intro pointer-events:none and removal by deadline; required controls exercised while effects exist."
+    },
+    {
+      "rule": 3,
+      "result": "PASS",
+      "evidence": "native links and document navigation; source review finds no smooth-scroll library or navigation interception; preventDefault occurs in form submission handlers."
+    },
+    {
+      "rule": 4,
+      "result": "PASS",
+      "evidence": "computed animation audit and CSS review: authored animations/transitions use transform/opacity only; no view-transition opt-in; form requests/results are immediate."
+    },
+    {
+      "rule": 5,
+      "result": "PASS",
+      "evidence": "monetary testid text/data-amount always final values; no animated counters; tint is a decorative pseudo-element."
+    },
+    {
+      "rule": 6,
+      "result": "PASS",
+      "evidence": "bundled scripts/fonts/art, no external runtime requests; zero animation dependencies."
+    },
+    {
+      "rule": 7,
+      "result": "PASS",
+      "evidence": "source scan and ordinary Chromium sessions: no automation/client detection branches; plain non-loopback HTTP works."
+    },
+    {
+      "rule": 8,
+      "result": "PASS",
+      "evidence": "no native dialogs; hover bounding-box stability and reduced-motion checks; hidden-tab/offscreen ambient loops paused; bounded intro and particles removed."
+    }
+  ],
+  "visual_evidence": {
+    "screenshots": 86,
+    "inventory": "evidence-b67e03c/screenshots.json",
+    "viewports": [
+      375,
+      1440
+    ],
+    "contrast_samples": 400,
+    "contrast_failures": 0,
+    "manual_review": [
+      "1440 signup empty: heading unobscured, aligned form and legible controls",
+      "375 home uncertain: clear available balance, preserved form, explicit unconfirmed outcome and no horizontal overflow"
+    ],
+    "required_routes": [
+      "/",
+      "/requests",
+      "/split",
+      "/signup",
+      "/login",
+      "/authorizations"
+    ]
+  },
+  "earlier_failures": [
+    {
+      "revision": "fa54326",
+      "failure": "seeded originally-open historical hold vanished after expiry at reset",
+      "fixed_by": [
+        "8548455"
+      ],
+      "verified_by": [
+        "model temporal historical holds",
+        "historical_holds.py"
+      ]
+    },
+    {
+      "revision": "8548455",
+      "failure": "same-time statement submission ordering did not match supplied check under random IDs",
+      "fixed_by": [
+        "ec0bb9c"
+      ],
+      "ruling": "S3-4 keeps plain string ordering; new IDs sort by creation, seeded/imported IDs unchanged",
+      "verified_by": [
+        "both final harnesses",
+        "temporal tied-boundary checks"
+      ]
+    },
+    {
+      "revision": "8548455",
+      "failure": "temporal Number accumulation lost one unit at 2^53; correction credit overflow broke current conservation",
+      "fixed_by": [
+        "fce49ac",
+        "ba9fdf0"
+      ],
+      "verified_by": [
+        "history_exact.py"
+      ]
+    },
+    {
+      "revision": "8548455",
+      "failure": "invalid negative/mismatched openings, hold events and revision1 recorded time accepted on import",
+      "fixed_by": [
+        "cb00a62",
+        "b0d95f6"
+      ],
+      "verified_by": [
+        "history_import.py"
+      ]
+    },
+    {
+      "revision": "b0d95f6",
+      "failure": "whole-second creation backdated money/holds before prior millisecond void, producing negative historical available and invalid own exports",
+      "fixed_by": [
+        "30a5e90"
+      ],
+      "ruling": "S3-5: new events use one monotonic millisecond clock, original seeded/imported strings retained",
+      "verified_by": [
+        "lifecycle_clock.py",
+        "model chronology"
+      ]
+    },
+    {
+      "revision": "30a5e90",
+      "failure": "default statement upper boundary omitted completed millisecond payments",
+      "fixed_by": [
+        "5e403de"
+      ],
+      "verified_by": [
+        "read_clock.py",
+        "both final harnesses"
+      ]
+    },
+    {
+      "revision": "5e403de",
+      "failure": "valid seeded past-expiry holds could not round-trip; accepted Stage2 seed exports failed migration/re-import",
+      "fixed_by": [
+        "c4b5c5f",
+        "e33b85a"
+      ],
+      "verified_by": [
+        "seeded_history_import.py eight own/legacy cases with source removed"
+      ]
+    },
+    {
+      "revision": "c4b5c5f",
+      "failure": "open hold could hide its lifecycle or disagree with historical initial amount after modified import",
+      "fixed_by": [
+        "b67e03c"
+      ],
+      "verified_by": [
+        "history_import.py"
+      ]
+    }
+  ],
+  "verifier_corrections": [
+    "Old inherited boundary fixture implied an opening above2^53; modeler0d718f6 removed its seeded payment. Final model uses the valid fixture; old R1-118 result not counted as product rejection.",
+    "Initial web_security invocations used system Python then omitted its screenshot-directory argument. Both errored and were not passes; final harness-venv invocation exits0.",
+    "Temporal mutation runner initially expected traceback assertions instead of history.py JSON failures; corrected in5289f9e. Final full rerun catches7/7, without accepting infrastructure errors.",
+    "Screenshot helper waits for the allowed intro to detach so evidence shows the actual screen; separate motion checks continue exercising the intro."
+  ],
+  "limitations": [
+    "Finite black-box histories and sampled atomic snapshots are not a formal proof over every schedule. Synchronous mutation paths were also reviewed; no product code was edited by gatekeeper.",
+    "Seeded public test-fixture passwords use coordinator-approved reduced Argon2id m1024KiB,t1,p1 with unique salts; successful login upgrades to m47104KiB,t2. Signup stays full-strength. This is an explicit test-fixture exception.",
+    "S3-6 restricts acceptance inputs to statement per-entry balance_after within \u00b12^53; excluded intermediate values are not claimed as covered. Opening/closing/boundary sums use exact accumulation.",
+    "Seeded closed or already-expired-at-creation holds need not reconstruct an unknown lifecycle; explicitly dated originally-open holds retain their actual historical interval.",
+    "Resource measurements cover5000 distinct users and5000-payment ledgers under2CPU/2GiB, not unbounded fixture sizes. State is ephemeral as permitted."
+  ],
+  "evidence_directory": "stage-3/verification/gatekeeper/evidence-b67e03c"
+}
