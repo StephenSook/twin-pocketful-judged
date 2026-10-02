@@ -270,6 +270,29 @@ def lifecycle(base):
     r.observe()
 
 
+def immediate_lifecycle(base):
+    """No sleeps: detect payment timestamp truncation before the releasing void."""
+    for attempt in range(3):
+        f=fixture();f['payments']=[]
+        for u in f['users']:u['balance']=100
+        r=Runner(base,f)
+        a=r.run({'kind':'authorize','user':'ada','key':'immediate-hold','body':{'to_handle':'bob','amount':100}})
+        aid=a['authorization_id'];created=r.state['holds'][aid]['created_at']
+        released=r.run({'kind':'void','user':'ada','id':aid,'body':{}})
+        p=r.run({'kind':'payment','user':'ada','key':'immediate-spend','body':{'to_handle':'bob','amount':100}})
+        require(model.instant(created)<=model.instant(released['closed_at'])<=model.instant(p['created_at']),
+                'R3 immediate lifecycle chronology', 'payment must not predate the releasing void')
+        require(model.historical_valid(r.state,model.instant(now())), 'R3 immediate lifecycle historical available')
+        for at in [created,released['closed_at'],p['created_at']]:
+            view=r.run({'kind':'me','user':'ada','query':{'as_of':at}})
+            require(view['total']>=0 and view['available']>=0,'R3 lifecycle nonnegative historical view')
+        at_payment=r.run({'kind':'me','user':'ada','query':{'as_of':p['created_at']}})
+        require(at_payment['total']==at_payment['available']==at_payment['held']==0,'R3 immediate payment view')
+        status,snapshot=http(base,'GET','/_test/export');require(status==200,'R3 immediate lifecycle export')
+        require(http(base,'POST','/_test/import',snapshot)[0]==204,'R3 immediate lifecycle own export imports')
+        r.run({'kind':'me','user':'ada','query':{'as_of':p['created_at']}})
+
+
 def reset_error(base):
     r=Runner(base);before=r.run({'kind':'statement','user':'ada','query':{'to':FUTURE}})
     f=fixture();f['payments'][0]['created_at']=FUTURE
@@ -379,7 +402,8 @@ def main():
     if not a.replay:
         try:
             temporal_queries(r);snapshots(a.base_url);tied_boundaries(a.base_url);snapshot_roundtrip(a.base_url,a.second_url)
-            historical_holds(a.base_url);lifecycle(a.base_url);reset_error(a.base_url);settlement_history(a.base_url);original_receipt(a.base_url)
+            historical_holds(a.base_url);lifecycle(a.base_url);immediate_lifecycle(a.base_url)
+            reset_error(a.base_url);settlement_history(a.base_url);original_receipt(a.base_url)
             if a.stage1_url:upgrade(a.stage1_url,a.base_url,False)
             if a.stage2_url:upgrade(a.stage2_url,a.base_url,True)
         except Mismatch as e:print('TEMPORAL CONTRACT FAIL '+str(e));raise SystemExit(1)
