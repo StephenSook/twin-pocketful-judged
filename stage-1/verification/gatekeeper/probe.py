@@ -103,12 +103,17 @@ def serial_history(events, initial):
             predecessors[j] |= 1 << i
     full = (1 << len(events)) - 1
     failed = set()
+    # Reads at the current rank must precede the next debit. Ordering enabled
+    # commutative debits by earliest response prevents factorial exploration.
+    order = sorted(range(len(events)), key=lambda i: (events[i]['kind'] == 'write', events[i]['end']))
     def visit(mask, used):
         if mask == full:
             return True
         if mask in failed:
             return False
-        for i, event in enumerate(events):
+        check(len(failed) < 100000, 'history search budget (inconclusive if exhausted)')
+        for i in order:
+            event = events[i]
             bit = 1 << i
             if mask & bit or predecessors[i] & ~mask:
                 continue
@@ -133,10 +138,18 @@ def concurrency():
     def operation(i):
         if i == 49:
             for n in range(25):
-                who = 'a' if n % 2 == 0 else 'b'
                 start = time.monotonic()
-                value = balance(tokens[who])
-                event = {'kind': 'read', 'rank': 20 - value if who == 'a' else value,
+                status, snapshot = call('GET', '/_test/export')
+                check(status == 200, 'concurrent atomic snapshot')
+                state = snapshot['state']
+                balances = {u['handle']: u['balance'] for u in state['users']}
+                check(sum(balances.values()) == 20, 'every snapshot conserves total')
+                check(all(v >= 0 for v in balances.values()), 'every snapshot nonnegative')
+                payments = [p['payment'] for p in state['payments']]
+                request_ids = [p['request_id'] for p in payments if p['request_id'] is not None]
+                check(len(request_ids) == len(set(request_ids)), 'every snapshot requests move once')
+                check(balances['b'] == len(payments) == 20 - balances['a'], 'every snapshot movements match receipts')
+                event = {'kind': 'read', 'rank': balances['b'],
                          'start': start, 'end': time.monotonic()}
                 with lock:
                     events.append(event)
@@ -188,6 +201,9 @@ def semantics():
     for action in ['pay', 'decline', 'cancel']:
         status, error = call('POST', '/requests/' + req['request_id'] + '/' + action, {}, tokens['c'], 'foreign')
         check(status == 403 and error['error']['code'] == 'forbidden', 'foreign request ' + action)
+        wrong_party = 'a' if action == 'cancel' else 'b'
+        status, error = call('POST', '/requests/' + req['request_id'] + '/' + action, {}, tokens[wrong_party], 'wrong-role')
+        check(status == 403 and error['error']['code'] == 'forbidden', 'visible wrong-role request ' + action)
     status, error = call('POST', '/payments', {'amount': False}, tokens['a'], 'private')
     check(status == 409 and error['error']['code'] == 'idempotency_key_reuse', 'replay precedence over invalid fields')
     status, exported = call('GET', '/_test/export')
