@@ -68,16 +68,17 @@ function userEvents(s, user, K, override) {
 }
 
 // GET /me?as_of=T&known_at=K: total and held at instant T (inclusive).
+// Accumulated in BigInt: intermediate sums may pass 2^53 (exact arithmetic, R2).
 function moneyAt(s, user, T, K) {
-  let total = user.opening;
-  let held = 0;
+  let total = BigInt(user.opening);
+  let held = 0n;
   for (const e of userEvents(s, user, K, null)) {
     if (e.t <= T) {
-      total += e.dTotal;
-      held += e.dHeld;
+      total += BigInt(e.dTotal);
+      held += BigInt(e.dHeld);
     }
   }
-  return { total, held };
+  return { total: Number(total), held: Number(held) };
 }
 
 // True when, under the latest revisions (with `override`), the user's total and
@@ -85,17 +86,17 @@ function moneyAt(s, user, T, K) {
 // movements at one instant are combined before checking.
 function historyIsSound(s, user, override, nowMs) {
   const events = userEvents(s, user, INF, override).sort((x, y) => x.t - y.t);
-  let total = user.opening;
-  let held = 0;
+  let total = BigInt(user.opening);
+  let held = 0n;
   for (let i = 0; i < events.length;) {
     const t = events[i].t;
     if (t > nowMs) break;
     while (i < events.length && events[i].t === t) {
-      total += events[i].dTotal;
-      held += events[i].dHeld;
+      total += BigInt(events[i].dTotal);
+      held += BigInt(events[i].dHeld);
       i++;
     }
-    if (total < 0 || total - held < 0) return false;
+    if (total < 0n || total - held < 0n) return false;
   }
   return true;
 }
@@ -113,30 +114,29 @@ function statement(s, user, fromMs, toMs, K, cutoff = INF) {
     rows.push({ p, rev, delta: p.from_user_id === user.id ? -rev.amount : rev.amount });
   }
   rows.sort((x, y) => x.rev.effMs - y.rev.effMs || compareIds(x.p.payment_id, y.p.payment_id));
-  let opening = user.opening;
+  let opening = BigInt(user.opening);
   const entries = [];
-  let running = 0;
   for (const r of rows) {
     if (fromMs !== null && r.rev.effMs < fromMs) {
-      opening += r.delta;
+      opening += BigInt(r.delta);
       continue;
     }
     if (r.rev.effMs >= toMs) break;
     entries.push(r);
   }
-  running = opening;
+  let running = opening;
   const out = entries.map((r) => {
-    running += r.delta;
+    running += BigInt(r.delta);
     return {
       payment: { ...r.p, amount: r.rev.amount },
       delta: r.delta,
-      balance_after: running,
+      balance_after: Number(running),
       revision: r.rev.revision,
       effective_at: r.rev.effective_at,
       recorded_at: r.rev.recorded_at,
     };
   });
-  return { opening_balance: opening, entries: out, closing_balance: running };
+  return { opening_balance: Number(opening), entries: out, closing_balance: Number(running) };
 }
 
 function revisionView(paymentId, r) {

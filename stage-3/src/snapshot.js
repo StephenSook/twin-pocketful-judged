@@ -437,13 +437,13 @@ function deriveHistory(s, extras) {
       continue;
     }
     // Opening = ending balance minus the net effect of the payments (current revisions).
-    let net = 0;
+    let net = 0n;
     for (const p of s.paymentsByUser.get(u.id) || []) {
       const revs = s.revisions.get(p.payment_id);
-      const amount = revs[revs.length - 1].amount;
+      const amount = BigInt(revs[revs.length - 1].amount);
       net += p.from_user_id === u.id ? -amount : amount;
     }
-    u.opening = u.balance - net;
+    u.opening = Number(BigInt(u.balance) - net);
   }
   const events = extras.authEvents || new Map();
   for (const { a } of s.authorizations) {

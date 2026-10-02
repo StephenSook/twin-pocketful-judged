@@ -205,7 +205,7 @@ class Store {
     const credited = diff > 0 ? receiver : sender;
     const move = Math.abs(diff);
     if (move > 0 && debited.balance - this.held(debited) < move) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
-    if (credited.balance + move > MAX_BALANCE) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
+    if (BigInt(credited.balance) + BigInt(move) > BigInt(MAX_BALANCE)) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
     const now = Date.now();
     const recMs = Math.max(now, last.recMs + 1); // recorded times strictly increase (ruling S3-1)
     const rev = {

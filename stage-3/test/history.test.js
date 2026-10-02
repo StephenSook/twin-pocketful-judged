@@ -332,3 +332,25 @@ test('payments created in the same second appear in creation order in statements
   assert.deepStrictEqual(ids, [...ids].sort(), 'ordered by payment id');
   assert.deepStrictEqual(st.entries.map((e) => e.delta), deltas);
 });
+
+test('historical balances are exact around 2^53 (R2)', async () => {
+  const MAX = 9007199254740992;
+  const users = [
+    { id: 'u_a', email: 'a@x.io', password: 'correct horse', display_name: 'A', handle: 'a', balance: MAX - 1 },
+    { id: 'u_b', email: 'b@x.io', password: 'correct horse', display_name: 'B', handle: 'b', balance: 2 },
+  ];
+  const r = await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users, payments: [
+    { id: 'p_in', from_user_id: 'u_b', to_user_id: 'u_a', amount: 1, created_at: '2020-01-01T00:00:00+00:00' },
+    { id: 'p_out', from_user_id: 'u_a', to_user_id: 'u_b', amount: 1, created_at: '2020-01-02T00:00:00+00:00' },
+  ] } });
+  assert.strictEqual(r.status, 204);
+  const login = async (e) => (await call('POST', '/auth/login', { body: { email: e, password: 'correct horse' } })).body.token;
+  const a = await login('a@x.io');
+  const b = await login('b@x.io');
+  const c = await call('POST', '/payments/p_in/corrections', { token: b, key: 'x', body: { expected_revision: 1, amount: 2, effective_at: '2020-01-03T00:00:00+00:00', reason: 'more' } });
+  assert.strictEqual(c.status, 201, c.text);
+  const raw = (await call('GET', `/me?as_of=${q('2020-01-04T00:00:00+00:00')}`, { token: a })).text;
+  assert.match(raw, /"balance":9007199254740992,/);
+  const st = (await call('GET', '/statement', { token: a })).text;
+  assert.match(st, /"closing_balance":9007199254740992/);
+});
