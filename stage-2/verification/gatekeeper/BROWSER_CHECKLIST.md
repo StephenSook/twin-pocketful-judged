@@ -32,4 +32,8 @@ This is a pre-candidate checklist, not passing evidence. Only stage-2 verificati
 
 ## Rulings carried forward
 
+S2-3: seeded captured, voided and expired authorizations hold zero. Checks assert status, visibility, zero held and specified refusal codes, without inventing capture history absent from the fixture. Required fallback fields are captured_amount equal to amount for captured (otherwise zero), payment_ids [], payment_id null and remaining_amount zero. Partial-capture history is checked through API operations and exports.
+
+S2-4: a successful Stage 1 receipt replayed after import must equal the original JSON value exactly, without an added authorization_id. Fresh activity reads expose authorization_id:null for non-authorization payments. Upgrade checks must distinguish immutable replay responses from current read representations.
+
 Existing request/capture/void wrong-role parties receive403, unknown IDs404. Balances include2^53 and arithmetic remains exact. Handles lowercase the whole local part before code-point replacement/truncation. Null amounts422; exactly supplied split participants; zero shares payable; note lengths use code points. Fixture seeds may use per-user salted Argon2id1024KiB,t1, upgrading on successful login; signup47104KiB,t2. All test controls retain10s including5000 distinct seeds. Email case-insensitive; timestamps second precision+00:00; unknown routes404/wrong methods405 with envelopes. S2-2: expired capture409authorization_expired even after a read; captured/voided409authorization_not_open even after deadline; void of expired/captured409authorization_not_open.
