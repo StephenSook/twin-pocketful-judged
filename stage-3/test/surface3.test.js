@@ -101,3 +101,28 @@ test('SnapshotStore pages a frozen result and scopes tokens to user and epoch', 
   a.notStrictEqual(t2, t);
   a.deepStrictEqual(s.page('u1', t2, 50, 0).value.entries, []);
 });
+
+test('SnapshotStore export/restore carries tokens across import (ruling S3-3)', () => {
+  const src = new SnapshotStore();
+  const t = src.create('u1', { opening_balance: 5, entries: [{ n: 1 }, { n: 2 }], closing_balance: 7, known_at: null });
+  const data = JSON.parse(JSON.stringify(src.export()));
+  const dst = new SnapshotStore();
+  const old = dst.create('u9', { opening_balance: 0, entries: [], closing_balance: 0 });
+  a.strictEqual(SnapshotStore.isValidExport(data), true);
+  a.strictEqual(dst.restore(data), true);
+  a.strictEqual(dst.page('u9', old, 50, 0).error.status, 404);
+  const p = dst.page('u1', t, 1, 1).value;
+  a.deepStrictEqual(p, { opening_balance: 5, entries: [{ n: 2 }], closing_balance: 7, known_at: null, has_more: false, snapshot: t });
+  a.strictEqual(dst.page('u2', t, 1, 0).error.status, 404);
+  const again = JSON.parse(JSON.stringify(dst.export()));
+  a.strictEqual(dst.restore(again), true);
+  a.strictEqual(dst.page('u1', t, 50, 0).value.entries.length, 2);
+  for (const bad of [null, {}, [null], [{ token: '', user_id: 'u', result: { entries: [] } }], [{ token: 't', user_id: 1, result: { entries: [] } }],
+    [{ token: 't', user_id: 'u', result: {} }], [{ token: 't', user_id: 'u', result: { entries: [] } }, { token: 't', user_id: 'u', result: { entries: [] } }]]) {
+    a.strictEqual(dst.restore(bad), false, JSON.stringify(bad));
+  }
+  a.strictEqual(dst.page('u1', t, 50, 0).ok, true);
+  dst.clear();
+  a.strictEqual(dst.page('u1', t, 50, 0).error.status, 404);
+  a.deepStrictEqual(dst.export(), []);
+});

@@ -24,10 +24,41 @@ class SnapshotStore {
     this.epoch = 0;
   }
 
-  // Forget every token (POST /_test/reset and a successful import).
+  // Forget every token (POST /_test/reset).
   clear() {
     this.byToken = new Map();
     this.epoch += 1;
+  }
+
+  // JSON-safe copy of every live snapshot, for GET /_test/export (ruling S3-3).
+  export() {
+    return Array.from(this.byToken, ([token, snap]) => ({ token, user_id: snap.userId, result: structuredClone(snap.result) }));
+  }
+
+  // True when data is an array that restore() accepts.
+  static isValidExport(data) {
+    if (!Array.isArray(data)) return false;
+    const seen = new Set();
+    for (const e of data) {
+      if (e === null || typeof e !== 'object' || Array.isArray(e)) return false;
+      if (typeof e.token !== 'string' || e.token === '' || e.token.length > 64 || seen.has(e.token)) return false;
+      if (typeof e.user_id !== 'string') return false;
+      if (e.result === null || typeof e.result !== 'object' || Array.isArray(e.result) || !Array.isArray(e.result.entries)) return false;
+      seen.add(e.token);
+    }
+    return true;
+  }
+
+  // Replaces every token with the exported set (POST /_test/import): tokens
+  // from the destination's previous state are gone, imported ones work again.
+  // Returns false and changes nothing when data is invalid.
+  restore(data) {
+    if (!SnapshotStore.isValidExport(data)) return false;
+    this.epoch += 1;
+    const next = new Map();
+    for (const e of data) next.set(e.token, { userId: e.user_id, epoch: this.epoch, result: deepFreeze(structuredClone(e.result)) });
+    this.byToken = next;
+    return true;
   }
 
   // Stores a deep, frozen copy of the full-window result and returns its token.
