@@ -472,10 +472,10 @@ Initial live run of driver5dfddf3 against product95f41e2 exited1 on a random req
 ## Temporal ambiguity readings
 
 - S3-A1: statement ordering uses selected effective_at then payment ID, superseding original created_at rule after correction; activity continues original created_at order.
-- S3-A2: historical affordability is evaluated after aggregating all events at an instant, not after each same-time statement entry. A statement intermediate balance_after may therefore be negative at a tied entry without violating the combined-boundary invariant.
+- S3-A2 (confirmed coordinator audit ruling): “Balances at a boundary include the combined effect of all movements at that instant” requires aggregate nonnegativity at each instant, rather than after each same-time statement entry. A statement intermediate balance_after may therefore be negative at a tied entry without violating the combined-boundary invariant.
 - S3-A3: omitted known_at means all committed knowledge at read start; explicit known_at compares visible recorded instants. Coordinator S3-1 (also recorded in gatekeeper revision382da78) permits millisecond precision and a1ms monotonic bump; explicit known_at compares visible instants, omitted known_at includes every committed revision. Original receipts retain their timestamps.
 - S3-A4: snapshot conflict rules name from/to/known_at; unrelated unknown query fields remain ignored.
-- S3-A5: correction sender authorization is required even for publicly visible payment; revisions are visible only to the two parties.
+- S3-A5 (confirmed coordinator audit ruling): corrections “require ... the original sender” even for publicly visible payments; revision history is visible only to the two parties.
 - S3-A6: seeded closed holds do not reconstruct unspecified historical lifecycle. API-created holds do, including import from stage2.
 
 ## R3 entries
