@@ -602,7 +602,7 @@ Every row is initially unchecked; quoted fragments preserve normative meaning. H
 |---|---|---|---|
 | R3-109 | Coordinator S3-2: “a decoded space in the offset-sign position of a query instant is read as '+'” | Send raw + in as_of,known_at,from,to; decode offset-sign space as+, preserve normalized+ in echo, reject other malformed spaces. | own model/HTTP check (partial; see limits) |
 | R3-110 | Coordinator S3-3: snapshot tokens are exported state | Export source snapshot, reset destination with different token, import source: original frozen pages survive; destination-only token404; later reset invalidates source token. | own model/HTTP check |
-| R3-111 | Coordinator S3-5: “every newly created event carries a millisecond-precision RFC 3339 instant from one monotonic clock” | With wallet100, authorize100, immediately void then pay100 without sleeps. Require creation<=void<=payment timestamps, nonnegative total/available at every event boundary, as_of payment total/held/available0, and unchanged own export reimports204. Three repetitions; other new-event paths retain existing timestamp checks. | own HTTP check, currently rejects b0d95f6 |
+| R3-111 | Coordinator S3-5: “every newly created event carries a millisecond-precision RFC 3339 instant from one monotonic clock” | With wallet100, authorize100, immediately void then pay100 without sleeps. Require creation<=void<=payment timestamps, nonnegative total/available at every event boundary, as_of payment total/held/available0, and unchanged own export reimports204. Three repetitions; other new-event paths retain existing timestamp checks. | own HTTP check; rejects b0d95f6, passes30a5e90 |
 
 | R3-112 | Coordinator S3-6: per-entry balance_after stays within ±2^53 for acceptance inputs | Generate bounded statement intermediates; maximum-wallet net settlement debits before crediting. For excluded out-of-range intermediates, never reject on the intermediate value itself; only require no5xx and exact opening/closing/aggregate values. | bounded fixture checked; excluded-input response case unchecked |
 
@@ -645,3 +645,13 @@ STAGE3 MODEL SUITE PASS inherited=pass temporal=pass both-legacy-imports=pass
 ```
 
 The clean product build/start exited0; build log `/tmp/modeler-s3-recheck-gyuqi4kh/build.log`. Self-test commands `PYTHONDONTWRITEBYTECODE=1 python3 stage-3/verification/model/driver.py --self-test` and `PYTHONDONTWRITEBYTECODE=1 python3 stage-3/verification/model/temporal_driver.py --self-test` both exited0 with `MODEL SELF-TEST PASS operations=663 boundary=pass authorization_operations=736 expiry=pass` and `TEMPORAL MODEL SELF-TEST PASS`. These are modeler observations, not independent acceptance.
+
+## Immediate lifecycle chronology recheck (S3-5/S3-6)
+
+Verifier93e2833 added `immediate_lifecycle`, performing authorize100, void, then payment100 without sleeps, three times. Clean productb0d95f6 exited1 on `R3 immediate lifecycle chronology: payment must not predate the releasing void`. Clean product30a5e90 was built and run at2CPU/2GiB (build/start exit0, log `/tmp/modeler-s3-clock-fixed-xy9dt0x4/build.log`).
+
+Command: `PYTHONDONTWRITEBYTECODE=1 python3 -c "import sys;sys.path.insert(0,'stage-3/verification/model');from temporal_driver import immediate_lifecycle;immediate_lifecycle('http://127.0.0.1:18531');print('IMMEDIATE LIFECYCLE PASS attempts=3 chronology=pass historical-available=pass self-import=pass')"`. Exit0: `IMMEDIATE LIFECYCLE PASS attempts=3 chronology=pass historical-available=pass self-import=pass`.
+
+Command: `PYTHONDONTWRITEBYTECODE=1 python3 -u stage-3/verification/model/temporal_driver.py --base-url http://127.0.0.1:18531 --steps 30 --no-shrink`. Exit0: `TEMPORAL DIFFERENTIAL PASS operations=75 revisions=pass known-effective=pass snapshots=pass holds=pass stage1-import=NOT_RUN stage2-import=NOT_RUN`. This targeted recheck does not claim legacy migration or full inherited acceptance on30a5e90; gatekeeper must rerun the full four-target wrapper.
+
+S3-6 also changes only the stage3 maximum-wallet settlement fixture to outgoing-first, keeping sorted per-entry balances within ±2^53. The adapted boundary probe passed b0d95f6 independently; its chronology defect remained correctly rejected.
