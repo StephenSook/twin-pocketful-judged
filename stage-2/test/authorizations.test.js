@@ -104,10 +104,11 @@ test('seeded holds: available derived, expired seeds hold nothing, over-held see
   assert.strictEqual((await call('POST', '/authorizations/a_c0/capture', { token: t2.cy, key: 'z', body: {} })).body.error.code, 'authorization_not_open');
   assert.strictEqual((await call('POST', '/authorizations/a_c2/capture', { token: t2.cy, key: 'z', body: {} })).body.error.code, 'authorization_expired');
   assert.strictEqual((await call('POST', '/authorizations/a_c1/void', { token: t2.bob })).status, 200);
-  await reset(fixture({ authorizations: seeded }));
+  const t3 = await reset(fixture({ authorizations: seeded }));
+  const over = fixture({ authorizations: [{ ...seeded[0], amount: 10001 }] });
 
   assert.strictEqual((await call('POST', '/_test/reset', { body: over })).status, 422);
-  assert.strictEqual((await me(t.ada)).held, 2000, 'a refused reset changes nothing');
+  assert.strictEqual((await me(t3.ada)).held, 2000, 'a refused reset changes nothing');
   for (const ttl of [0, -5, 1.5, '600', null]) {
     assert.strictEqual((await call('POST', '/_test/reset', { body: fixture({ authorization_ttl_seconds: ttl }) })).status, 422, String(ttl));
   }
