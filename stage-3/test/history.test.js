@@ -371,3 +371,15 @@ test('a correction credit above 2^53 is 422 and changes nothing', async () => {
   assert.match((await call('GET', '/me', { token: b })).text, /"balance":9007199254740992,/);
   assert.strictEqual((await call('GET', '/payments/p/revisions', { token: a })).body.revisions.length, 1);
 });
+
+test('import refuses inconsistent history: negative or mismatched openings', async () => {
+  const t = await reset();
+  const exp = (await call('GET', '/_test/export')).body;
+  const tamper = (fn) => { const d = JSON.parse(JSON.stringify(exp)); fn(d.state); return d; };
+  const neg = tamper((st) => { st.openings.find((o) => o.user_id === 'u_cy').opening = -1; });
+  assert.strictEqual((await call('POST', '/_test/import', { body: neg })).status, 422);
+  const off = tamper((st) => { st.openings.find((o) => o.user_id === 'u_ada').opening += 1; });
+  assert.strictEqual((await call('POST', '/_test/import', { body: off })).status, 422);
+  assert.strictEqual((await me(t.ada)).balance, 10000, 'a refused import changes nothing');
+  assert.strictEqual((await call('POST', '/_test/import', { body: exp })).status, 204);
+});

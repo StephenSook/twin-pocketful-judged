@@ -419,6 +419,21 @@ function buildImportedState(doc) {
   const lastOf = (arr) => (arr.length ? arr[arr.length - 1].ms : 0);
   s.lastMs = Math.max(s.lastMs, lastOf(s.payments), lastOf(s.requests), lastOf(s.authorizations));
   deriveHistory(s, importHistory(st, s));
+  // The imported history must be consistent (§10 invalid state is 422): each
+  // opening is nonnegative, opening plus the net of current revisions equals
+  // the balance, and total and available never go negative at any boundary.
+  const now = Date.now();
+  for (const u of s.users.values()) {
+    if (u.opening < 0) fail('state opening balance is negative');
+    let net = 0n;
+    for (const p of s.paymentsByUser.get(u.id) || []) {
+      const revs = s.revisions.get(p.payment_id);
+      const amount = BigInt(revs[revs.length - 1].amount);
+      net += p.from_user_id === u.id ? -amount : amount;
+    }
+    if (BigInt(u.opening) + net !== BigInt(u.balance)) fail('state opening and payments do not match the balance');
+    if (!ledger.historyIsSound(s, u, null, now)) fail('state history has a negative balance');
+  }
   return s;
 }
 
