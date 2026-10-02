@@ -1,7 +1,7 @@
 {
   "revision": "803871815fafa082a022c4d418b0cfb43b149530",
   "stage_tree": "092fe21f0383e184e0c8f7636e55a15474b89021",
-  "status": "gates passed; pending coordinator transition ruling and combined-candidate confirmation",
+  "status": "all gates passed; pending final combined-candidate confirmation",
   "verifier_revision": "8f18bd9 plus seeded UI terminal-state extension in this evidence commit",
   "clean_copy": "/tmp/gatekeeper-s2-l0q3ih4a/candidate-8038718",
   "build": {
@@ -589,7 +589,11 @@
       "revision": "26581d1",
       "finding": "native view-transition pageerror and non-transform UA keyframes",
       "fixed": "e8ffe16",
-      "ruling": "pending direct delivery"
+      "ruling": "closed by coordinator5b1e54d8: transition removal accepted"
     }
-  ]
+  ],
+  "transition_ruling": {
+    "message": "5b1e54d8-f4b9-4511-80d1-2fa4f497d6ee",
+    "quote": "Removing it is accepted: the brief asks for the cross-fade only \"where supported\", and an error-free page wins. Ruling S2-5 stays on record but no longer applies to the product."
+  }
 }
