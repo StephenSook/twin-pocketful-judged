@@ -21,7 +21,7 @@ faults = [
     ('snapshot_cutoff', 'ledger.js', 'revs[i].seq <= cutoff', 'true'),
     ('snapshot_owner', 'snapshots.js', 'snap.userId !== userId', 'false'),
     ('inclusive_boundary', 'ledger.js', 'if (e.t <= T)', 'if (e.t < T)'),
-    ('original_receipt', 'store.js', 'revs.push(rev);', 'p.amount = amount; revs.push(rev);'),
+    ('original_receipt', 'store.js', 'for (const c of plans) c.revs.push(c.rev);', 'for (const c of plans) { c.p.amount = c.amount; c.revs.push(c.rev); }'),
 ]
 results = []
 for name, filename, old, new in faults:

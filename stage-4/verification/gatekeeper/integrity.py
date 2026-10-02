@@ -18,10 +18,10 @@ secret_patterns = [re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY----
                    re.compile(r'(?:ghp_|github_pat_|sk_live_)[A-Za-z0-9_]{20,}'),
                    re.compile(r'AKIA[A-Z0-9]{16}')]
 secret_hits = [str(f.relative_to(repo)) for f in files if any(p.search(f.read_text(errors='ignore')) for p in secret_patterns)]
-product = list((repo / 'stage-3/src').rglob('*.js'))
+product = list((repo / 'stage-4/src').rglob('*.js'))
 test_names = re.compile(r'pytest|test_sample|test_me_payments|harness|u_ada|u_bob')
 branches = [str(f.relative_to(repo)) for f in product if test_names.search(f.read_text())]
-package = json.loads((repo / 'stage-3/package.json').read_text())
+package = json.loads((repo / 'stage-4/package.json').read_text())
 dependencies = {k: package.get(k, {}) for k in ['dependencies', 'devDependencies', 'optionalDependencies']}
 dependency_count = sum(len(v) for v in dependencies.values())
 result = {'provided_files': len(expected), 'provided_changed': changed,
