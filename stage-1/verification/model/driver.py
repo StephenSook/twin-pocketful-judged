@@ -43,6 +43,12 @@ def require(test, label, detail=''):
         raise Mismatch(label, detail)
 
 
+def bind_path(path, bindings):
+    # Bind complete URL segments: symbolic request:7 must not rewrite request:71.
+    return '/'.join(urllib.parse.quote(bindings[part], safe='') if part in bindings else part
+                    for part in path.split('/'))
+
+
 def http(base, method, path, body=None, token=None, key=None, raw=None, auth=None):
     headers = {'Content-Type': 'application/json; charset=utf-8'}
     if token:
@@ -124,9 +130,7 @@ class Runner:
 
     def run(self, op, observe=True):
         state, expected = transition(self.state, op)
-        path = op['path']
-        for symbolic, live in self.bindings.items():
-            path = path.replace(symbolic, urllib.parse.quote(live, safe=''))
+        path = bind_path(op['path'], self.bindings)
         if op.get('query'):
             path += '?' + urllib.parse.urlencode(op['query'])
         status, actual = http(self.base, op.get('method', 'POST'), path,
@@ -488,6 +492,8 @@ def auth_and_controls(base):
 
 
 def self_test():
+    require(bind_path('/requests/@id:request:71/pay', {'@id:request:7': 'wrong', '@id:request:71': 'correct'})
+            == '/requests/correct/pay', 'adapter exact segment binding')
     state = initial(FIXTURE)
     count = 0
     for operation in deterministic():
