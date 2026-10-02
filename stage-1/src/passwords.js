@@ -83,4 +83,4 @@ async function dummyVerify(password) {
   return false;
 }
 
-module.exports = { dummyHashReady, hashPassword, verifyPassword, isPasswordHash, dummyVerify, paramsForFixture, PARAMS, BULK_PARAMS };
+module.exports = { BULK_THRESHOLD, dummyHashReady, hashPassword, verifyPassword, isPasswordHash, dummyVerify, paramsForFixture, PARAMS, BULK_PARAMS };

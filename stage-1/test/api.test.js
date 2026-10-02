@@ -327,3 +327,33 @@ test('reset time does not grow with user count when passwords repeat (5000 users
   const exp = await call('GET', '/_test/export');
   assert.ok(!exp.text.includes('correct horse') && !exp.text.includes('battery staple'));
 });
+
+test('large reset with distinct passwords returns at once; seeded users log in immediately; export waits for hashes', async () => {
+  for (const n of [1000, 5000]) {
+    const users = Array.from({ length: n }, (_, i) => ({ id: `u${i}`, email: `u${i}@x.io`, password: `secret-${i}-pw`, display_name: `U${i}`, handle: `u${i}`, balance: 1 }));
+    const t0 = Date.now();
+    assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users } })).status, 204);
+    const took = Date.now() - t0;
+    assert.ok(took < 10000, `${n}-user reset took ${took} ms`);
+    // immediately: 50 concurrent logins of seeded users deep in the list, plus a wrong password
+    const t1 = Date.now();
+    const rs = await Promise.all(Array.from({ length: 50 }, (_, i) => {
+      const k = n - 1 - i * 3;
+      return call('POST', '/auth/login', { body: { email: `u${k}@x.io`, password: i === 0 ? 'wrong' : `secret-${k}-pw` } });
+    }));
+    assert.ok(Date.now() - t1 < 5000, `burst took ${Date.now() - t1} ms`);
+    assert.strictEqual(rs[0].status, 401);
+    assert.ok(rs.slice(1).every((r) => r.status === 200));
+  }
+  // export after a 1000-distinct reset contains every hash and no plaintext; import restores logins
+  const users = Array.from({ length: 1000 }, (_, i) => ({ id: `u${i}`, email: `u${i}@x.io`, password: `secret-${i}-pw`, display_name: `U${i}`, handle: `u${i}`, balance: 1 }));
+  assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users } })).status, 204);
+  // Export waits until every seeded hash is done (CPU-bound, ~13 ms per
+  // distinct password on 2 vCPU), so it is not timed here.
+  const exp = await call('GET', '/_test/export');
+  assert.strictEqual(exp.status, 200);
+  assert.ok(!exp.text.includes('secret-'));
+  assert.ok(!exp.text.includes('"password_hash":null'));
+  assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204);
+  assert.strictEqual((await call('POST', '/auth/login', { body: { email: 'u777@x.io', password: 'secret-777-pw' } })).status, 200);
+});

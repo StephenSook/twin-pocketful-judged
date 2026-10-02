@@ -5,6 +5,7 @@ const v = require('./validate');
 const { Store, ApiError } = require('./store');
 const { planFixture, buildFixtureState, buildImportedState } = require('./snapshot');
 const passwords = require('./passwords');
+const seeding = require('./seeding');
 
 const TEST_BODY_BYTES = 64 * 1024 * 1024;
 
@@ -75,11 +76,14 @@ async function login(req, res) {
   const body = await readObject(req);
   if (body.email === undefined || body.password === undefined) throw new ApiError(422, 'validation_failed', 'email and password are required');
   if (typeof body.email !== 'string' || typeof body.password !== 'string') throw new ApiError(400, 'malformed_request', 'email and password must be strings');
+  const state = store.s;
   const user = store.userByEmail(v.emailKey(body.email));
-  const good = user ? await passwords.verifyPassword(body.password, user.password_hash) : await passwords.dummyVerify(body.password);
+  // A seeded user's hash may still be pending after a large reset: compute it first.
+  const hash = user ? await seeding.hashFor(state, user).catch(() => null) : null;
+  const good = hash ? await passwords.verifyPassword(body.password, hash) : await passwords.dummyVerify(body.password);
   // Re-read after the async verify: a reset/import may have replaced the state.
   const current = good ? store.userByEmail(v.emailKey(body.email)) : null;
-  if (!current || current.password_hash !== user.password_hash) throw new ApiError(401, 'unauthenticated', 'wrong email or password');
+  if (!current || current !== user) throw new ApiError(401, 'unauthenticated', 'wrong email or password');
   const token = store.issueToken(current);
   v.sendJson(res, 200, { user_id: current.id, display_name: current.display_name, token });
 }
@@ -172,22 +176,23 @@ function createSettlement(req, res) {
 async function reset(req, res) {
   const fixture = await readObject(req, { maxBytes: TEST_BODY_BYTES });
   const plan = planFixture(fixture);
-  // Slow hashing happens before the swap; the swap itself is one assignment.
-  // Each distinct seeded password is hashed once per reset (coordinator scope
-  // ruling): seeded users with an identical password share one Argon2id hash
-  // and salt, so reset time depends on distinct passwords, not on user count.
-  // Signups always get their own salt.
-  const distinct = [...new Set(plan.users.map((u) => u.password))];
-  const params = passwords.paramsForFixture(distinct.length);
-  const digests = await Promise.all(distinct.map((pw) => passwords.hashPassword(pw, params)));
-  const byPassword = new Map(distinct.map((pw, i) => [pw, digests[i]]));
-  const hashes = plan.users.map((u) => byPassword.get(u.password));
-  store.replace(buildFixtureState(plan, hashes));
+  // Slow hashing never runs inside the swap, which is one assignment. Small
+  // fixtures are hashed first; large ones finish in the background (seeding.js).
+  const { hashes, attach } = await seeding.hashFixturePasswords(plan);
+  const state = buildFixtureState(plan, hashes);
+  store.replace(state);
+  attach(state, () => store.s === state);
   v.sendNoContent(res);
 }
 
-function exportState(req, res) {
+async function exportState(req, res) {
   req.resume();
+  // Never export a pending seeded password: wait until every hash is done.
+  // The snapshot itself is taken synchronously, so it is atomic.
+  for (let state = store.s; ; state = store.s) {
+    await seeding.allHashed(state);
+    if (store.s === state) break;
+  }
   sendText(res, 200, JSON.stringify(store.exportSnapshot()));
 }
 
