@@ -29,3 +29,7 @@ Additional acceptance coverage to complete with the candidate:
 - Historical captures, final releases, partial void/expiry and known expiry deadlines; seeded closed holds do not invent prior lifecycle.
 - Plant Stage3 faults in scratch copies (revision guard, boundary comparison, correction history replacement, snapshot freezing/ownership); add checks for any uncaught observable fault.
 - Record full audit closure, every earlier rejection/fix, fixture-hash scope limitation, exact stage tree, commands/exits/counts and retained browser evidence in the final manifest.
+
+## Timestamp ruling S3-1
+
+Coordinator c8fc20a6 supersedes the earlier second-precision choice for Stage3. recorded_at, closed_at and correction effective_at echoes may include milliseconds; revision1 effective_at/recorded_at equal the original created_at exactly. Strictly increasing correction recorded times may bump1ms when the clock does not advance. Original Stage1/2 receipt timestamps remain unchanged. Omitted known_at/current reads select everything committed when the read begins, including a revision assigned a bumped visible timestamp; explicit known_at compares visible instants literally and inclusively. Query offsets resolve to exact instants at millisecond resolution. The strict-order assertion in history.py already compares parsed instants without imposing second precision.
