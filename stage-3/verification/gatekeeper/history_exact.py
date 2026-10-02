@@ -51,3 +51,4 @@ print(json.dumps({'overflow_expected_status': 422, 'observed_status': status,
     'expected_balances': [100, MAXIMUM], 'observed_balances': balances}))
 p.check(temporal_ok, 'corrected temporal sum exact')
 p.check(status == 422 and balances == [100, MAXIMUM], 'overflow rejected atomically')
+print(json.dumps({'result':'PASS','assertions':p.COUNT,'cases':3}))
