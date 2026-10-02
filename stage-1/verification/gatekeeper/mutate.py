@@ -16,8 +16,8 @@ scratch = pathlib.Path(scratch)
 scratch.mkdir(parents=True, exist_ok=True)
 probe = pathlib.Path(__file__).with_name('probe.py').resolve()
 faults = [
-    ('overdraft', 'if (next < 0)', 'if (false)'),
-    ('credit', 'user.balance += d;', 'user.balance += Math.min(d, 0);'),
+    ('overdraft', 'if (next < 0n)', 'if (false)'),
+    ('credit', 'user.balance = next;', 'user.balance = Math.min(next, user.balance);'),
     ('idempotency', 'const prior = this.s.idem.get(scope);', 'const prior = null;'),
     ('request_guard', "if (r.status !== 'pending')", 'if (false)'),
     ('private_feed', "if (p.visibility !== 'public' && p.from_user_id !== caller.id && p.to_user_id !== caller.id) continue;", 'if (false) continue;'),
