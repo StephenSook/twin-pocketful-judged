@@ -13,7 +13,11 @@
 
 const crypto = require('node:crypto');
 
-const MAX_BALANCE = Number.MAX_SAFE_INTEGER;
+// §4: no balance outside ±2^53; 2^53 itself is in range (coordinator ruling,
+// ledger R1-041). Every integer up to 2^53 is exact as a double; balance
+// arithmetic is done in BigInt so the bound check itself never rounds.
+const MAX_BALANCE = 2 ** 53;
+const MAX_BALANCE_BIG = 2n ** 53n;
 const MAX_ID = 64;
 
 class ApiError extends Error {
@@ -166,13 +170,16 @@ class Store {
       if (!Number.isSafeInteger(e.amount) || e.amount < 0 || e.from === e.to) {
         throw new ApiError(422, 'validation_failed', 'invalid transfer');
       }
-      delta.set(e.from, (delta.get(e.from) || 0) - e.amount);
-      delta.set(e.to, (delta.get(e.to) || 0) + e.amount);
+      const amount = BigInt(e.amount);
+      delta.set(e.from, (delta.get(e.from) || 0n) - amount);
+      delta.set(e.to, (delta.get(e.to) || 0n) + amount);
     }
+    const nextBalance = new Map();
     for (const [user, d] of delta) {
-      const next = user.balance + d;
-      if (next < 0) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
-      if (next > MAX_BALANCE) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
+      const next = BigInt(user.balance) + d;
+      if (next < 0n) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
+      if (next > MAX_BALANCE_BIG) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
+      nextBalance.set(user, Number(next));
     }
     const ms = this.tick();
     const createdAt = rfc3339(ms);
@@ -195,7 +202,7 @@ class Store {
       this.s.paymentById.set(p.payment_id, p);
       return p;
     });
-    for (const [user, d] of delta) user.balance += d;
+    for (const [user, next] of nextBalance) user.balance = next;
     return { payments: created, ms, createdAt };
   }
 

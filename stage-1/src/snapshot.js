@@ -210,7 +210,7 @@ function buildImportedState(doc) {
     if (s.byEmail.has(key)) fail('state user email is duplicated');
     if (!v.isValidHandle(u.handle) || s.byHandle.has(u.handle)) fail('state user handle is invalid');
     if (typeof u.display_name !== 'string') fail('state user display_name is invalid');
-    if (!Number.isSafeInteger(u.balance) || u.balance < 0) fail('state user balance is invalid');
+    if (typeof u.balance !== 'number' || !Number.isInteger(u.balance) || u.balance < 0 || u.balance > MAX_BALANCE) fail('state user balance is invalid');
     if (!isPasswordHash(u.password_hash)) fail('state user password_hash is invalid');
     const user = {
       id: u.id, email: u.email, email_key: key, display_name: u.display_name,

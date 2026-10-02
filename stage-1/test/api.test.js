@@ -259,3 +259,45 @@ test('large reset fixture fits the reset budget and every seeded user can log in
   assert.strictEqual(l.status, 200);
   assert.strictEqual((await call('GET', '/me', { token: l.body.token })).body.minor_units, 0);
 });
+
+test('balances are exact at the 2^53 bound (R1-041)', async () => {
+  const MAX = 9007199254740992; // 2^53, in range
+  const fixture = { currency: 'EUR', minor_units: 2, users: [
+    { id: 'u_r', email: 'rich@x.io', password: 'correct horse', display_name: 'R', handle: 'rich', balance: MAX },
+    { id: 'u_p', email: 'poor@x.io', password: 'correct horse', display_name: 'P', handle: 'poor', balance: 0 },
+    { id: 'u_m', email: 'mid@x.io', password: 'correct horse', display_name: 'M', handle: 'mid', balance: 10 },
+  ] };
+  assert.strictEqual((await call('POST', '/_test/reset', { raw: JSON.stringify(fixture) })).status, 204);
+  const login = async (e) => (await call('POST', '/auth/login', { body: { email: e, password: 'correct horse' } })).body.token;
+  const rich = await login('rich@x.io');
+  const poor = await login('poor@x.io');
+  const bal = async (tok) => JSON.parse((await call('GET', '/me', { token: tok })).text.replace(/"balance":(\d+)/, '"balance":"$1"')).balance;
+  assert.strictEqual(await bal(rich), '9007199254740992');
+  assert.strictEqual((await call('POST', '/payments', { token: rich, key: 'm1', body: { to_handle: 'poor', amount: 1 } })).status, 201);
+  assert.strictEqual(await bal(rich), '9007199254740991');
+  assert.strictEqual(await bal(poor), '1');
+  // back to exactly 2^53 is allowed; one more unit above it is refused and changes nothing
+  assert.strictEqual((await call('POST', '/payments', { token: poor, key: 'm2', body: { to_handle: 'rich', amount: 1 } })).status, 201);
+  assert.strictEqual(await bal(rich), '9007199254740992');
+  const ab = await call('POST', '/splits', { token: poor, key: 'm3', body: { amount: 1, participant_handles: ['rich', 'poor'] } });
+  assert.strictEqual(ab.status, 201);
+  const over = await call('POST', '/payments', { token: rich, key: 'm4', body: { to_handle: 'poor', amount: 5 } });
+  assert.strictEqual(over.status, 201);
+  const back = await call('POST', '/payments', { token: poor, key: 'm5', body: { to_handle: 'rich', amount: 5 } });
+  assert.strictEqual(back.status, 201);
+  assert.strictEqual(await bal(rich), '9007199254740992');
+  assert.strictEqual(await bal(poor), '0');
+  const mid = await login('mid@x.io');
+  const tooRich = await call('POST', '/payments', { token: mid, key: 'm6', body: { to_handle: 'rich', amount: 1 } });
+  assert.strictEqual(tooRich.status, 422);
+  assert.strictEqual(await bal(rich), '9007199254740992');
+  assert.strictEqual(await bal(mid), '10');
+  const neg = { ...fixture, users: [{ ...fixture.users[0], balance: -1 }] };
+  assert.strictEqual((await call('POST', '/_test/reset', { body: neg })).status, 422);
+  const above = JSON.stringify(fixture).replace('9007199254740992', '9007199254740994');
+  assert.strictEqual((await call('POST', '/_test/reset', { raw: above })).status, 422);
+  const exp = await call('GET', '/_test/export');
+  assert.ok(exp.text.includes('"balance":9007199254740992'));
+  assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204);
+  assert.strictEqual(await bal(rich), '9007199254740992');
+});
