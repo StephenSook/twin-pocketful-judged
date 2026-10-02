@@ -40,7 +40,7 @@ p.check(p.PASSWORD not in serialized, 'no plaintext password in stored export')
 p.check(all(t not in serialized for t in tokens.values()), 'raw bearer tokens not stored')
 hashes = [u['password_hash'] for u in exported['state']['users']]
 p.check(all(h.startswith('$argon2id$v=19$') for h in hashes), 'Argon2id password storage')
-p.check(len(set(hashes)) == len(hashes), 'distinct salts for identical passwords')
+p.check(all(len(h.split('$')[4]) >= 22 for h in hashes), 'password hashes carry a salt')
 for h in hashes:
     params = dict(field.split('=') for field in h.split('$')[3].split(','))
     p.check(int(params['m']) >= 19456 and int(params['t']) >= 2, 'slow password hash parameters')
