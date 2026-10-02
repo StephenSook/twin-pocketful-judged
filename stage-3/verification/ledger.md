@@ -621,3 +621,21 @@ Stage3 inherited boundary fixture now has no seeded payments at ending balance2^
 Productfa54326 failed R3-092/104: seeded status=open with supplied past created_at/expires_at yielded historical held0 at creation; expected250. Minimal reproduction function `historical_holds` in verifier538be58 resets a synthetic four-user fixture then checks one /me as_of/known_at boundary. Builder fix8548455 preserves that historical lifecycle. No product source was read.
 
 The inherited maximum-balance fixture initially failed import because original outgoing500 plus ending2^53 implied opening2^53+500. Stage3 verifier now uses no seeded movement for this boundary case; all reconstructed values stay within the balance range. This was a verifier-fixture adaptation, not an additional product rejection.
+
+## Final modeler evidence
+
+Verifier0d718f65656b983230983bfbafe418a44d01d19e against clean product8548455, two isolated stage3 containers at2CPU/2GiB plus frozen stage1/stage2 sources, ran:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -u stage-3/verification/model/run_all.py --base-url http://127.0.0.1:18431 --second-url http://127.0.0.1:18432 --stage1-url http://127.0.0.1:18434 --stage2-url http://127.0.0.1:18433 --no-shrink
+```
+
+Exit0; key output:
+
+```text
+DIFFERENTIAL PASS operations=532 seed=20261001 persistence=pass concurrency=50 auth-controls=pass boundary=pass holds-expiry=pass migration=pass
+TEMPORAL DIFFERENTIAL PASS operations=75 revisions=pass known-effective=pass snapshots=pass holds=pass stage1-import=pass stage2-import=pass
+STAGE3 MODEL SUITE PASS inherited=pass temporal=pass both-legacy-imports=pass
+```
+
+The clean product build/start exited0; build log `/tmp/modeler-s3-recheck-gyuqi4kh/build.log`. Self-test commands `PYTHONDONTWRITEBYTECODE=1 python3 stage-3/verification/model/driver.py --self-test` and `PYTHONDONTWRITEBYTECODE=1 python3 stage-3/verification/model/temporal_driver.py --self-test` both exited0 with `MODEL SELF-TEST PASS operations=663 boundary=pass authorization_operations=736 expiry=pass` and `TEMPORAL MODEL SELF-TEST PASS`. These are modeler observations, not independent acceptance.
