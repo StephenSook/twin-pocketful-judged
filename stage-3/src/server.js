@@ -115,14 +115,24 @@ function getStatement(req, res, url) {
   const started = Date.now();
   const user = requireUser(req);
   const q = take(v.validateStatementQuery(url.searchParams));
+  let token;
+  let ref;
   if (q.snapshot !== null) {
-    v.sendJson(res, 200, take(snapshots.page(user.id, q.snapshot, q.limit, q.offset)));
-    return;
+    token = q.snapshot;
+    ref = take(snapshots.resolve(user.id, token));
+  } else {
+    // The snapshot stores only this reference; revisions are append-only, so
+    // recomputing with the same cutoff gives exactly the frozen result.
+    ref = store.statementRef(q.from ? q.from.ms : null, q.to ? q.to.ms : started, q.known_at ? q.known_at.ms : INF);
+    if (q.known_at) ref.known_at_raw = q.known_at.raw;
+    token = snapshots.createRef(user.id, ref);
   }
-  const full = store.statementFor(user, q.from ? q.from.ms : null, q.to ? q.to.ms : started, q.known_at ? q.known_at.ms : INF);
-  if (q.known_at) full.known_at = q.known_at.raw;
-  const token = snapshots.create(user.id, full);
-  v.sendJson(res, 200, take(snapshots.page(user.id, token, q.limit, q.offset)));
+  const full = store.statementFor(user, ref);
+  const body = { opening_balance: full.opening_balance, entries: full.entries.slice(q.offset, q.offset + q.limit), closing_balance: full.closing_balance };
+  if (ref.known_at_raw !== undefined) body.known_at = ref.known_at_raw;
+  body.has_more = q.offset + q.limit < full.entries.length;
+  body.snapshot = token;
+  v.sendJson(res, 200, body);
 }
 
 function correctPayment(req, res, id, path) {
@@ -231,14 +241,36 @@ async function reset(req, res) {
 
 function exportState(req, res) {
   req.resume();
-  // Synchronous, so the snapshot is atomic.
-  sendText(res, 200, JSON.stringify(store.exportSnapshot()));
+  // Synchronous, so the snapshot is atomic. Statement snapshot tokens are part
+  // of the service state (ruling S3-3).
+  const doc = store.exportSnapshot();
+  doc.state.snapshots = snapshots.exportAll();
+  sendText(res, 200, JSON.stringify(doc));
+}
+
+const isInt = (x) => Number.isSafeInteger(x);
+
+// Statement snapshot references in an export; absent before stage 3.
+function importedSnapshots(doc, state) {
+  const list = doc.state.snapshots === undefined ? [] : doc.state.snapshots;
+  const bad = () => new ApiError(422, 'validation_failed', 'state.snapshots is invalid');
+  if (!Array.isArray(list)) throw bad();
+  for (const e of list) {
+    const p = e && e.params;
+    if (!e || typeof e.token !== 'string' || e.token === '' || !state.users.has(e.user_id) || !p || typeof p !== 'object'
+      || !(p.from === null || isInt(p.from)) || !isInt(p.to) || !(p.known_at === null || isInt(p.known_at)) || !isInt(p.cutoff)
+      || !(p.known_at_raw === undefined || typeof p.known_at_raw === 'string')) throw bad();
+  }
+  return list;
 }
 
 async function importState(req, res) {
   const doc = await readObject(req, { maxBytes: TEST_BODY_BYTES });
-  store.replace(buildImportedState(doc));
-  snapshots.clear();
+  const state = buildImportedState(doc);
+  const refs = importedSnapshots(doc, state);
+  if (!SnapshotStore.isValidExport(refs)) throw new ApiError(422, 'validation_failed', 'state.snapshots is invalid');
+  store.replace(state);
+  snapshots.restore(refs);
   v.sendNoContent(res);
 }
 

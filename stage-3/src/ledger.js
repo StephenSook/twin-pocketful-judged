@@ -21,9 +21,11 @@ function stamp(ms) {
 
 // Latest revision recorded at or before K, or null. `override` replaces the
 // revision list of one payment (used to test a correction before applying it).
-function selectRevision(s, paymentId, K, override) {
+// `cutoff` (statement snapshots) excludes revisions committed after a read:
+// every revision carries a global commit sequence number `seq`.
+function selectRevision(s, paymentId, K, override, cutoff = INF) {
   const revs = override && override.paymentId === paymentId ? override.revs : s.revisions.get(paymentId);
-  for (let i = revs.length - 1; i >= 0; i--) if (revs[i].recMs <= K) return revs[i];
+  for (let i = revs.length - 1; i >= 0; i--) if (revs[i].recMs <= K && revs[i].seq <= cutoff) return revs[i];
   return null;
 }
 
@@ -103,10 +105,10 @@ function compareIds(a, b) {
 }
 
 // Full-window statement for [from, to) as known at K (from = null: wallet opening).
-function statement(s, user, fromMs, toMs, K) {
+function statement(s, user, fromMs, toMs, K, cutoff = INF) {
   const rows = [];
   for (const p of paymentsOf(s, user.id)) {
-    const rev = selectRevision(s, p.payment_id, K, null);
+    const rev = selectRevision(s, p.payment_id, K, null, cutoff);
     if (!rev) continue;
     rows.push({ p, rev, delta: p.from_user_id === user.id ? -rev.amount : rev.amount });
   }

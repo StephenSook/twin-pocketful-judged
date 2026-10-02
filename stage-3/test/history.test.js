@@ -281,3 +281,22 @@ test('imports: stage-2 export and stage-3 round trip keep history', async (t) =>
   assert.strictEqual(a.closed_at, null);
   assert.strictEqual((await call('POST', '/payments/p_1/corrections', { token: ada, key: 'o3', body: { expected_revision: 1, amount: 400, effective_at: iso(Date.now() - 1000), reason: 'after upgrade' } })).status, 201);
 });
+
+test('snapshot tokens survive export/import (ruling S3-3); destination tokens and reset clear them', async () => {
+  const t = await reset();
+  const first = (await call('GET', '/statement?limit=1', { token: t.ada })).body;
+  const exp = await call('GET', '/_test/export');
+  const t2 = await reset();
+  const dest = (await call('GET', '/statement', { token: t2.ada })).body.snapshot;
+  // writes after the snapshot do not change it
+  await call('POST', '/payments', { token: t2.ada, key: 'w', body: { to_handle: 'cy', amount: 5 } });
+  assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204);
+  const again = (await call('GET', `/statement?snapshot=${q(first.snapshot)}&limit=1`, { token: t.ada })).body;
+  assert.deepStrictEqual(again, first);
+  assert.strictEqual((await call('GET', `/statement?snapshot=${q(dest)}`, { token: t.ada })).status, 404);
+  await call('POST', '/payments/p_1/corrections', { token: t.ada, key: 'z', body: { expected_revision: 1, amount: 1, effective_at: iso(P1_AT), reason: 'r' } });
+  assert.deepStrictEqual((await call('GET', `/statement?snapshot=${q(first.snapshot)}&limit=1`, { token: t.ada })).body, first, 'corrections after a snapshot do not change it');
+  await reset();
+  const fresh = (await call('POST', '/auth/login', { body: { email: 'ada@example.com', password: 'correct horse' } })).body.token;
+  assert.strictEqual((await call('GET', `/statement?snapshot=${q(first.snapshot)}`, { token: fresh })).status, 404);
+});

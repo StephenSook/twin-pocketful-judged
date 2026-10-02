@@ -426,6 +426,7 @@ function buildImportedState(doc) {
 // extras: { seeded, revisions: Map, openings: Map, authEvents: Map } (all optional).
 function deriveHistory(s, extras) {
   const revisions = extras.revisions || new Map();
+  for (const revs of revisions.values()) for (const r of revs) if (r.seq > s.revSeq) s.revSeq = r.seq;
   for (const { p } of s.payments) indexPayment(s, p, revisions.get(p.payment_id));
   const openings = extras.openings || new Map();
   for (const u of s.users.values()) {
@@ -487,7 +488,8 @@ function importHistory(st, s) {
       const revs = item.revisions.map((r, i) => {
         if (!isObj(r) || r.revision !== i + 1 || !isShare(r.amount) || r.amount > 1000000000 && i > 0 || typeof r.reason !== 'string') fail('state revision is invalid');
         for (const k of ['effective_at', 'recorded_at']) if (typeof r[k] !== 'string' || !Number.isFinite(Date.parse(r[k]))) fail('state revision time is invalid');
-        const rev = { revision: r.revision, amount: r.amount, effMs: Date.parse(r.effective_at), recMs: Date.parse(r.recorded_at), effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason };
+        if (!Number.isSafeInteger(r.seq) || r.seq < 1) fail('state revision seq is invalid');
+        const rev = { revision: r.revision, amount: r.amount, effMs: Date.parse(r.effective_at), recMs: Date.parse(r.recorded_at), effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason, seq: r.seq };
         if (prev && rev.recMs <= prev.recMs) fail('state revision recorded times must increase');
         prev = rev;
         return rev;

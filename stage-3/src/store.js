@@ -14,6 +14,8 @@
 const crypto = require('node:crypto');
 const ledger = require('./ledger');
 
+const INF = Number.POSITIVE_INFINITY;
+
 // §4: no balance outside ±2^53; 2^53 itself is in range (coordinator ruling,
 // ledger R1-041). Every integer up to 2^53 is exact as a double; balance
 // arithmetic is done in BigInt so the bound check itself never rounds.
@@ -66,6 +68,7 @@ function emptyState() {
     paymentsByUser: new Map(), // user id -> [payment objects the user sent or received]
     authorizationsByPayer: new Map(), // user id -> [authorization objects the user authorized]
     authEvents: new Map(), // authorization_id -> {createdMs, initialHold, expMs, captures:[{ms, amount}], closedMs, closedKind, noHistory}
+    revSeq: 0, // global commit sequence of revisions (statement snapshots freeze a cutoff)
   };
 }
 
@@ -78,8 +81,11 @@ function pushTo(map, key, value) {
 // Indexes a payment for history: revision 1 at created_at (stage 3).
 function indexPayment(s, p, revs) {
   const t = Date.parse(p.created_at);
+  if (revs) {
+    for (const r of revs) if (r.seq > s.revSeq) s.revSeq = r.seq;
+  }
   s.revisions.set(p.payment_id, revs || [{
-    revision: 1, amount: p.amount, effMs: t, recMs: t, effective_at: p.created_at, recorded_at: p.created_at, reason: '',
+    revision: 1, amount: p.amount, effMs: t, recMs: t, effective_at: p.created_at, recorded_at: p.created_at, reason: '', seq: ++s.revSeq,
   }]);
   pushTo(s.paymentsByUser, p.from_user_id, p);
   if (p.to_user_id !== p.from_user_id) pushTo(s.paymentsByUser, p.to_user_id, p);
@@ -204,6 +210,7 @@ class Store {
       effective_at: ledger.stamp(effective_at.ms),
       recorded_at: ledger.stamp(recMs),
       reason,
+      seq: this.s.revSeq + 1,
     };
     const override = { paymentId: id, revs: [...revs, rev] };
     // Balances move only after both wallets' histories are proven sound.
@@ -216,6 +223,7 @@ class Store {
       }
     }
     revs.push(rev);
+    this.s.revSeq = rev.seq;
     for (const [u, b] of balances) u.balance = b;
     return ledger.revisionView(id, rev);
   }
@@ -227,8 +235,13 @@ class Store {
     return { revisions: this.s.revisions.get(id).map((r) => ledger.revisionView(id, r)) };
   }
 
-  statementFor(user, fromMs, toMs, K) {
-    return ledger.statement(this.s, user, fromMs, toMs, K);
+  // Statement snapshot reference: everything needed to recompute the frozen result.
+  statementRef(fromMs, toMs, K) {
+    return { from: fromMs, to: toMs, known_at: K === INF ? null : K, cutoff: this.s.revSeq };
+  }
+
+  statementFor(user, ref) {
+    return ledger.statement(this.s, user, ref.from, ref.to, ref.known_at === null ? INF : ref.known_at, ref.cutoff);
   }
 
   authenticate(token) {
@@ -672,9 +685,9 @@ class Store {
         authorizations: s.authorizations.map(({ ms, a }) => ({ ms, authorization: authorizationView(a) })),
         // stage 3 history
         openings: [...s.users.values()].map((u) => ({ user_id: u.id, opening: u.opening })),
-        revisions: [...s.revisions].filter(([, revs]) => revs.length > 1).map(([paymentId, revs]) => ({
+        revisions: [...s.revisions].map(([paymentId, revs]) => ({
           payment_id: paymentId,
-          revisions: revs.map((r) => ({ revision: r.revision, amount: r.amount, effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason })),
+          revisions: revs.map((r) => ({ revision: r.revision, amount: r.amount, effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason, seq: r.seq })),
         })),
         auth_events: [...s.authEvents].map(([id, e]) => ({ authorization_id: id, ...e, captures: e.captures.map((c) => ({ ...c })) })),
       },
