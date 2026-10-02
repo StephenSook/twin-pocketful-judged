@@ -391,11 +391,16 @@ function parseInstant(raw, field) {
   return ok({ raw, ms });
 }
 
+// A '+' offset sent without percent-encoding arrives as a space: a single
+// space exactly where the offset sign belongs is read as '+' (ruling S3-2).
+const SPACE_OFFSET_RE = /^([0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]+)?) ([0-9]{2}:[0-9]{2})$/;
+
 // Optional instant query parameter: absent -> null; present (even empty) is
-// parsed strictly.
+// parsed strictly. The echoed raw value carries the '+' restored.
 function parseQueryInstant(params, name) {
   if (!params.has(name)) return ok(null);
-  return parseInstant(params.get(name), name);
+  const value = params.get(name).replace(SPACE_OFFSET_RE, '$1+$2');
+  return parseInstant(value, name);
 }
 
 // GET /me temporal parameters: { as_of, known_at }, each null or { raw, ms }.

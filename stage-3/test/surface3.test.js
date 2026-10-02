@@ -32,7 +32,15 @@ test('GET /me and /statement query parsing', () => {
   a.strictEqual(v.parseMeQuery(q('as_of=')).error.status, 422);
   a.strictEqual(v.parseMeQuery(q('known_at=2026-09-24')).error.status, 422);
   a.strictEqual(v.parseMeQuery(q('as_of=2026-09-24T13:20:00%2B00:00')).value.as_of.raw, '2026-09-24T13:20:00+00:00');
-  a.strictEqual(v.parseMeQuery(q('as_of=2026-09-24T13:20:00+00:00')).error.status, 422); // "+" decodes to a space
+  // Ruling S3-2: an unencoded '+' offset (decoded as a space) is read as '+' and echoed with '+'.
+  const plus = v.parseMeQuery(q('as_of=2026-09-24T13:20:00+02:00&known_at=2026-09-24T13:20:00.5+00:00')).value;
+  a.deepStrictEqual([plus.as_of.raw, plus.as_of.ms, plus.known_at.raw], ['2026-09-24T13:20:00+02:00', Date.UTC(2026, 8, 24, 11, 20), '2026-09-24T13:20:00.5+00:00']);
+  a.strictEqual(v.validateStatementQuery(q('from=2026-01-01T00:00:00+00:00&to=2026-02-01T00:00:00+01:00')).value.to.raw, '2026-02-01T00:00:00+01:00');
+  for (const s of ['2026-09-24T13:20:00  00:00', '2026-09-24T13:20:00 0000', '2026-09-24 13:20:00 00:00', '2026-09-24T13:20:00 00:00 ', ' 2026-09-24T13:20:00 00:00', '2026-09-24T13:20 00:00']) {
+    a.strictEqual(v.parseMeQuery(new URLSearchParams([['as_of', s]])).error.status, 422, JSON.stringify(s));
+  }
+  // The strict body parser never applies the space rule.
+  a.strictEqual(v.parseInstant('2026-09-24T13:20:00 00:00', 'effective_at').error.status, 422);
   const s = v.validateStatementQuery(q('from=2026-01-01T00:00:00Z&limit=10&offset=5&x=1')).value;
   a.deepStrictEqual([s.snapshot, s.from.raw, s.to, s.known_at, s.limit, s.offset], [null, '2026-01-01T00:00:00Z', null, null, 10, 5]);
   for (const k of ['from', 'to', 'known_at']) {
