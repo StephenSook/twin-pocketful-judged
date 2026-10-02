@@ -147,6 +147,22 @@ def concurrent_available():
     p.check(me['available'] == 1 and me['balance'] == me['total'] and me['total'] - me['held'] == 1, 'final available matches serial history')
 
 
+def replay_races():
+    tokens = seed()
+    body = {'to_handle': 'b', 'amount': 50}
+    results = p.burst(lambda i: p.call('POST', '/authorizations', body, tokens['a'], 'same-hold'))
+    p.check(sum(s == 201 for s, _ in results) == 1 and sum(s == 200 for s, _ in results) == 49, '50 hold replays have one original')
+    original = results[0][1]
+    p.check(all(value == original for _, value in results), 'hold replay bodies identical')
+    wallet(tokens['a'], 100, 50)
+    path = '/authorizations/' + original['authorization_id'] + '/capture'
+    results = p.burst(lambda i: p.call('POST', path, {'amount': 20, 'final': False}, tokens['b'], 'same-capture'))
+    p.check(sum(s == 201 for s, _ in results) == 1 and sum(s == 200 for s, _ in results) == 49, '50 capture replays have one original')
+    p.check(all(value == results[0][1] for _, value in results), 'capture replay bodies identical')
+    wallet(tokens['a'], 80, 30)
+    wallet(tokens['b'], 20, 0)
+
+
 def capture_races():
     tokens = seed()
     auth = hold(tokens, 50)
@@ -173,6 +189,7 @@ if __name__ == '__main__':
         expiry()
         concurrent_available()
         capture_races()
+        replay_races()
         print(json.dumps({'result': 'PASS', 'assertions': p.COUNT, 'max_request_seconds': round(p.MAX_LATENCY, 4)}))
     except Exception as exc:
         print(json.dumps({'result': 'FAIL', 'assertions': p.COUNT, 'check': str(exc) if isinstance(exc, AssertionError) else type(exc).__name__}))

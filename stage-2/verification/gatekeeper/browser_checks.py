@@ -201,8 +201,7 @@ async def run_width(browser, width):
             await expect(page.get_by_test_id('authorization-void-' + auth['authorization_id'])).to_be_visible()
         await shot(page, width, route[1:] + '-filled')
 
-    # Native view-transition internals are recorded separately; coordinator ruling pending.
-    animations = await page.evaluate('''document.getAnimations().filter(a=>!String(a.effect?.pseudoElement||'').includes('view-transition')).flatMap(a=>a.effect?.getKeyframes().flatMap(k=>Object.keys(k).filter(p=>!['offset','computedOffset','easing','composite','transform','opacity'].includes(p)))||[])''')
+    animations = await page.evaluate('''document.getAnimations().flatMap(a=>a.effect?.getKeyframes().flatMap(k=>Object.keys(k).filter(p=>!['offset','computedOffset','easing','composite','transform','opacity'].includes(p)))||[])''')
     if animations:
         print(json.dumps({'animation_properties': sorted(set(animations))}))
     p.check(not animations, 'active animations change transform/opacity only')

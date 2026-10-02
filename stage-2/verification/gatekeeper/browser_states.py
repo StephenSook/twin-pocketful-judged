@@ -128,7 +128,26 @@ async def run(browser, width):
 async def main():
     async with async_playwright() as pw:
         browser=await pw.chromium.launch(headless=True)
-        try: results=[await run(browser,w) for w in [375,1440]]
+        try:
+            results=[await run(browser,w) for w in [375,1440]]
+            for width in [375,1440]:
+                for code,units,balance,shown,typed,amount,bad in [('JPY',0,1200,'1200 JPY','15',15,'15.5'),('BHD',3,10000,'10.000 BHD','1.005',1005,'1.0005')]:
+                    fx=b.fixture();fx['currency']=code;fx['minor_units']=units;fx['users'][0]['balance']=balance
+                    p.check(p.call('POST','/_test/reset',fx)[0]==204,'currency fixture')
+                    _,user=p.call('POST','/auth/login',{'email':'alice@example.test','password':b.PASSWORD})
+                    context=await browser.new_context(viewport={'width':width,'height':900},reduced_motion='reduce')
+                    await context.add_init_script('localStorage.setItem("pocketful.token",'+json.dumps(user['token'])+')')
+                    page=await context.new_page();await page.goto(p.BASE+'/')
+                    await expect(page.get_by_test_id('wallet-balance')).to_have_text(shown)
+                    await page.get_by_test_id('pay-handle').fill('bob');await page.get_by_test_id('pay-amount').fill(bad)
+                    posts=[];page.on('request',lambda req:posts.append(req) if req.method=='POST' and req.url.endswith('/payments') else None)
+                    await page.get_by_test_id('pay-submit').click();await expect(page.get_by_test_id('pay-error')).to_be_visible()
+                    p.check(not posts,'overprecision never posted in '+code)
+                    await page.get_by_test_id('pay-amount').fill(typed);await page.get_by_test_id('pay-submit').click()
+                    await expect(page.get_by_test_id('wallet-balance')).to_have_attribute('data-amount',str(balance-amount))
+                    p.check(len(posts)==1 and posts[0].post_data_json['amount']==amount,'decimal converted exactly in '+code)
+                    await b.shot(page,width,'states-currency-'+code)
+                    await context.close()
         finally: await browser.close()
     print(json.dumps({'result':'PASS','assertions':p.COUNT,'viewports':results}))
 
