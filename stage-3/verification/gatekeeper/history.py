@@ -127,9 +127,23 @@ def races():
     results=p.burst(concurrent)
     p.check(all(s in [200,201] for s,_ in results),'snapshot/write race statuses')
 
+def snapshot_import():
+    source=seed()
+    status,frozen=get('/statement',source['b'],**{'from':T0,'to':T3,'limit':1})
+    p.check(status==200,'source snapshot before export')
+    status,export=p.call('GET','/_test/export')
+    p.check(status==200,'snapshot state export')
+    destination=seed()
+    _,discarded=get('/statement',destination['b'])
+    p.check(p.call('POST','/_test/import',export)[0]==204,'import snapshot state replacement')
+    status,restored=get('/statement',source['b'],snapshot=frozen['snapshot'],limit=1)
+    p.check(status==200 and restored==frozen,'source snapshot token survives import exactly')
+    p.check(get('/statement',source['b'],snapshot=discarded['snapshot'])[0]==404,'destination-only snapshot removed by import')
+    p.check(get('/me',destination['b'])[0]==401,'destination session removed by import')
+
 if __name__=='__main__':
     try:
-        semantics();validation();races()
+        semantics();validation();races();snapshot_import()
         print(json.dumps({'result':'PASS','assertions':p.COUNT,'max_request_seconds':round(p.MAX_LATENCY,4)}))
     except Exception as exc:
         print(json.dumps({'result':'FAIL','assertions':p.COUNT,'check':str(exc) if isinstance(exc,AssertionError) else type(exc).__name__}));raise SystemExit(1)
