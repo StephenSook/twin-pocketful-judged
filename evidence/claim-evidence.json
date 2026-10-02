@@ -1,0 +1,40 @@
+{
+  "schema": "dark-factory.claim-evidence.v1",
+  "claims": [
+    {
+      "id": "executable_model",
+      "room_message_id": "f36ffecd-b2db-4d7e-9522-938d5d23e2f2",
+      "sender": "modeler",
+      "quote": "Pure model and live differential driver now exist",
+      "inserted_at": "2026-10-01T23:56:52.349Z"
+    },
+    {
+      "id": "differential_comparison",
+      "room_message_id": "e02d0f3e-45cc-411a-8f1b-239ac5598c5e",
+      "sender": "modeler",
+      "quote": "DIFFERENTIAL FAIL operation status /requests/rq_seed/decline: expected 403, observed 404",
+      "inserted_at": "2026-10-01T23:59:09.888Z"
+    },
+    {
+      "id": "concurrency_probe",
+      "room_message_id": "679c6f4b-61ac-4724-a9e6-bf0ba38eb0f4",
+      "sender": "gatekeeper",
+      "quote": "50-way concurrency",
+      "inserted_at": "2026-10-02T02:36:42.095Z"
+    },
+    {
+      "id": "planted_fault",
+      "room_message_id": "f7d76376-a407-42bb-a7ba-99aa2a615b35",
+      "sender": "gatekeeper",
+      "quote": "Faults22/22 caught",
+      "inserted_at": "2026-10-02T03:04:16.006Z"
+    },
+    {
+      "id": "third_family_audit",
+      "room_message_id": "c735542d-c972-47c6-8282-8b3a24062a21",
+      "sender": "auditor",
+      "quote": "LEDGER AUDIT f0a9650",
+      "inserted_at": "2026-10-02T00:10:47.681Z"
+    }
+  ]
+}

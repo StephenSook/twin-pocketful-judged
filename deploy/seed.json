@@ -1,0 +1,28 @@
+{
+  "currency": "EUR",
+  "minor_units": 2,
+  "users": [
+    { "id": "u_ada", "email": "ada@demo.example", "password": "pocketful demo",
+      "display_name": "Ada Lovelace", "handle": "ada", "balance": 12450 },
+    { "id": "u_bob", "email": "bob@demo.example", "password": "pocketful demo",
+      "display_name": "Bob Okafor", "handle": "bob", "balance": 4830 },
+    { "id": "u_cleo", "email": "cleo@demo.example", "password": "pocketful demo",
+      "display_name": "Cleo Martin", "handle": "cleo", "balance": 7720 },
+    { "id": "u_dev", "email": "dev@demo.example", "password": "pocketful demo",
+      "display_name": "Dev Patel", "handle": "dev", "balance": 3000 }
+  ],
+  "payments": [
+    { "id": "p_1", "from_user_id": "u_ada", "to_user_id": "u_bob",
+      "amount": 1250, "note": "Dinner at Nina's", "visibility": "public" },
+    { "id": "p_2", "from_user_id": "u_cleo", "to_user_id": "u_ada",
+      "amount": 3400, "note": "Concert tickets", "visibility": "public" },
+    { "id": "p_3", "from_user_id": "u_bob", "to_user_id": "u_cleo",
+      "amount": 580, "note": "Coffee run", "visibility": "private" }
+  ],
+  "requests": [
+    { "id": "rq_1", "requester_id": "u_ada", "payer_id": "u_dev",
+      "amount": 1800, "note": "Taxi from the airport", "status": "pending" },
+    { "id": "rq_2", "requester_id": "u_cleo", "payer_id": "u_bob",
+      "amount": 900, "note": "Groceries", "status": "pending" }
+  ]
+}

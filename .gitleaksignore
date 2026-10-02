@@ -1,0 +1,4 @@
+# Hand-verified false positive (2026-10-02): the generic-api-key rule matched ordinary review prose in a
+# gatekeeper note about partial payment captures. The line is an English sentence, not a credential.
+83441cffe872d85852cb85d6457ebfc1d3da9371:stage-2/verification/gatekeeper/review-8038718.md:generic-api-key:27
+stage-2/verification/gatekeeper/review-8038718.md:generic-api-key:27

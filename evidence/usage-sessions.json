@@ -1,0 +1,1893 @@
+{
+  "sessions": [
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-45-52-01a0f9dc-31c5-7300-8702-df3e62cd7b76",
+      "projectPath": "",
+      "inputTokens": 1062866,
+      "outputTokens": 246044,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 81337088,
+      "reasoningTokens": 65108,
+      "totalCost": 104.26794800000002,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 1062866,
+          "outputTokens": 246044,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 81337088,
+          "reasoningTokens": 0,
+          "cost": 104.26794800000002,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 104.26794800000002,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-02T03:05:42.212Z",
+      "attribution": {
+        "agentId": "00ff0294-00da-4230-bb4d-79ed1ef3d3b3",
+        "peerId": "default/gatekeeper",
+        "peerName": "stephensookra/gatekeeper",
+        "chatId": "8b36e293-80e9-4388-856c-5c96402717c4",
+        "chatIds": [
+          "8b36e293-80e9-4388-856c-5c96402717c4"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T01-01-12-01a0eaae-1632-79f0-9b2a-1586bf573852",
+      "projectPath": "",
+      "inputTokens": 782815,
+      "outputTokens": 164250,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 58812928,
+      "reasoningTokens": 33369,
+      "totalCost": 74.853578,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 782815,
+          "outputTokens": 164250,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 58812928,
+          "reasoningTokens": 0,
+          "cost": 74.853578,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 74.853578,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T04:24:30.600Z",
+      "attribution": {
+        "agentId": "00ff0294-00da-4230-bb4d-79ed1ef3d3b3",
+        "peerId": "default/gatekeeper",
+        "peerName": "stephensookra/gatekeeper",
+        "chatId": "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e",
+        "chatIds": [
+          "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T01-01-11-01a0eaae-12fa-7450-84d0-674d5f294cee",
+      "projectPath": "",
+      "inputTokens": 834898,
+      "outputTokens": 143617,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 28153472,
+      "reasoningTokens": 29789,
+      "totalCost": 43.683302000000005,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 834898,
+          "outputTokens": 143617,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 28153472,
+          "reasoningTokens": 0,
+          "cost": 43.683302000000005,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 43.683302000000005,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T04:24:31.801Z",
+      "attribution": {
+        "agentId": "f92f8cea-d0ed-4705-8a77-6bf921dd77fd",
+        "peerId": "default/modeler",
+        "peerName": "stephensookra/modeler",
+        "chatId": "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e",
+        "chatIds": [
+          "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T14-58-43-01a0edac-dc6c-7452-8858-fea8e14ef152",
+      "projectPath": "",
+      "inputTokens": 626258,
+      "outputTokens": 144601,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 27728512,
+      "reasoningTokens": 54314,
+      "totalCost": 41.221142,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 626258,
+          "outputTokens": 144601,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 27728512,
+          "reasoningTokens": 0,
+          "cost": 41.221142,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 41.221142,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T16:34:34.959Z",
+      "attribution": {
+        "agentId": "00ff0294-00da-4230-bb4d-79ed1ef3d3b3",
+        "peerId": "default/gatekeeper",
+        "peerName": "stephensookra/gatekeeper",
+        "chatId": "43b76e11-a406-4668-b62e-cf3281173aca",
+        "chatIds": [
+          "43b76e11-a406-4668-b62e-cf3281173aca"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-45-54-01a0f9dc-38bc-7271-b27b-45a90e031769",
+      "projectPath": "",
+      "inputTokens": 432930,
+      "outputTokens": 131151,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 26278016,
+      "reasoningTokens": 23796,
+      "totalCost": 37.164866,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 432930,
+          "outputTokens": 131151,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 26278016,
+          "reasoningTokens": 0,
+          "cost": 37.164866,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 37.164866,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-02T03:04:57.446Z",
+      "attribution": {
+        "agentId": "f92f8cea-d0ed-4705-8a77-6bf921dd77fd",
+        "peerId": "default/modeler",
+        "peerName": "stephensookra/modeler",
+        "chatId": "8b36e293-80e9-4388-856c-5c96402717c4",
+        "chatIds": [
+          "8b36e293-80e9-4388-856c-5c96402717c4"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T19-48-20-01a0f3dc-5e99-74f3-b2e0-6e3637436964",
+      "projectPath": "",
+      "inputTokens": 242617,
+      "outputTokens": 68926,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 31088384,
+      "reasoningTokens": 9317,
+      "totalCost": 36.960854,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 242617,
+          "outputTokens": 68926,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 31088384,
+          "reasoningTokens": 0,
+          "cost": 36.960854,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 36.960854,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T21:04:44.442Z",
+      "attribution": {
+        "agentId": "00ff0294-00da-4230-bb4d-79ed1ef3d3b3",
+        "peerId": "default/gatekeeper",
+        "peerName": "stephensookra/gatekeeper",
+        "chatId": "c0d1f591-10ba-43ca-b11d-87f4410f7001",
+        "chatIds": [
+          "c0d1f591-10ba-43ca-b11d-87f4410f7001"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T19-46-58-01a0f3db-1e1c-7a81-b96c-27b43aa2ce42",
+      "projectPath": "",
+      "inputTokens": 206730,
+      "outputTokens": 40117,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 24864128,
+      "reasoningTokens": 3045,
+      "totalCost": 28.937277999999996,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 206730,
+          "outputTokens": 40117,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 24864128,
+          "reasoningTokens": 0,
+          "cost": 28.937277999999996,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 28.937277999999996,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T21:04:55.266Z",
+      "attribution": {
+        "agentId": "dd1bcad7-e35d-4e74-99da-2a1f6eb46e28",
+        "peerId": "default/coordinator-cx",
+        "peerName": "stephensookra/coordinator-cx",
+        "chatId": "c0d1f591-10ba-43ca-b11d-87f4410f7001",
+        "chatIds": [
+          "c0d1f591-10ba-43ca-b11d-87f4410f7001"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "ed2bef94-8172-4193-8a54-03147a2ebf9d",
+      "projectPath": "",
+      "inputTokens": 584,
+      "outputTokens": 315692,
+      "cacheCreationTokens": 526558,
+      "cacheReadTokens": 87229858,
+      "reasoningTokens": 0,
+      "totalCost": 27.9746116,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 584,
+          "outputTokens": 315692,
+          "cacheCreationTokens": 526558,
+          "cacheReadTokens": 87229858,
+          "reasoningTokens": 0,
+          "cost": 27.9746116,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 27.9746116,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-02T03:04:59.482Z",
+      "attribution": {
+        "agentId": "e609bf7f-6189-41ef-bfda-ff926c9037d1",
+        "peerId": "default/builder",
+        "peerName": "stephensookra/builder",
+        "chatId": "8b36e293-80e9-4388-856c-5c96402717c4",
+        "chatIds": [
+          "8b36e293-80e9-4388-856c-5c96402717c4"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "c6895c6c-c6e4-4671-a5b6-edaaf8e16768",
+      "projectPath": "",
+      "inputTokens": 800,
+      "outputTokens": 150133,
+      "cacheCreationTokens": 353688,
+      "cacheReadTokens": 84852159,
+      "reasoningTokens": 0,
+      "totalCost": 22.80579579999998,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 800,
+          "outputTokens": 150133,
+          "cacheCreationTokens": 353688,
+          "cacheReadTokens": 84852159,
+          "reasoningTokens": 0,
+          "cost": 22.80579579999998,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 22.80579579999998,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-02T03:05:03.772Z",
+      "attribution": {
+        "agentId": "fd5cb7e4-0b89-447d-81f5-1379b275a099",
+        "peerId": "default/coordinator",
+        "peerName": "stephensookra/coordinator",
+        "chatId": "8b36e293-80e9-4388-856c-5c96402717c4",
+        "chatIds": [
+          "8b36e293-80e9-4388-856c-5c96402717c4"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "83b0f503-0971-4591-a2c1-9bfcc9beb66e",
+      "projectPath": "",
+      "inputTokens": 394,
+      "outputTokens": 301052,
+      "cacheCreationTokens": 642689,
+      "cacheReadTokens": 52849726,
+      "reasoningTokens": 0,
+      "totalCost": 21.734073199999997,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 394,
+          "outputTokens": 301052,
+          "cacheCreationTokens": 642689,
+          "cacheReadTokens": 52849726,
+          "reasoningTokens": 0,
+          "cost": 21.734073199999997,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 21.734073199999997,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T16:47:39.061Z",
+      "attribution": {
+        "agentId": "e609bf7f-6189-41ef-bfda-ff926c9037d1",
+        "peerId": "default/builder",
+        "peerName": "stephensookra/builder",
+        "chatId": "43b76e11-a406-4668-b62e-cf3281173aca",
+        "chatIds": [
+          "43b76e11-a406-4668-b62e-cf3281173aca"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "5a139835-0e75-491a-b769-d3794032dcc9",
+      "projectPath": "",
+      "inputTokens": 488,
+      "outputTokens": 269135,
+      "cacheCreationTokens": 456495,
+      "cacheReadTokens": 62633617,
+      "reasoningTokens": 0,
+      "totalCost": 21.56333539999999,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 488,
+          "outputTokens": 269135,
+          "cacheCreationTokens": 456495,
+          "cacheReadTokens": 62633617,
+          "reasoningTokens": 0,
+          "cost": 21.56333539999999,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 21.56333539999999,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T04:24:33.308Z",
+      "attribution": {
+        "agentId": "e609bf7f-6189-41ef-bfda-ff926c9037d1",
+        "peerId": "default/builder",
+        "peerName": "stephensookra/builder",
+        "chatId": "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e",
+        "chatIds": [
+          "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T05-24-56-01a0eb9f-88a8-7401-95bb-8cbf22e9f72e",
+      "projectPath": "",
+      "inputTokens": 290246,
+      "outputTokens": 60291,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 14340096,
+      "reasoningTokens": 15170,
+      "totalCost": 20.257106,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 290246,
+          "outputTokens": 60291,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 14340096,
+          "reasoningTokens": 0,
+          "cost": 20.257106,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 20.257106,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T14:47:03.042Z",
+      "attribution": {
+        "agentId": "00ff0294-00da-4230-bb4d-79ed1ef3d3b3",
+        "peerId": "default/gatekeeper",
+        "peerName": "stephensookra/gatekeeper",
+        "chatId": "43b76e11-a406-4668-b62e-cf3281173aca",
+        "chatIds": [
+          "43b76e11-a406-4668-b62e-cf3281173aca"
+        ],
+        "live": false
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T19-48-17-01a0f3dc-51ac-7143-8ce0-dd4cd6c6c81b",
+      "projectPath": "",
+      "inputTokens": 150489,
+      "outputTokens": 51482,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 11285632,
+      "reasoningTokens": 5614,
+      "totalCost": 15.364622,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 150489,
+          "outputTokens": 51482,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 11285632,
+          "reasoningTokens": 0,
+          "cost": 15.364622,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 15.364622,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T21:04:47.486Z",
+      "attribution": {
+        "agentId": "f92f8cea-d0ed-4705-8a77-6bf921dd77fd",
+        "peerId": "default/modeler",
+        "peerName": "stephensookra/modeler",
+        "chatId": "c0d1f591-10ba-43ca-b11d-87f4410f7001",
+        "chatIds": [
+          "c0d1f591-10ba-43ca-b11d-87f4410f7001"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "872a58b5-f983-4acd-b4a4-505064f8bcc6",
+      "projectPath": "",
+      "inputTokens": 296,
+      "outputTokens": 156328,
+      "cacheCreationTokens": 475455,
+      "cacheReadTokens": 31506517,
+      "reasoningTokens": 0,
+      "totalCost": 13.232687399999998,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 296,
+          "outputTokens": 156328,
+          "cacheCreationTokens": 475455,
+          "cacheReadTokens": 31506517,
+          "reasoningTokens": 0,
+          "cost": 13.232687399999998,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 13.232687399999998,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T16:48:32.422Z",
+      "attribution": {
+        "agentId": "e84264d3-6c82-4904-8c6a-e2d5118b73be",
+        "peerId": "default/surface",
+        "peerName": "stephensookra/surface",
+        "chatId": "43b76e11-a406-4668-b62e-cf3281173aca",
+        "chatIds": [
+          "43b76e11-a406-4668-b62e-cf3281173aca"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T05-24-57-01a0eb9f-8f42-7bc2-b22c-9ec263f064aa",
+      "projectPath": "",
+      "inputTokens": 232160,
+      "outputTokens": 61779,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 7781504,
+      "reasoningTokens": 8189,
+      "totalCost": 13.192054,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 232160,
+          "outputTokens": 61779,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 7781504,
+          "reasoningTokens": 0,
+          "cost": 13.192054,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 13.192054,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T16:39:19.313Z",
+      "attribution": {
+        "agentId": "f92f8cea-d0ed-4705-8a77-6bf921dd77fd",
+        "peerId": "default/modeler",
+        "peerName": "stephensookra/modeler",
+        "chatId": "43b76e11-a406-4668-b62e-cf3281173aca",
+        "chatIds": [
+          "43b76e11-a406-4668-b62e-cf3281173aca"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "9f572f5f-c22b-45ce-a551-1cf643282606",
+      "projectPath": "",
+      "inputTokens": 310,
+      "outputTokens": 177709,
+      "cacheCreationTokens": 317376,
+      "cacheReadTokens": 31023682,
+      "reasoningTokens": 0,
+      "totalCost": 12.2991644,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 310,
+          "outputTokens": 177709,
+          "cacheCreationTokens": 317376,
+          "cacheReadTokens": 31023682,
+          "reasoningTokens": 0,
+          "cost": 12.2991644,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 12.2991644,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-02T03:04:57.356Z",
+      "attribution": {
+        "agentId": "e84264d3-6c82-4904-8c6a-e2d5118b73be",
+        "peerId": "default/surface",
+        "peerName": "stephensookra/surface",
+        "chatId": "8b36e293-80e9-4388-856c-5c96402717c4",
+        "chatIds": [
+          "8b36e293-80e9-4388-856c-5c96402717c4"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "2166a95a-fac6-4fdc-8b15-54840c58e45e",
+      "projectPath": "",
+      "inputTokens": 496,
+      "outputTokens": 99258,
+      "cacheCreationTokens": 260346,
+      "cacheReadTokens": 41144309,
+      "reasoningTokens": 0,
+      "totalCost": 12.298773800000008,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 496,
+          "outputTokens": 99258,
+          "cacheCreationTokens": 260346,
+          "cacheReadTokens": 41144309,
+          "reasoningTokens": 0,
+          "cost": 12.298773800000008,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 12.298773800000008,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T04:24:42.097Z",
+      "attribution": {
+        "agentId": "fd5cb7e4-0b89-447d-81f5-1379b275a099",
+        "peerId": "default/coordinator",
+        "peerName": "stephensookra/coordinator",
+        "chatId": "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e",
+        "chatIds": [
+          "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T19-48-16-01a0f3dc-4daa-7b12-8431-adc49d08b130",
+      "projectPath": "",
+      "inputTokens": 112092,
+      "outputTokens": 25815,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 7089920,
+      "reasoningTokens": 872,
+      "totalCost": 9.50159,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 112092,
+          "outputTokens": 25815,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 7089920,
+          "reasoningTokens": 0,
+          "cost": 9.50159,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 9.50159,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T21:04:42.079Z",
+      "attribution": {
+        "agentId": "70e2a0f6-8b4c-487f-94e3-bc51e58f2e83",
+        "peerId": "default/surface-cx",
+        "peerName": "stephensookra/surface-cx",
+        "chatId": "c0d1f591-10ba-43ca-b11d-87f4410f7001",
+        "chatIds": [
+          "c0d1f591-10ba-43ca-b11d-87f4410f7001"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T19-48-15-01a0f3dc-4aa8-7eb2-98a8-530110956177",
+      "projectPath": "",
+      "inputTokens": 107812,
+      "outputTokens": 21215,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 6715136,
+      "reasoningTokens": 1294,
+      "totalCost": 8.854006,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 107812,
+          "outputTokens": 21215,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 6715136,
+          "reasoningTokens": 0,
+          "cost": 8.854006,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 8.854006,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T21:04:43.203Z",
+      "attribution": {
+        "agentId": "272fe050-7cf2-482d-9781-bf3660aeeed0",
+        "peerId": "default/builder-cx",
+        "peerName": "stephensookra/builder-cx",
+        "chatId": "c0d1f591-10ba-43ca-b11d-87f4410f7001",
+        "chatIds": [
+          "c0d1f591-10ba-43ca-b11d-87f4410f7001"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "d851a3b1-a169-4e69-bcf6-6a55eee2c5c1",
+      "projectPath": "",
+      "inputTokens": 338,
+      "outputTokens": 60257,
+      "cacheCreationTokens": 259927,
+      "cacheReadTokens": 21016111,
+      "reasoningTokens": 0,
+      "totalCost": 7.4891302000000035,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 338,
+          "outputTokens": 60257,
+          "cacheCreationTokens": 259927,
+          "cacheReadTokens": 21016111,
+          "reasoningTokens": 0,
+          "cost": 7.4891302000000035,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 7.4891302000000035,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T16:30:14.260Z",
+      "attribution": {
+        "agentId": "fd5cb7e4-0b89-447d-81f5-1379b275a099",
+        "peerId": "default/coordinator",
+        "peerName": "stephensookra/coordinator",
+        "chatId": "43b76e11-a406-4668-b62e-cf3281173aca",
+        "chatIds": [
+          "43b76e11-a406-4668-b62e-cf3281173aca"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "e2c04299-4388-42cd-a30a-759b97f897f4",
+      "projectPath": "",
+      "inputTokens": 192,
+      "outputTokens": 124914,
+      "cacheCreationTokens": 256810,
+      "cacheReadTokens": 13384268,
+      "reasoningTokens": 0,
+      "totalCost": 7.2303815999999985,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 192,
+          "outputTokens": 124914,
+          "cacheCreationTokens": 256810,
+          "cacheReadTokens": 13384268,
+          "reasoningTokens": 0,
+          "cost": 7.2303815999999985,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 7.2303815999999985,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T02:10:08.353Z",
+      "attribution": {
+        "agentId": "e84264d3-6c82-4904-8c6a-e2d5118b73be",
+        "peerId": "default/surface",
+        "peerName": "stephensookra/surface",
+        "chatId": "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e",
+        "chatIds": [
+          "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e"
+        ],
+        "live": false
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "45b957dd-97ba-4123-b62b-5678d90e492e",
+      "projectPath": "",
+      "inputTokens": 254,
+      "outputTokens": 75357,
+      "cacheCreationTokens": 220215,
+      "cacheReadTokens": 18517649,
+      "reasoningTokens": 0,
+      "totalCost": 6.973405800000001,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 254,
+          "outputTokens": 75357,
+          "cacheCreationTokens": 220215,
+          "cacheReadTokens": 18517649,
+          "reasoningTokens": 0,
+          "cost": 6.973405800000001,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 6.973405800000001,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T04:24:31.604Z",
+      "attribution": {
+        "agentId": "e84264d3-6c82-4904-8c6a-e2d5118b73be",
+        "peerId": "default/surface",
+        "peerName": "stephensookra/surface",
+        "chatId": "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e",
+        "chatIds": [
+          "ef2faf57-8f6e-4f36-b2c8-8beeafd9693e"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T00-25-34-01a0ea8d-75af-7253-a103-7b622395f500",
+      "projectPath": "",
+      "inputTokens": 104894,
+      "outputTokens": 22579,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 3989120,
+      "reasoningTokens": 2369,
+      "totalCost": 6.167009999999999,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 104894,
+          "outputTokens": 22579,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 3989120,
+          "reasoningTokens": 0,
+          "cost": 6.167009999999999,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 6.167009999999999,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T00:43:21.115Z",
+      "attribution": {
+        "agentId": "00ff0294-00da-4230-bb4d-79ed1ef3d3b3",
+        "peerId": "default/gatekeeper",
+        "peerName": "stephensookra/gatekeeper",
+        "chatId": "5890f833-9a3d-40ca-bbe3-2eef3e85a67b",
+        "chatIds": [
+          "5890f833-9a3d-40ca-bbe3-2eef3e85a67b"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T00-25-29-01a0ea8d-60bf-73a2-8428-ff2f16c698d9",
+      "projectPath": "",
+      "inputTokens": 68125,
+      "outputTokens": 17295,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 1665152,
+      "reasoningTokens": 820,
+      "totalCost": 3.211152,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 68125,
+          "outputTokens": 17295,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 1665152,
+          "reasoningTokens": 0,
+          "cost": 3.211152,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 3.211152,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T00:43:12.903Z",
+      "attribution": {
+        "agentId": "f92f8cea-d0ed-4705-8a77-6bf921dd77fd",
+        "peerId": "default/modeler",
+        "peerName": "stephensookra/modeler",
+        "chatId": "5890f833-9a3d-40ca-bbe3-2eef3e85a67b",
+        "chatIds": [
+          "5890f833-9a3d-40ca-bbe3-2eef3e85a67b"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "dce62198-4d82-4010-9ad2-6e90b3d98d93",
+      "projectPath": "",
+      "inputTokens": 134,
+      "outputTokens": 28970,
+      "cacheCreationTokens": 86960,
+      "cacheReadTokens": 4559253,
+      "reasoningTokens": 0,
+      "totalCost": 2.1874665999999996,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 134,
+          "outputTokens": 28970,
+          "cacheCreationTokens": 86960,
+          "cacheReadTokens": 4559253,
+          "reasoningTokens": 0,
+          "cost": 2.1874665999999996,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 2.1874665999999996,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T00:43:21.022Z",
+      "attribution": {
+        "agentId": "fd5cb7e4-0b89-447d-81f5-1379b275a099",
+        "peerId": "default/coordinator",
+        "peerName": "stephensookra/coordinator",
+        "chatId": "5890f833-9a3d-40ca-bbe3-2eef3e85a67b",
+        "chatIds": [
+          "5890f833-9a3d-40ca-bbe3-2eef3e85a67b"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "4cc6fa49-032d-465b-b1b5-0da65f8756d3",
+      "projectPath": "",
+      "inputTokens": 62,
+      "outputTokens": 21590,
+      "cacheCreationTokens": 62947,
+      "cacheReadTokens": 1687894,
+      "reasoningTokens": 0,
+      "totalCost": 1.2732028,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 62,
+          "outputTokens": 21590,
+          "cacheCreationTokens": 62947,
+          "cacheReadTokens": 1687894,
+          "reasoningTokens": 0,
+          "cost": 1.2732028,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 1.2732028,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T00:43:08.554Z",
+      "attribution": {
+        "agentId": "e84264d3-6c82-4904-8c6a-e2d5118b73be",
+        "peerId": "default/surface",
+        "peerName": "stephensookra/surface",
+        "chatId": "5890f833-9a3d-40ca-bbe3-2eef3e85a67b",
+        "chatIds": [
+          "5890f833-9a3d-40ca-bbe3-2eef3e85a67b"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "ec54e020-c07a-40fc-93d9-63e608c04422",
+      "projectPath": "",
+      "inputTokens": 66,
+      "outputTokens": 17000,
+      "cacheCreationTokens": 56714,
+      "cacheReadTokens": 1777474,
+      "reasoningTokens": 0,
+      "totalCost": 1.1494708000000002,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 66,
+          "outputTokens": 17000,
+          "cacheCreationTokens": 56714,
+          "cacheReadTokens": 1777474,
+          "reasoningTokens": 0,
+          "cost": 1.1494708000000002,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 1.1494708000000002,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T00:43:10.760Z",
+      "attribution": {
+        "agentId": "e609bf7f-6189-41ef-bfda-ff926c9037d1",
+        "peerId": "default/builder",
+        "peerName": "stephensookra/builder",
+        "chatId": "5890f833-9a3d-40ca-bbe3-2eef3e85a67b",
+        "chatIds": [
+          "5890f833-9a3d-40ca-bbe3-2eef3e85a67b"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T16-58-15-01a0ee1a-493c-7632-bc18-a7bded7cdde7",
+      "projectPath": "",
+      "inputTokens": 36884,
+      "outputTokens": 767,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 268928,
+      "reasoningTokens": 0,
+      "totalCost": 0.6761180000000001,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 36884,
+          "outputTokens": 767,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 268928,
+          "reasoningTokens": 0,
+          "cost": 0.6761180000000001,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.6761180000000001,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T17:00:57.222Z",
+      "attribution": {
+        "agentId": "486d8ae9-cd35-4eb5-bcd9-038d5dea1ab0",
+        "peerId": "default/cx-probe",
+        "peerName": "stephensookra/cx-probe",
+        "chatId": "c1d27cd8-5b61-4d3c-93aa-33414c57cffc",
+        "chatIds": [
+          "c1d27cd8-5b61-4d3c-93aa-33414c57cffc"
+        ],
+        "live": true
+      },
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "f761a881-c56d-4d55-8d65-5e67d40ff493",
+      "projectPath": "",
+      "inputTokens": 4,
+      "outputTokens": 319,
+      "cacheCreationTokens": 17239,
+      "cacheReadTokens": 37460,
+      "reasoningTokens": 0,
+      "totalCost": 0.1518,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 4,
+          "outputTokens": 319,
+          "cacheCreationTokens": 17239,
+          "cacheReadTokens": 37460,
+          "reasoningTokens": 0,
+          "cost": 0.1518,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.1518,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T02:14:11.577Z",
+      "archived": true
+    },
+    {
+      "provider": "claudecode",
+      "sessionId": "b137fa51-9dee-4bb8-9937-c2886817feba",
+      "projectPath": "",
+      "inputTokens": 2,
+      "outputTokens": 4,
+      "cacheCreationTokens": 16355,
+      "cacheReadTokens": 10234,
+      "reasoningTokens": 0,
+      "totalCost": 0.13297479999999998,
+      "models": [
+        {
+          "provider": "claudecode",
+          "model": "claude-opus-5-5",
+          "inputTokens": 2,
+          "outputTokens": 4,
+          "cacheCreationTokens": 16355,
+          "cacheReadTokens": 10234,
+          "reasoningTokens": 0,
+          "cost": 0.13297479999999998,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.13297479999999998,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T00:08:11.270Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-36-09-01a0f9d3-4b59-7392-a0ec-c3479bcb87bd",
+      "projectPath": "",
+      "inputTokens": 8800,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 7168,
+      "reasoningTokens": 0,
+      "totalCost": 0.095418,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 8800,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 7168,
+          "reasoningTokens": 0,
+          "cost": 0.095418,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.095418,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T23:36:15.039Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-23-46-01a0f9c7-f434-7582-afc3-f202b85f5381",
+      "projectPath": "",
+      "inputTokens": 7053,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 7168,
+      "reasoningTokens": 0,
+      "totalCost": 0.077948,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 7053,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 7168,
+          "reasoningTokens": 0,
+          "cost": 0.077948,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.077948,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T23:23:55.248Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T17-35-41-01a0f362-e6cd-7610-8b64-9d9daf31b8ad",
+      "projectPath": "",
+      "inputTokens": 3680,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.04933800000000001,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 3680,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.04933800000000001,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.04933800000000001,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T17:35:46.192Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T18-53-49-01a0f3aa-6f4d-7c62-897d-c5576638b6e5",
+      "projectPath": "",
+      "inputTokens": 3680,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.04933800000000001,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 3680,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.04933800000000001,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.04933800000000001,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T18:53:53.154Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/30/rollout-2026-09-30T22-29-43-01a0f470-1cf7-7630-a75c-7928cccd324b",
+      "projectPath": "",
+      "inputTokens": 3680,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.04933800000000001,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 3680,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.04933800000000001,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.04933800000000001,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-30T22:29:49.400Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T02-43-11-01a0f558-2a6c-7352-b376-150b18b4f838",
+      "projectPath": "",
+      "inputTokens": 3680,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.04933800000000001,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 3680,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.04933800000000001,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.04933800000000001,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T02:43:16.671Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T21-05-41-01a0f949-8707-7531-8bca-69c61ea26ed8",
+      "projectPath": "",
+      "inputTokens": 3680,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.04933800000000001,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 3680,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.04933800000000001,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.04933800000000001,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T21:05:45.132Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/09/29/rollout-2026-09-29T17-33-32-01a0ee3a-9361-71d1-92cf-08e2752caee5",
+      "projectPath": "",
+      "inputTokens": 3394,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.046478000000000005,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 3394,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.046478000000000005,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.046478000000000005,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-09-29T17:33:36.619Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-24-43-01a0f9c8-d3f9-78c2-87e5-88d5043a4577",
+      "projectPath": "",
+      "inputTokens": 1904,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.031578,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 1904,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.031578,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.031578,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T23:24:46.988Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-25-43-01a0f9c9-bef1-7491-91e4-d084151dd51d",
+      "projectPath": "",
+      "inputTokens": 1904,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.031578,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 1904,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.031578,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.031578,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T23:25:51.623Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-41-02-01a0f9d7-c2d0-7ac1-adef-66e9a6d6f0bc",
+      "projectPath": "",
+      "inputTokens": 1904,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.031578,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 1904,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.031578,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.031578,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T23:41:09.987Z",
+      "archived": true
+    },
+    {
+      "provider": "codex",
+      "sessionId": "2026/10/01/rollout-2026-10-01T23-42-14-01a0f9d8-de60-7c12-bc19-1473b29e6893",
+      "projectPath": "",
+      "inputTokens": 1904,
+      "outputTokens": 5,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 12288,
+      "reasoningTokens": 0,
+      "totalCost": 0.031578,
+      "models": [
+        {
+          "provider": "codex",
+          "model": "gpt-6-astra",
+          "inputTokens": 1904,
+          "outputTokens": 5,
+          "cacheCreationTokens": 0,
+          "cacheReadTokens": 12288,
+          "reasoningTokens": 0,
+          "cost": 0.031578,
+          "missingPricing": false,
+          "pricing": [
+            {
+              "costKind": "estimated_equivalent",
+              "currency": "USD",
+              "source": "usage_import",
+              "amountUsd": 0.031578,
+              "missingPricing": false
+            }
+          ]
+        }
+      ],
+      "lastActivity": "2026-10-01T23:42:24.012Z",
+      "archived": true
+    }
+  ],
+  "agents": [
+    {
+      "agentId": "00ff0294-00da-4230-bb4d-79ed1ef3d3b3",
+      "peerId": "default/gatekeeper",
+      "peerName": "stephensookra/gatekeeper",
+      "sessionCount": 6,
+      "inputTokens": 3109696,
+      "outputTokens": 706691,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 217296128,
+      "reasoningTokens": 179647,
+      "totalCost": 283.727638,
+      "lastActivity": "2026-10-02T03:05:42.212Z"
+    },
+    {
+      "agentId": "f92f8cea-d0ed-4705-8a77-6bf921dd77fd",
+      "peerId": "default/modeler",
+      "peerName": "stephensookra/modeler",
+      "sessionCount": 5,
+      "inputTokens": 1718602,
+      "outputTokens": 405324,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 75163776,
+      "reasoningTokens": 68208,
+      "totalCost": 112.615996,
+      "lastActivity": "2026-10-02T03:04:57.446Z"
+    },
+    {
+      "agentId": "e609bf7f-6189-41ef-bfda-ff926c9037d1",
+      "peerId": "default/builder",
+      "peerName": "stephensookra/builder",
+      "sessionCount": 4,
+      "inputTokens": 1532,
+      "outputTokens": 902879,
+      "cacheCreationTokens": 1682456,
+      "cacheReadTokens": 204490675,
+      "reasoningTokens": 0,
+      "totalCost": 72.42149099999999,
+      "lastActivity": "2026-10-02T03:04:59.482Z"
+    },
+    {
+      "agentId": "fd5cb7e4-0b89-447d-81f5-1379b275a099",
+      "peerId": "default/coordinator",
+      "peerName": "stephensookra/coordinator",
+      "sessionCount": 4,
+      "inputTokens": 1768,
+      "outputTokens": 338618,
+      "cacheCreationTokens": 960921,
+      "cacheReadTokens": 151571832,
+      "reasoningTokens": 0,
+      "totalCost": 44.7811664,
+      "lastActivity": "2026-10-02T03:05:03.772Z"
+    },
+    {
+      "agentId": "e84264d3-6c82-4904-8c6a-e2d5118b73be",
+      "peerId": "default/surface",
+      "peerName": "stephensookra/surface",
+      "sessionCount": 5,
+      "inputTokens": 1114,
+      "outputTokens": 555898,
+      "cacheCreationTokens": 1332803,
+      "cacheReadTokens": 96120010,
+      "reasoningTokens": 0,
+      "totalCost": 41.008842,
+      "lastActivity": "2026-10-02T03:04:57.356Z"
+    },
+    {
+      "agentId": "dd1bcad7-e35d-4e74-99da-2a1f6eb46e28",
+      "peerId": "default/coordinator-cx",
+      "peerName": "stephensookra/coordinator-cx",
+      "sessionCount": 1,
+      "inputTokens": 206730,
+      "outputTokens": 40117,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 24864128,
+      "reasoningTokens": 3045,
+      "totalCost": 28.937277999999996,
+      "lastActivity": "2026-09-30T21:04:55.266Z"
+    },
+    {
+      "agentId": "70e2a0f6-8b4c-487f-94e3-bc51e58f2e83",
+      "peerId": "default/surface-cx",
+      "peerName": "stephensookra/surface-cx",
+      "sessionCount": 1,
+      "inputTokens": 112092,
+      "outputTokens": 25815,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 7089920,
+      "reasoningTokens": 872,
+      "totalCost": 9.50159,
+      "lastActivity": "2026-09-30T21:04:42.079Z"
+    },
+    {
+      "agentId": "272fe050-7cf2-482d-9781-bf3660aeeed0",
+      "peerId": "default/builder-cx",
+      "peerName": "stephensookra/builder-cx",
+      "sessionCount": 1,
+      "inputTokens": 107812,
+      "outputTokens": 21215,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 6715136,
+      "reasoningTokens": 1294,
+      "totalCost": 8.854006,
+      "lastActivity": "2026-09-30T21:04:43.203Z"
+    },
+    {
+      "agentId": "486d8ae9-cd35-4eb5-bcd9-038d5dea1ab0",
+      "peerId": "default/cx-probe",
+      "peerName": "stephensookra/cx-probe",
+      "sessionCount": 1,
+      "inputTokens": 36884,
+      "outputTokens": 767,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 268928,
+      "reasoningTokens": 0,
+      "totalCost": 0.6761180000000001,
+      "lastActivity": "2026-09-29T17:00:57.222Z"
+    },
+    {
+      "peerName": "(unattributed)",
+      "sessionCount": 14,
+      "inputTokens": 45269,
+      "outputTokens": 383,
+      "cacheCreationTokens": 33594,
+      "cacheReadTokens": 184910,
+      "reasoningTokens": 0,
+      "totalCost": 0.8776208,
+      "lastActivity": "2026-10-01T23:42:24.012Z"
+    }
+  ],
+  "totals": {
+    "inputTokens": 5341499,
+    "outputTokens": 2997707,
+    "cacheCreationTokens": 4009774,
+    "cacheReadTokens": 783765443,
+    "reasoningTokens": 253066,
+    "totalCost": 603.4017462,
+    "missingPricing": false
+  }
+}

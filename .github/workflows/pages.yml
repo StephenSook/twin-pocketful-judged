@@ -1,0 +1,87 @@
+# Copied to the result repository. Publishes the generated Factory Floor replay only.
+name: factory-floor
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "FACTORY.md"
+      - "JUDGE-GUIDE.md"
+      - "deploy/README.md"
+      - "floor/**"
+      - "evidence/floor.json"
+      - "room.json"
+      - "tools/check_public_copy.py"
+      - "tools/check_public_claims.py"
+      - ".github/workflows/pages.yml"
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  pages:
+    name: Factory Floor is public
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Build the static replay artifact
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir _site
+          cp floor/index.html floor/style.css floor/app.js _site/
+          cp evidence/floor.json _site/floor.json
+          python3 - <<'PY'
+          import os
+          import pathlib
+          path = pathlib.Path("_site/index.html")
+          text = path.read_text()
+          old = 'href="../">Repository</a>'
+          new = f'href="https://github.com/{os.environ["REPOSITORY"]}">Repository</a>'
+          if text.count(old) != 1:
+              raise SystemExit("Factory Floor repository link marker changed")
+          path.write_text(text.replace(old, new))
+          PY
+          touch _site/.nojekyll
+      - name: Check the rendered public copy
+        run: |
+          python3 -m http.server 4173 --directory _site > /tmp/factory-floor-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          python3 - <<'PY'
+          import time
+          import urllib.request
+          for attempt in range(20):
+              try:
+                  with urllib.request.urlopen("http://127.0.0.1:4173/", timeout=2) as response:
+                      if response.status == 200:
+                          break
+              except Exception:
+                  if attempt == 19:
+                      raise
+                  time.sleep(0.25)
+          PY
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=5000 \
+            --dump-dom http://127.0.0.1:4173/ > /tmp/factory-floor-rendered.html
+          python3 - <<'PY'
+          from pathlib import Path
+          text = Path("/tmp/factory-floor-rendered.html").read_text()
+          if 'class="stat"' not in text or "Loading the run" in text:
+              raise SystemExit("Factory Floor did not render its measured claims")
+          PY
+          python3 tools/check_public_copy.py --quotes room.json evidence/floor.json \
+            README.md FACTORY.md JUDGE-GUIDE.md floor/index.html deploy/README.md \
+            /tmp/factory-floor-rendered.html
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

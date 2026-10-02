@@ -1,0 +1,29 @@
+{
+  "track": "pocketful",
+  "one_line": "Six seats on three model families built all four Pocketful stages in BAND from one dispatch, with no human message after it.",
+  "room_sha256": "1d184d0574fccfada5561ec2fd8d89ed91ebc93a94b8e673bef37d00e8302eb8",
+  "stage_claims": {
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS"
+  },
+  "holdout_applicable": true,
+  "holdout_score": "73/73",
+  "holdout_digest": "379f28f6c49b9b995f8d6a5fff58e6e8612377693104ccdf759c5f5f04abc9a9",
+  "holdout_headline": "73 attacks the band never saw, sealed before the run, all pass.",
+  "genericity": "Tablekeeper comparison was not run.",
+  "baseline": "Solo comparison was not run.",
+  "featherless_usd": 1.026102,
+  "check_commands": [
+    "python3 tools/check_room.py room.json --expected-accepts 4",
+    "python3 tools/check_claim_evidence.py room.json evidence/claim-evidence.json",
+    "python3 -m harness run --track pocketful --repo . --all --mode isolated"
+  ],
+  "limits": [
+    "Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.",
+    "Concurrency and history checks are sampled, not proofs.",
+    "Two untracked auditor placeholder files stayed in the build machine's working tree and are not part of this repository."
+  ],
+  "measurements": []
+}

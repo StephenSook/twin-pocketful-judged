@@ -1,0 +1,44 @@
+# Copied by the human to .github/workflows/verify.yml in the result repository, with
+# tools/verify_result.sh, tools/check_room.py and tools/check_claim_evidence.py beside it. It verifies the submission the way
+# a judge would: fresh clone, the organizers' checker at the pinned kickoff commit, isolated mode.
+name: verify
+on:
+  push:
+  pull_request:
+concurrency:
+  group: verify-${{ github.ref }}-${{ github.ref == 'refs/heads/main' && github.sha || '' }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: band-ai/dark-factory-wearedevs
+          ref: 803560d2a678ace1414465c098eb0ab5380ffade
+          path: kickoff
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install the organizers' harness
+        run: |
+          python -m venv .venv-harness
+          .venv-harness/bin/pip install -q -r kickoff/harness/requirements.txt
+      - name: Install gitleaks (checksum-verified release binary)
+        env:
+          V: "8.30.1"
+        run: |
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${V}"
+          tarball="gitleaks_${V}_linux_x64.tar.gz"
+          curl -sSfLO "${base}/${tarball}"
+          curl -sSfL "${base}/gitleaks_${V}_checksums.txt" | grep " ${tarball}\$" | sha256sum -c -
+          tar xzf "${tarball}" gitleaks
+          sudo mv gitleaks /usr/local/bin/
+      - name: Verify the submission from a fresh clone
+        env:
+          PYTHON: ${{ github.workspace }}/.venv-harness/bin/python
+        run: bash tools/verify_result.sh "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/kickoff" pocketful 4

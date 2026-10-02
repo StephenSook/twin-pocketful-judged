@@ -1,0 +1,46 @@
+# Copied by the human to .github/workflows/demo-image.yml in the result repository, with
+# factory/deploy/ copied to deploy/. Builds the last stage folder exactly as its own Dockerfile says,
+# wraps it with the demo front door, and publishes it to the GitHub container registry for the
+# demo host to pull. The exact entrypoint and command are read from the built image configuration.
+name: demo-image
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["stage-4/**", "deploy/**"]
+permissions:
+  contents: read
+  packages: write
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build the band's image unchanged, then the demo image
+        run: |
+          docker build -t app stage-4
+          app_argv_b64=$(docker image inspect app | python3 -c '
+          import base64, json, sys
+          config = json.load(sys.stdin)[0]["Config"]
+          argv = (config.get("Entrypoint") or []) + (config.get("Cmd") or [])
+          if not argv or not all(isinstance(value, str) and "\x00" not in value for value in argv):
+              raise SystemExit("built image has no valid entrypoint or command")
+          raw = json.dumps(argv, separators=(",", ":")).encode()
+          print(base64.b64encode(raw).decode())
+          ')
+          test -n "$app_argv_b64"
+          docker build -t demo --build-arg APP_IMAGE=app --build-arg APP_ARGV_B64="$app_argv_b64" deploy
+      - name: Smoke test the demo image
+        run: |
+          docker run -d --name demo -p 10000:10000 demo
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:10000/__demo/status && break; sleep 1; done
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:10000/_test/reset -d '{}')" = 404
+          curl -sf http://127.0.0.1:10000/health
+          curl -sf -X POST http://127.0.0.1:10000/auth/login -H 'Content-Type: application/json' \
+            -d '{"email":"ada@demo.example","password":"pocketful demo"}' | grep -q token
+      - name: Publish
+        run: |
+          img="ghcr.io/${GITHUB_REPOSITORY,,}-demo"
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker tag demo "$img:${GITHUB_SHA::12}" && docker tag demo "$img:latest"
+          docker push "$img:${GITHUB_SHA::12}" && docker push "$img:latest"

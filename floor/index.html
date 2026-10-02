@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factory Floor</title>
+<meta name="description" content="A replay of our BAND dark factory run, computed from the exported room log and the git history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">Factory Floor</div>
+  <nav aria-label="Sections"><a href="#replay">Replay</a><a href="#numbers">Numbers</a><a href="#verdicts">Verdicts</a><a href="#seats">Seats</a><a href="#method">How we computed this</a></nav>
+</header>
+
+<main>
+  <section class="hero panel sun" aria-labelledby="h1">
+    <h1 id="h1">Six agents. One verifiable run.</h1>
+    <p class="lede">A replay of the band's run in BAND, rebuilt from the exported room log and the result repository. Every number on this page is computed from those two public files.</p>
+    <p class="source" id="source">Loading the run…</p>
+    <span class="note" aria-hidden="true">press play</span>
+  </section>
+
+  <section id="replay" class="panel" aria-labelledby="h2r">
+    <h2 id="h2r">Replay</h2>
+    <div class="replay">
+      <svg id="floor" viewBox="0 0 640 420" role="img" aria-label="Seats as stations with handoffs moving between them"></svg>
+      <div class="side">
+        <div class="clock" aria-live="off"><span id="clock">00:00</span><small>elapsed in the run</small></div>
+        <div class="controls">
+          <button id="play" class="pill primary" type="button">Play</button>
+          <label class="speed">Speed
+            <select id="speed"><option value="120">120x</option><option value="600" selected>600x</option><option value="2400">2400x</option></select>
+          </label>
+        </div>
+        <label class="scrub">Position in the run
+          <input id="scrub" type="range" min="0" max="1000" value="0">
+        </label>
+        <article class="ticker" id="ticker" aria-live="polite"><p class="muted">The latest message appears here as the replay runs.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="numbers" class="panel aqua" aria-labelledby="h2n">
+    <h2 id="h2n">The numbers</h2>
+    <div class="stats" id="stats"></div>
+    <div class="stages" id="stages" aria-label="When each stage folder got its first seat commit"></div>
+  </section>
+
+  <section id="verdicts" class="panel" aria-labelledby="h2v">
+    <h2 id="h2v">Every verdict</h2>
+    <p class="muted">Each ACCEPT and REJECT the band posted, with the exact revision it names and the room message it came from.</p>
+    <ol class="verdicts" id="verdictList"></ol>
+  </section>
+
+  <section id="seats" class="panel pink" aria-labelledby="h2s">
+    <h2 id="h2s">Seat by seat</h2>
+    <div class="tablewrap"><table id="seatTable"><caption class="sr">Messages, tool calls and commits per seat</caption></table></div>
+  </section>
+
+  <section id="evidence" class="panel" aria-labelledby="h2e" hidden>
+    <h2 id="h2e">Evidence the band never saw</h2>
+    <div id="evidenceBody"></div>
+  </section>
+
+  <section id="method" class="panel butter" aria-labelledby="h2m">
+    <h2 id="h2m">How we computed this</h2>
+    <ul class="method">
+      <li><strong>Handoffs</strong> are text messages from a seat that @mention another participant.</li>
+      <li><strong>Verdicts</strong> are the words ACCEPT or REJECT followed by a revision hash, as the mandates require.</li>
+      <li><strong>Rejections followed by a seat commit</strong> count REJECT verdicts that a later seat commit followed. Open the room message to see what the rejection asked for, then the commit to see what changed.</li>
+      <li><strong>Human messages after dispatch</strong> counts messages from any human after the first one. Zero means the run was hands off.</li>
+      <li><strong>Retried or undelivered messages</strong> come from BAND's own per-recipient delivery records inside the export, as of the moment it was downloaded.</li>
+    </ul>
+    <p>Rerun it yourself: <code>python tools/floor_data.py room.json . floor.json</code></p>
+  </section>
+</main>
+
+<footer class="foot"><span>Twin, a BAND dark factory</span><a href="../">Repository</a></footer>
+<script src="app.js"></script>
+</body>
+</html>

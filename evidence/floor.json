@@ -1,0 +1,5949 @@
+{
+ "generated_from": {
+  "room": "room.json",
+  "room_id": "8b36e293-80e9-4388-856c-5c96402717c4",
+  "exported_at": "2026-10-02T03:42:25.671Z",
+  "messages": 5828
+ },
+ "duration_s": 12069.7,
+ "seats": [
+  "auditor",
+  "builder",
+  "coordinator",
+  "gatekeeper",
+  "modeler",
+  "surface"
+ ],
+ "per_seat": {
+  "auditor": {
+   "text": 19,
+   "tool_call": 134,
+   "thought": 150,
+   "error": 0
+  },
+  "builder": {
+   "text": 46,
+   "tool_call": 290,
+   "thought": 64,
+   "error": 0
+  },
+  "coordinator": {
+   "text": 92,
+   "tool_call": 280,
+   "thought": 173,
+   "error": 0
+  },
+  "gatekeeper": {
+   "text": 94,
+   "tool_call": 655,
+   "thought": 67,
+   "error": 0
+  },
+  "surface": {
+   "text": 24,
+   "tool_call": 151,
+   "thought": 35,
+   "error": 0
+  },
+  "modeler": {
+   "text": 56,
+   "tool_call": 313,
+   "thought": 37,
+   "error": 1
+  }
+ },
+ "totals": {
+  "handoffs": 331,
+  "handoff_chars_median": 730,
+  "rejects": 12,
+  "rejects_followed_by_seat_commit": 12,
+  "accepts": 4,
+  "human_messages_after_dispatch": 0,
+  "delivery_retries": 0,
+  "delivery_failures": 0,
+  "commits": 117,
+  "seat_commits": 117
+ },
+ "stage_first_commit_s": {
+  "1": 190.5,
+  "2": 3929.5,
+  "3": 6630.5,
+  "4": 10375.5
+ },
+ "events": [
+  {
+   "id": "29f8a166-4b40-4a82-a4f5-ebd33a7398a8",
+   "t": 0.0,
+   "from": "Stephen Sookra",
+   "human": true,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 3617,
+   "verdicts": [],
+   "preview": "You are @coordinator, the lead seat. Build all four stages of the task below,\none after another, with your band. This message is the only input you will get from me.\nDo not ask me anything or wait for me at any point; re"
+  },
+  {
+   "id": "9cdf6e13-29a0-43a3-a79e-faf240be00db",
+   "t": 76.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 4498,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 1 HANDOFF \u2014 PART 1 OF 5 (plan, ownership, done). Parts 2-5 paste the complete stage-1 requirements verbatim; PART 5 is the last part. Start work as soon as you hold a"
+  },
+  {
+   "id": "da6bedb6-f302-4546-befc-0bcbae4e666a",
+   "t": 76.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 8023,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 1 HANDOFF \u2014 PART 2 OF 5 \u2014 stage-1 requirements verbatim (lines 1-182)\n\n# Pocketful \u2014 Stage 1: payments and settlements\n\nThis stage defines the initial service and its"
+  },
+  {
+   "id": "6b7461eb-f4fa-414d-96d1-63be07b45545",
+   "t": 76.6,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 5632,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 1 HANDOFF \u2014 PART 3 OF 5 \u2014 stage-1 requirements verbatim (lines 183-303)\n\n## 5. Errors\n\nEvery 4xx and 5xx response carries this body:\n\n```json\n{ \"error\": { \"code\": \"in"
+  },
+  {
+   "id": "feca0b90-e0f0-4800-bc9f-a5e56727b267",
+   "t": 76.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 7271,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 1 HANDOFF \u2014 PART 4 OF 5 \u2014 stage-1 requirements verbatim (lines 304-519)\n\n## 8. API\n\n### `GET /me`\n\n```json\n{ \"user_id\": \"u_ada\", \"display_name\": \"Ada\", \"handle\": \"ada"
+  },
+  {
+   "id": "7a8c4a87-a84d-4678-9217-cc84809ca59b",
+   "t": 76.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 4688,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 1 HANDOFF \u2014 PART 5 OF 5 \u2014 stage-1 requirements verbatim (lines 520-9999) \u2014 LAST PART\n\n## 9. Money and rounding\n\nShares must be whole minor units, sum exactly to `amou"
+  },
+  {
+   "id": "5cb107ce-df1f-4cd1-8945-12d12ab5b040",
+   "t": 86.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "Stephen Sookra"
+   ],
+   "chars": 765,
+   "verdicts": [],
+   "preview": "@Stephen Sookra Coordinator here. All five seats are already in the room. Stage 1 started at 2026-10-01T23:45:25Z. I sent the handoff in 5 parts: the full stage-1 requirements, the work split, file ownership and what don"
+  },
+  {
+   "id": "fc8f21c2-04ee-4bed-acdd-958887d65caf",
+   "t": 153.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 619,
+   "verdicts": [],
+   "preview": "@coordinator SPEC CONFLICT: gatekeeper mandate says second-user identifiers are refused with no object disclosure; stage 1 \u00a78 explicitly requires 403 forbidden for a known request accessed by a non-payer and 404 not_foun"
+  },
+  {
+   "id": "0210ef0f-269d-4b6c-968d-b6dd5e9ccfb9",
+   "t": 163.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 936,
+   "verdicts": [],
+   "preview": "@gatekeeper RULING (coordinator), recorded for the room: the written requirements win.\n1. \u00a78 says \"The caller is not the request's payer | 403 forbidden\", \"Unknown request | 404 not_found\", \"Not the payer is 403 forbidde"
+  },
+  {
+   "id": "0dee6ed9-c4cd-4fa9-9e5a-fa031580dd8e",
+   "t": 178.4,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 442,
+   "verdicts": [],
+   "preview": "@modeler I have complete stage-1 requirements and will run your committed ledger/model driver after the provided isolated harness, against an exact clean candidate. Please include the one-command invocation and verificat"
+  },
+  {
+   "id": "01e2f913-e455-4973-8020-af95d5ad9135",
+   "t": 193.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "surface"
+   ],
+   "chars": 901,
+   "verdicts": [],
+   "preview": "@coordinator @surface builder: have all 5 parts, implementing stage-1 core now. Password-hash measurement (docker --cpus=2 --memory=2g, 50 concurrent hashes): node:22 stdlib scrypt at every OWASP setting misses the 5 s b"
+  },
+  {
+   "id": "e4dea71a-af96-4143-9d93-62f8154869fd",
+   "t": 200.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "surface"
+   ],
+   "chars": 367,
+   "verdicts": [],
+   "preview": "@builder @surface APPROVED (coordinator): use Node 24 and its built-in crypto.argon2 with argon2id at m=47104 KiB, t=2, p=1. The Dockerfile base becomes the official node:24-slim image. Entry point: node src/server.js. T"
+  },
+  {
+   "id": "8c4d2e60-5322-4305-ba91-f6e80748cdfc",
+   "t": 233.4,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 3876,
+   "verdicts": [],
+   "preview": "@builder VALIDATE CONTRACT for stage-1 (copy @coordinator). Committed in /home/ubuntu/work/band-work/current at 8b07e2e: stage-1/src/validate.js, Dockerfile, .dockerignore, RUN.md.\n\nResult shape for every validator: { ok"
+  },
+  {
+   "id": "d5134dbd-355f-4a15-8d2c-25923cfb02de",
+   "t": 233.6,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 501,
+   "verdicts": [],
+   "preview": "@builder @coordinator Done at ae53a80: stage-1/Dockerfile now uses FROM node:24-slim, with CMD [\"node\",\"src/server.js\"]. Check: `docker run --rm node:24-slim node -e 'console.log(process.version, typeof require(\"crypto\")"
+  },
+  {
+   "id": "d95d814e-150b-48d8-b735-fbc927ddaf97",
+   "t": 243.5,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "surface"
+   ],
+   "chars": 531,
+   "verdicts": [],
+   "preview": "@surface Contract received, thanks. One change is needed. Builder's password hashing uses crypto.argon2, which is built into Node 24, so I've approved Node 24 as the runtime. Please change the Dockerfile base from node:2"
+  },
+  {
+   "id": "7f38bcdd-3e8c-404e-97c7-d5fcc8e73a7b",
+   "t": 251.3,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 322,
+   "verdicts": [],
+   "preview": "@coordinator This change is already committed at ae53a80. `head -1 stage-1/Dockerfile` prints `FROM node:24-slim`. Builder's server.js is not in the repo yet: HEAD is ae53a80 and stage-1/src contains only validate.js. On"
+  },
+  {
+   "id": "811a3aa2-d41e-444a-8290-01ed7e90d359",
+   "t": 308.9,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 861,
+   "verdicts": [],
+   "preview": "@coordinator @builder Ledger ready at f98e70e in /home/ubuntu/work/band-work/current/stage-1/verification/ledger.md; stable IDs R1-001\u2013R1-145. Builder: cite IDs but do not read verification files. Rulings before tests: s"
+  },
+  {
+   "id": "4d5cb259-a930-4b14-a1be-b6c073dc459e",
+   "t": 316.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 881,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 1. Repository: /home/ubuntu/work/band-work/current. Revision f98e70e. File: stage-1/verification/ledger.md (entries R1-001 to R1-145).\nRequirements: the stage-1 text I pasted in HANDO"
+  },
+  {
+   "id": "f233bf37-d208-47d5-af77-7d3abc591389",
+   "t": 350.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 731,
+   "verdicts": [],
+   "preview": "@coordinator Verification preparation committed at 3fab2bb in /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/probe.py. It adds 50-flight overdraft/identical-key/request-pay races, a serial-history wi"
+  },
+  {
+   "id": "7e718a3b-d69e-4f8b-87dd-c16386ed3327",
+   "t": 361.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 178,
+   "verdicts": [],
+   "preview": "@coordinator All five parts received. Preparing independent verification; acceptance remains pending the exact candidate revision and modeler driver."
+  },
+  {
+   "id": "975156e0-1790-4a15-bff5-b8acd9410871",
+   "t": 644.0,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 1651,
+   "verdicts": [],
+   "preview": "@surface builder: integration with your validate.js confirmed at e3f5e4a (all its exports used as documented; package.json committed, so your Dockerfile builds; 'docker build -t pocketful-stage1 . && docker run ... -e PO"
+  },
+  {
+   "id": "bd228dc9-ee40-4013-a302-a4049144ac0b",
+   "t": 668.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 2586,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator BUILDER HANDOFF, stage 1 candidate. This is one message and the last part.\nRepo: /home/ubuntu/work/band-work/current, branch main, revision e3f5e4a (the product is in stage-1/; verification/ is u"
+  },
+  {
+   "id": "1c06294f-f4d0-4b77-8e30-7e300fe5b24b",
+   "t": 683.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 1269,
+   "verdicts": [],
+   "preview": "@gatekeeper @modeler @builder RULING (coordinator), refining my earlier ruling for stage 1. Candidate: e3f5e4a.\n\nBuilder's reading (a) is the one to use, on these requirement texts:\n- \u00a75: \"404 not_found | No such resourc"
+  },
+  {
+   "id": "21cbaf29-f17e-495a-bf28-fdd370e2d00d",
+   "t": 717.6,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 1220,
+   "verdicts": [],
+   "preview": "@modeler @gatekeeper @coordinator The builder candidate is now b5fac7f. It replaces e3f5e4a; everything in that handoff still holds. I checked the modeler's rulings against the service:\n- R1-103: only the listed particip"
+  },
+  {
+   "id": "c4b8fa4c-3a98-4cb4-b11c-2fcb7d4816d3",
+   "t": 717.8,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1579,
+   "verdicts": [],
+   "preview": "@builder @coordinator Both requests are committed at 2d61f07 (parent e3f5e4a).\n(1) RUN.md now ends with the \"## Password storage\" section, copied verbatim from your message.\n(2) parseJsonBuffer now uses the Node 24 reviv"
+  },
+  {
+   "id": "f36ffecd-b2db-4d7e-9522-938d5d23e2f2",
+   "t": 739.8,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 585,
+   "verdicts": [],
+   "preview": "@coordinator @builder Pure model and live differential driver now exist under /home/ubuntu/work/band-work/current/stage-1/verification/model/ (uncommitted WIP on ledger f98e70e). Observed command PYTHONDONTWRITEBYTECODE="
+  },
+  {
+   "id": "996fb052-cc1d-4bbd-8544-8e4439c417ac",
+   "t": 747.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 724,
+   "verdicts": [],
+   "preview": "@modeler The candidate is b5fac7f in /home/ubuntu/work/band-work/current, and you don't need builder for it. Start your own isolated instance from a clean copy:\ngit clone /home/ubuntu/work/band-work/current /tmp/modeler-"
+  },
+  {
+   "id": "e201c8ec-850f-4b70-a4bf-bc4c817bc290",
+   "t": 758.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 595,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper Our messages crossed: the current builder candidate is b5fac7f, not e3f5e4a. It adds one fix, for ledger R1-114: a zero-share split request can now be paid, giving 201 with a 0-amount payment. At"
+  },
+  {
+   "id": "7be4ab93-2961-4c6a-ab51-f1fa9d71b1e0",
+   "t": 758.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 1199,
+   "verdicts": [],
+   "preview": "@surface @gatekeeper @coordinator FINAL STAGE-1 CANDIDATE: b5fac7f in /home/ubuntu/work/band-work/current, branch main. Its parent is surface's 2d61f07, so it contains the inexact-literal rejection and the password-stora"
+  },
+  {
+   "id": "d624ee4b-5c07-4b2d-bca3-018037f56919",
+   "t": 766.7,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 724,
+   "verdicts": [],
+   "preview": "@modeler To start an isolated service at revision b5fac7f, run:\nS=$(mktemp -d) && git clone -q /home/ubuntu/work/band-work/current \"$S/repo\" && cd \"$S/repo/stage-1\" && git checkout -q b5fac7f && docker build -t pocketful"
+  },
+  {
+   "id": "f27518f7-9151-4165-a46f-9a82bb4d2bd9",
+   "t": 847.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 398,
+   "verdicts": [],
+   "preview": "@coordinator Environment note: my auxiliary `docker run --network df-harness-internal ... gatekeeper-s1-b5fac7f` failed: `network df-harness-internal not found`. This was an assumed harness network name, not a product fa"
+  },
+  {
+   "id": "6f376e83-1e72-41b8-a2a2-c1dc0e4f030d",
+   "t": 855.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 550,
+   "verdicts": [],
+   "preview": "@gatekeeper ENVIRONMENT NOTES (coordinator running list, all seats):\n1. The docker network \"df-harness-internal\" does not exist. Fix: create your own network (docker network create --internal <seat>-net), or use a plain "
+  },
+  {
+   "id": "d4a2db13-582e-49f4-a264-877a85db1183",
+   "t": 860.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 578,
+   "verdicts": [],
+   "preview": "@coordinator SPEC CONFLICT: your refined ruling says 'A third party calling pay, decline or cancel gets 404 not_found'. The provided isolated harness at exact e3f5e4a reports `test_only_the_payer_may_pay ... expected 403"
+  },
+  {
+   "id": "efc353df-0eb0-4e96-beaa-5e8f0daee8d1",
+   "t": 869.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 1354,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper @modeler RULING REVISED (coordinator, final for stage 1). I am withdrawing my 404 ruling for third parties.\nThe text is literal:\n- \u00a78 pay: \"The caller is not the request's payer | 403 forbidden\"\n- \u00a78"
+  },
+  {
+   "id": "e02d0f3e-45cc-411a-8f1b-239ac5598c5e",
+   "t": 877.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1054,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper @coordinator REJECT b5fac7f: R1-033/R1-095 expected 403 forbidden for nonpayer declining existing request, observed 404 not_found. Minimal reproduction: reset fixture with users ada,bob,cy and reques"
+  },
+  {
+   "id": "390adadf-48b1-4b8b-b808-ecb8daa18949",
+   "t": 888.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1041,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator Verification handoff: /home/ubuntu/work/band-work/current revision e8dfb7dd4a1aa59652e1ac23b3c8f30cf46e3346. Files stage-1/verification/ledger.md (R1-001\u2013R1-145) and model/{model.py,driver.py,RUN"
+  },
+  {
+   "id": "6dfb9b7b-0cbf-4887-9678-3b00121a31aa",
+   "t": 902.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1385,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-1 CANDIDATE: 2299fe8, parent b5fac7f, in /home/ubuntu/work/band-work/current on branch main. It fixes the request actions to follow the revised ruling. For an existing request: pay or d"
+  },
+  {
+   "id": "1d3e3e5f-37b4-4262-bb31-adf55a361ac4",
+   "t": 963.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 612,
+   "verdicts": [],
+   "preview": "@coordinator @builder At b5fac7f: isolated harness exit 1, stage 1 collected 147/passed146/failed1 (third-party pay expected403 observed404); next suite collected35/passed0/failed1/not-run34, claimed stage1. Independent "
+  },
+  {
+   "id": "2d78f4a5-cb70-487d-abb8-b1aaf733c882",
+   "t": 969.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 587,
+   "verdicts": [],
+   "preview": "@coordinator Ledger coverage updated and committed in /home/ubuntu/work/band-work/current (latest commit 'Map ledger requirements to executable checks and disclose unchecked boundaries'). Each own-check group is distingu"
+  },
+  {
+   "id": "22dcf391-1886-41e8-bbff-3a7b57b35111",
+   "t": 979.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 1080,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 1. This replaces the f98e70e request; audit the latest revision only. Repository: /home/ubuntu/work/band-work/current. Revision f0a9650. File: stage-1/verification/ledger.md.\nRequirem"
+  },
+  {
+   "id": "6fe3debc-d506-41f3-a1d8-466a52fcf3bf",
+   "t": 987.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 1193,
+   "verdicts": [],
+   "preview": "@gatekeeper The ruling has already been delivered. Start every gate on 2299fe8 now, in /home/ubuntu/work/band-work/current.\nRULING (coordinator, final for stage 1):\n- Pay or decline on an existing request by anyone who i"
+  },
+  {
+   "id": "b0e937c3-ea19-4943-bab2-3696db6cc34d",
+   "t": 1033.3,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "modeler"
+   ],
+   "chars": 444,
+   "verdicts": [],
+   "preview": "@coordinator @modeler I found driver e8dfb7d and authorization fix2299fe8 in repository history. Clean isolated harness for2299fe8 is running now; full fresh rerun continues from there. Please deliver the final authoriza"
+  },
+  {
+   "id": "9498da17-d75d-4152-a0e8-ed4ef797c84a",
+   "t": 1040.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 1012,
+   "verdicts": [],
+   "preview": "@gatekeeper FINAL AUTHORIZATION RULING, stage 1 (coordinator). Copy this into your evidence manifest. It replaces the earlier third-party 404 ruling.\n- POST /requests/{id}/pay or /decline on an existing request by any au"
+  },
+  {
+   "id": "24189379-7ac2-4ba9-8602-2bf4a12c22b2",
+   "t": 1048.7,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 481,
+   "verdicts": [],
+   "preview": "@coordinator Driver correction: recheck of 2299fe8 reached a later generated request but failed because my adapter substituted symbolic request IDs by prefix (request:7 corrupted request:71). This is a verifier defect, n"
+  },
+  {
+   "id": "4f06f901-90f1-4371-85fd-ea141d6f30f6",
+   "t": 1107.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 556,
+   "verdicts": [],
+   "preview": "@coordinator @builder Exact2299fe8 isolated harness completed exit0: stage1 passed; highest contiguous stage1; claimed stage1. Command: `/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python -m harness run --track po"
+  },
+  {
+   "id": "0de6081b-0cc6-4356-93b3-c59822df8fd9",
+   "t": 1114.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 597,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper Driver correction at 67dbebc fixes exact symbolic URL binding. Full sequential run, separate-process persistence, and 50-way payment replay proceeded to the final auth-controls suite; my hardcode"
+  },
+  {
+   "id": "405b65c1-1772-447b-844b-0adf1b51d625",
+   "t": 1120.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 589,
+   "verdicts": [],
+   "preview": "@gatekeeper Noted, the clean-copy check tool passed at 2299fe8. Before you give a verdict, also run the dispatched command exactly as written, with HEAD at 2299fe8 or a later commit that changes only verification/:\ncd /h"
+  },
+  {
+   "id": "334899ee-16de-4897-b6d1-973855c401db",
+   "t": 1143.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "modeler"
+   ],
+   "chars": 430,
+   "verdicts": [],
+   "preview": "@modeler @coordinator Driver67dbebc against product2299fe8 exited1: `CONTRACT FAIL R1-027/029 derived handle and zero balance`. Exact command `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/model/driver.py --base"
+  },
+  {
+   "id": "8fa954e2-b456-4a51-992f-70219556bb64",
+   "t": 1150.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 456,
+   "verdicts": [],
+   "preview": "@gatekeeper Modeler has already identified that failure as a driver defect. Its hard-coded expectation was 21 characters, while the product's \"mix_ed_longlocalpart\" is 20 characters, which is correct under \u00a74's truncatio"
+  },
+  {
+   "id": "32a032f9-885b-4715-97c2-02ea8b6990d8",
+   "t": 1178.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 335,
+   "verdicts": [],
+   "preview": "@modeler Derived-handle failure is a driver expectation bug: Python `re.sub('[^a-z0-9_]','_','MiX.ed+LongLocalPartMoreThan20'.lower())[:20]` prints `mix_ed_longlocalpart` length20. Committed67dbebc expected trailing m (2"
+  },
+  {
+   "id": "45cb1850-fed5-4d39-8725-4284bdfd48dd",
+   "t": 1192.8,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1023,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator Modeler handoff complete: /home/ubuntu/work/band-work/current at 34d30b2598dfa19782f7ff1154f3681cc73a861b. Ledger R1-001\u2013R1-145 in stage-1/verification/ledger.md; pure model + differential/shrink"
+  },
+  {
+   "id": "3ae65e97-18dc-475f-b79a-7a9e64b0be13",
+   "t": 1226.1,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 523,
+   "verdicts": [],
+   "preview": "@coordinator This appears crossed with later work: repository commit 2299fe8 is titled 'request actions give 403 to any non-party caller, 404 only for unknown ids (\u00a78 pay/decline/cancel, coordinator final ruling)'. My co"
+  },
+  {
+   "id": "c4b09699-2e25-4bcc-a24b-372e96a2994b",
+   "t": 1233.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 582,
+   "verdicts": [],
+   "preview": "@modeler The later 403 ruling controls, and the earlier third-party 404 ruling is withdrawn. The final ruling:\n- Pay or decline on an existing request by anyone who is not its payer, including third parties: 403 forbidde"
+  },
+  {
+   "id": "7be097e0-dd23-4129-9323-892352fbe919",
+   "t": 1279.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "modeler"
+   ],
+   "chars": 535,
+   "verdicts": [],
+   "preview": "@coordinator @modeler Potential R1-041 boundary defect: spec permits balances within \u00b12^53, but candidate Store MAX_BALANCE is Number.MAX_SAFE_INTEGER (2^53\u22121). Reset fixture with one user balance9007199254740992 returns"
+  },
+  {
+   "id": "28b9ea2f-1dd8-4e9f-a6ea-cbbb683a388c",
+   "t": 1290.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 1132,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper @modeler RULING (coordinator), R1-041 balance range. \u00a74: \"no operation produces a balance outside \u00b12\u2075\u00b3. Monetary arithmetic must preserve exact minor-unit values without rounding error.\"\nExactly 2^53"
+  },
+  {
+   "id": "0ce3820b-f91c-4d45-b002-918343c2a067",
+   "t": 1317.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "error",
+   "to": [],
+   "chars": 134,
+   "verdicts": [],
+   "preview": "rpc error RpcError { code: -32603, message: \"failed to submit turn input: ActiveTurnNotSteerable { turn_kind: Compact }\", data: None }"
+  },
+  {
+   "id": "5a0d74b8-b5b0-4348-999d-40ffbbf13bf5",
+   "t": 1359.3,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "surface"
+   ],
+   "chars": 939,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "2299fe8"
+    }
+   ],
+   "preview": "@coordinator @builder @surface REJECT 2299fe8: expected reset with balance2^53 to return204 and signup \u0130@example.test to derive i_; observed422 validation_failed and derived _. Reproduce against clean /tmp/gatekeeper-s1-"
+  },
+  {
+   "id": "b8f7a0bc-a7c1-4afc-ba40-ede84cb5d12e",
+   "t": 1365.2,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 762,
+   "verdicts": [],
+   "preview": "@surface builder request, ledger R1-041 (coordinator ruling: balances are valid in 0..2^53 and must be exact). At 145a95f, POST /_test/reset with user balance 9007199254740993 (2^53+1) returns 204, because JSON.parse rou"
+  },
+  {
+   "id": "6b732735-7069-4184-b835-849c7b1708bc",
+   "t": 1368.6,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 1111,
+   "verdicts": [],
+   "preview": "@surface ROUTED REJECT, stage 1 (coordinator). Repository: /home/ubuntu/work/band-work/current. Rejected revision: 2299fe8. You own stage-1/src/validate.js deriveHandle.\nRequirement \u00a74: \"take the local part, lowercase it"
+  },
+  {
+   "id": "187d7433-7be1-4fde-b62b-3dd0298d57b4",
+   "t": 1381.0,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 1245,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @surface Builder status on the two findings in REJECT 2299fe8.\n(1) Reset with balance 2^53: fixed in 145a95f. Balances 0..2^53 are now valid in reset and import. Transfers compute each touched wa"
+  },
+  {
+   "id": "2b028657-4c86-43d8-a234-7816e3091437",
+   "t": 1449.2,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1547,
+   "verdicts": [],
+   "preview": "@builder @coordinator @gatekeeper Surface fixes for REJECT 2299fe8 and ledger R1-041 are committed at 9a272ad (parent 145a95f). Only stage-1/src/validate.js and the new stage-1/test/validate.test.js changed.\n(1) deriveHa"
+  },
+  {
+   "id": "044d98c9-64f6-4c5a-b9c5-d881481e835d",
+   "t": 1465.7,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "surface"
+   ],
+   "chars": 933,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "2299fe8"
+    }
+   ],
+   "preview": "@coordinator @builder @surface REJECT 2299fe83ee780dc6b1667d4591617a97940a2920 remains open. Evidence/check tools committed db566a1 in /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-2299fe8"
+  },
+  {
+   "id": "11e39814-9f1e-4b06-9bc8-5154533292bb",
+   "t": 1468.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 891,
+   "verdicts": [],
+   "preview": "@gatekeeper @builder R1-041 boundary verification committed at 895ee97915282ab22100234337bb802580c14aa2 in /home/ubuntu/work/band-work/current (ledger.md and model/driver.py under stage-1/verification). Exact 2^53 reset,"
+  },
+  {
+   "id": "d81255c3-b4de-403b-a594-1af8118536e6",
+   "t": 1473.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 794,
+   "verdicts": [],
+   "preview": "@coordinator R1-041 ruling recorded and checked. Verification revision 895ee97915282ab22100234337bb802580c14aa2 in /home/ubuntu/work/band-work/current: stage-1/verification/ledger.md and model/driver.py now test exactly "
+  },
+  {
+   "id": "4ef53c12-9483-4bf9-bcd7-daf0d29031cd",
+   "t": 1475.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 294,
+   "verdicts": [],
+   "preview": "@coordinator Refined ruling received; third parties will be checked for 404 and wrong-role parties for 403. Exact e3f5e4a clean copy is checked out under /tmp/gatekeeper-s1-v_ns6w8t/candidate-e3f5e4a and isolated harness"
+  },
+  {
+   "id": "90ec0876-1072-4696-8b10-bcabba9f141d",
+   "t": 1476.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 216,
+   "verdicts": [],
+   "preview": "@builder Acceptance started for exact e3f5e4a in a clean temporary clone. I incorporated the coordinator's refined third-party 404 ruling. Verdict follows independent observed checks."
+  },
+  {
+   "id": "84f52ed7-f127-4e57-b089-dabd0ab12b4d",
+   "t": 1476.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 204,
+   "verdicts": [],
+   "preview": "@builder Candidate superseded by b5fac7f; I will restart acceptance from a clean checkout at that revision. Independent zero-share payment coverage is already in probe.py."
+  },
+  {
+   "id": "cb082f0f-a85f-429d-bd21-57711b56d0e0",
+   "t": 1476.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 368,
+   "verdicts": [],
+   "preview": "@gatekeeper Both fixes are in history: 145a95f (builder, inclusive 2^53) and 9a272ad (surface, handle derivation on the whole lowercased local part). Builder will post one candidate containing both. Don't wait on the aud"
+  },
+  {
+   "id": "1f31dabf-b0e8-481f-8587-3fbd187a728a",
+   "t": 1482.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 615,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 1, revision 895ee97 in /home/ubuntu/work/band-work/current, file stage-1/verification/ledger.md.\nFinish and commit your f0a9650 report first. Then audit the change: git diff f0a9650 8"
+  },
+  {
+   "id": "1b039e9e-0e48-4058-900d-fbd6548dccc5",
+   "t": 1495.9,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 1761,
+   "verdicts": [],
+   "preview": "@surface @gatekeeper @coordinator NEW STAGE-1 CANDIDATE: 9a272ad in /home/ubuntu/work/band-work/current, branch main. It supersedes 2299fe8 and fixes both findings in REJECT 2299fe8. Builder commit 145a95f: balances 0..2"
+  },
+  {
+   "id": "ed54409f-4cf6-4e8f-82a5-e38f0dea2f80",
+   "t": 1501.8,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 271,
+   "verdicts": [],
+   "preview": "@coordinator Ledger revision for final authorization ruling A10: 18805af24c11b91e62fff9f7ecb503aaf23f69ac, /home/ubuntu/work/band-work/current/stage-1/verification/ledger.md. Documentation only; driver remains the passin"
+  },
+  {
+   "id": "bf3c4024-b42c-4199-a14d-9cfba0d435ac",
+   "t": 1505.1,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 429,
+   "verdicts": [],
+   "preview": "@coordinator Final ruling matches existing model/driver behavior and resolves the crossed older ruling. Added explicit A10 to /home/ubuntu/work/band-work/current/stage-1/verification/ledger.md (R1-033/049/050/093/095/096"
+  },
+  {
+   "id": "772acabd-252a-4aff-94c9-55f8abd32d99",
+   "t": 1509.5,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 767,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT target update, stage 1. Repository: /home/ubuntu/work/band-work/current. The latest ledger revision is 18805af (stage-1/verification/ledger.md). Audit it cumulatively: f0a9650 in full, then git diff"
+  },
+  {
+   "id": "2f149f62-be4b-4596-a5db-ab4483c11476",
+   "t": 1520.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 766,
+   "verdicts": [],
+   "preview": "@gatekeeper Coordinator final stage-1 ruling: endpoint-specific \u00a78 rows take precedence over generic \u00a75 visibility. Pay/decline on an existing request by anyone other than its payer, including third parties, return403 fo"
+  },
+  {
+   "id": "c6c9323d-4487-4716-9ff8-c1e85469b446",
+   "t": 1530.6,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 529,
+   "verdicts": [],
+   "preview": "@gatekeeper Confirmed verifier error, already fixed in e148d3a: the hardcoded expected handle had21 characters. Correct lowercase/replace/truncate result is mix_ed_longlocalpart (20). This is not a product defect. Use dr"
+  },
+  {
+   "id": "d07c02de-7464-4610-9aa4-0b789b9ad460",
+   "t": 1534.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 487,
+   "verdicts": [],
+   "preview": "@coordinator @builder I verified9a272ad includes145a95f. Acceptance rerun has started on exact18805af, which contains both product fixes plus committed verification tools and final authorization ruling. Clean copy /tmp/g"
+  },
+  {
+   "id": "c735542d-c972-47c6-8282-8b3a24062a21",
+   "t": 1575.1,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 3063,
+   "verdicts": [],
+   "preview": "@coordinator I am unable to write files or run commands due to a tool invocation issue in this session (all tool parameters are dropped). I will deliver the audit findings directly in this message.\n\n---\n\n**LEDGER AUDIT f"
+  },
+  {
+   "id": "648eeb90-e919-4c3d-83ed-6d151c4b1b5c",
+   "t": 1591.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "modeler"
+   ],
+   "chars": 1696,
+   "verdicts": [],
+   "preview": "@modeler @auditor RULINGS on LEDGER AUDIT f0a9650 (coordinator). The audit text in auditor's room message is the record; it does not need a commit.\n1. R1-024, null amount: 422 validation_failed. \u00a75: \"invalid amount value"
+  },
+  {
+   "id": "ea5c8d27-4b25-4b80-88b7-fdcb62a964e0",
+   "t": 1609.8,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 766,
+   "verdicts": [],
+   "preview": "@coordinator All tools in this session have been dropping their parameters since the previous turn \u2014 `write`, `bash`, and `read` all report missing required keys. I cannot write files, run commands, or read files. I will"
+  },
+  {
+   "id": "e9e63e74-353b-4d46-b5b7-303ad145348b",
+   "t": 1626.8,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 397,
+   "verdicts": [],
+   "preview": "@coordinator Added all four audit rulings and quoted requirement text to the ambiguity section of /home/ubuntu/work/band-work/current/stage-1/verification/ledger.md. Ledger revision eb261eb0b3c623c892229f2d1762721a31aca2"
+  },
+  {
+   "id": "d10d1951-6e3b-414f-872c-e888f3ad22f8",
+   "t": 1640.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 4090,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 1, ledger revision eb261eb. Your tools cannot read files, so this is the full ledger diff from f0a9650 to eb261eb, pasted below. Audit it against the stage-1 requirements you hold fro"
+  },
+  {
+   "id": "67fb5559-a107-434a-b695-c19faa658bc4",
+   "t": 1795.7,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 847,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "18805af"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT 18805af: expected every request in50-flight unknown-account login burst under5s (\u00a72); observed TimeoutError at5s. Command `PYTHONDONTWRITEBYTECODE=1 python3 /home/ubuntu/work/band-work/curren"
+  },
+  {
+   "id": "a94332a3-7a3a-4c0d-bddd-cd451311e606",
+   "t": 1809.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 1187,
+   "verdicts": [],
+   "preview": "@gatekeeper @builder ROUTED REJECT 18805af (coordinator). You own src/passwords.js.\n- Expected (\u00a72, 5 s per-request timeout with up to 50 requests in flight): 50 concurrent logins with unknown emails all answer within 5 "
+  },
+  {
+   "id": "a8763eb5-7a4c-4567-b074-ed4043744212",
+   "t": 1876.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 705,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "18805af"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT18805af confirmed by fresh minimal reproduction: `PYTHONDONTWRITEBYTECODE=1 python3 /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/cold_login.py gatekeeper-s1-18805af gate"
+  },
+  {
+   "id": "f74b2a28-ec22-47a6-b4ee-4ee4e1417be1",
+   "t": 1902.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 329,
+   "verdicts": [],
+   "preview": "@coordinator I will verify the combined revision from history and restart all gates in a clean copy. An undelivered audit report will not by itself delay the verdict; any concrete audit discrepancies received must be fix"
+  },
+  {
+   "id": "ae62d7d0-58cf-4e21-a540-acb2456e232a",
+   "t": 1928.0,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 1908,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT 18805af** \u2014 cumulative (f0a9650 through 18805af).\n\n**1. Normative sentences with no covering entry:** None. All additions correspond to coordinator rulings that either clarify existing entries"
+  },
+  {
+   "id": "9474014e-fd4f-4f62-9add-700017ef565f",
+   "t": 1929.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1885,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-1 CANDIDATE: ed67fb8 in /home/ubuntu/work/band-work/current, branch main, parent 18805af. Only builder files changed: src/passwords.js, src/server.js, test/api.test.js.\nFix for REJECT 1"
+  },
+  {
+   "id": "b9fe11e8-c106-4137-a7b3-e44014f4b620",
+   "t": 1948.6,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 1809,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT eb261eb**\n\n**1. Normative sentences with no covering entry:** None. The diff adds only coordinator rulings (A9, A10) that clarify existing entries and coordinator responses to the f0a9650 audi"
+  },
+  {
+   "id": "7dcd7e58-56c7-4146-8a17-f2c27bb37687",
+   "t": 1998.3,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 400,
+   "verdicts": [],
+   "preview": "@coordinator Environment correction: an initial metadata-only `git rev-parse ed67fb8` ran in /home/ubuntu/work/dark-factory-wearedevs and printed unknown revision. Clone/checkout used the explicit result-repository path "
+  },
+  {
+   "id": "00121d35-6141-4bce-a3dc-baf2e288bfd9",
+   "t": 2181.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 539,
+   "verdicts": [],
+   "preview": "@coordinator @builder On exacted67fb8, the previous cold-login defect is now closed by independent reproduction: cold_login.py exit0,50/50 HTTP401,max2.357s. environment.py exit0,422assertions,startup0.2591/0.2715s,maxre"
+  },
+  {
+   "id": "bfa2fc16-9241-4a10-8b69-dd3180500213",
+   "t": 2251.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 552,
+   "verdicts": [],
+   "preview": "@coordinator All independently executed gates oned67fb8 currently pass, including cold-login fix and5/5faults. One disclosed limitation needs a written scope ruling before I issue ACCEPT: builder's handoff says resets ab"
+  },
+  {
+   "id": "308887d6-defc-495c-81a0-fee5721428e7",
+   "t": 2270.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 970,
+   "verdicts": [],
+   "preview": "@gatekeeper @builder SCOPE RULING (coordinator). The requirements give no fixture-size bound anywhere. \u00a72 says \"Per-request timeout | 5 s (10 s for POST /_test/reset)\", and \u00a73.3 says \"Seeded users must be able to log in "
+  },
+  {
+   "id": "7d3c8ccc-30a5-42f7-84c4-e8c42ad83ae5",
+   "t": 2323.3,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 748,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "ed67fb8"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT ed67fb8: expected valid1000-user reset within10s (\u00a72/\u00a73.3); observed TimeoutError at10.0347s, fixture150750bytes. Exact2CPU/2GiB/internal-network candidate http://172.24.0.5:18080. One-reques"
+  },
+  {
+   "id": "49969211-2f15-449c-8969-e8e5c68cf835",
+   "t": 2338.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 1256,
+   "verdicts": [],
+   "preview": "@gatekeeper @builder ROUTED REJECT ed67fb8 (coordinator). The scope ruling stands: reset must finish within 10 s for any reasonable fixture, and seeded users must be able to log in immediately.\n- Observed: a 1000-user re"
+  },
+  {
+   "id": "99cb9311-4978-45f0-84fe-5ffbbe939bde",
+   "t": 2441.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 612,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "ed67fb8"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT ed67fb81a641fbce9e9a24a09bf3a8f78b0aaaca remains open. Evidence committed12ad51c at /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-ed67fb8.md. Committed `reset_"
+  },
+  {
+   "id": "369cac0c-c115-43f8-aca9-dd7bdb23ad95",
+   "t": 2448.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 309,
+   "verdicts": [],
+   "preview": "@builder Acceptance started on exact ed67fb8 in /tmp/gatekeeper-s1-v_ns6w8t/candidate-ed67fb8. Isolated harness is running first; full model, race, limits, cold-login, migration, mutation and security checks will follow."
+  },
+  {
+   "id": "fe487135-f934-4265-950f-3cdf18d72580",
+   "t": 2580.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 393,
+   "verdicts": [],
+   "preview": "@coordinator This instruction arrived after 2299fe8 was rejected and superseded by later product revisions. Current open rejection is ed67fb8\u2019s 1,000-user reset timeout, evidence12ad51c. I will also run the dispatched sh"
+  },
+  {
+   "id": "43144f1c-2a0c-4188-b4c5-5efa2f70be56",
+   "t": 2665.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 2259,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper Builder response to REJECT ed67fb8. Part 1 of 1.\nNEW CANDIDATE e434c09 (parent ed67fb8). Following the coordinator's scope ruling, each distinct seeded password is now hashed once per reset with "
+  },
+  {
+   "id": "2e99d6fa-81b8-4001-bde5-dc3b9f8fa011",
+   "t": 2665.4,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 2591,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-1 CANDIDATE: a7a67ec in /home/ubuntu/work/band-work/current, branch main, parents e434c09 and ed67fb8. Builder files only: src/seeding.js (new), src/server.js, src/passwords.js, test/ap"
+  },
+  {
+   "id": "9358587b-80ab-405f-8aec-c12917936818",
+   "t": 2685.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 1504,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper RULING on builder's SPEC CONFLICT (coordinator): build option B on top of e434c09's deduplication. C is rejected; the OWASP minimum stays.\nBasis:\n- \u00a73.3: \"When reset returns 204, subsequent requests "
+  },
+  {
+   "id": "0710e33a-1dae-4d1d-ab61-d7c11f8105b4",
+   "t": 2797.9,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1342,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper Option B, built on e434c09's deduplication, is already candidate a7a67ec, posted earlier with its full evidence. It meets each requirement of this ruling:\n- Reset returns 204 right after the swap"
+  },
+  {
+   "id": "4fc5b434-b8e6-440b-a03f-2f335df0b78a",
+   "t": 2872.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 821,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "a7a67ec"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT a7a67ec: expected immediate export after valid reset within10s (\u00a710 'Test control calls have a10-second timeout'); observed reset204 in0.0266s then export TimeoutError10.0104s for1000 distinc"
+  },
+  {
+   "id": "ea7c8af9-5942-4f31-a671-856e4af8025a",
+   "t": 2901.1,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 1455,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper RULING (coordinator), REJECT a7a67ec is upheld. I withdraw the residual-limit acceptance and the rejection of option C.\nThe written requirements win over seat baselines. \u00a76 requires only that passwor"
+  },
+  {
+   "id": "5431ed8e-26ae-4f9c-bffb-feed345d9977",
+   "t": 2985.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 814,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "a7a67ec"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT a7a67ec remains open for immediate export timeout after1000 distinct-password reset. Evidence committed2074899: /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-a"
+  },
+  {
+   "id": "8f3f5f63-773c-47be-b9d3-28f8cca8a0e5",
+   "t": 2990.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 293,
+   "verdicts": [],
+   "preview": "@builder reset_size.py uses one generated password shared across all fixture users. Candidate a7a67ec has since superseded e434c09, so I will test a7a67ec. I also need to verify immediate export against \u00a710\u2019s ten-second "
+  },
+  {
+   "id": "7496a9d9-c5eb-4638-b705-bef8a896108a",
+   "t": 2991.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 339,
+   "verdicts": [],
+   "preview": "@builder Acceptance review starts on exact a7a67ec. Your reported 11,641ms/60s export results conflict with \u00a710\u2019s ten-second test-control timeout; I will independently reproduce immediate export after a distinct-password"
+  },
+  {
+   "id": "e599d12b-dcdf-44b3-8480-e2ff28a203e7",
+   "t": 3047.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 1010,
+   "verdicts": [],
+   "preview": "@surface builder request: the RUN.md '## Password storage' section is stale as of dadabac, after the coordinator's ruling on REJECT a7a67ec. Please replace its 'Reset fixtures with more than 64 users...' sentence with th"
+  },
+  {
+   "id": "9a20e1e5-c0e0-4d16-b693-cf0f31523da0",
+   "t": 3059.7,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 569,
+   "verdicts": [],
+   "preview": "@builder @coordinator RUN.md is updated at d1ebec2 (parent dadabac). In the \"## Password storage\" section I replaced the \"Reset fixtures with more than 64 users...\" sentence with builder's text, verbatim, and left the re"
+  },
+  {
+   "id": "73d951bb-9c6d-4914-af29-54273eb25f7b",
+   "t": 3069.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 2361,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-1 CANDIDATE: dadabac in /home/ubuntu/work/band-work/current, branch main, parent 2074899. This is the fix for REJECT a7a67ec, per the coordinator's ruling. Builder files only: src/seedi"
+  },
+  {
+   "id": "30821874-61a4-40d0-a9a5-404d08a99996",
+   "t": 3076.4,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 458,
+   "verdicts": [],
+   "preview": "@surface @gatekeeper @coordinator The candidate revision is now d1ebec2. Its parent is dadabac, and the only change is to RUN.md, where surface updated the password-storage section to match dadabac. The product code is i"
+  },
+  {
+   "id": "e2bf9117-4bb9-4300-8fdf-6f8e2255b65b",
+   "t": 3080.1,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 425,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper The candidate to test for stage 1 is d1ebec2: builder's dadabac plus surface's RUN.md password-section update, with no product code changed in d1ebec2. Run every gate on that exact revision so the ac"
+  },
+  {
+   "id": "1af7c946-f712-4274-90c6-592a837bce5a",
+   "t": 3099.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 446,
+   "verdicts": [],
+   "preview": "@coordinator SPEC CONFLICT: latest ruling delivered to me9358587b says 'C is rejected; the OWASP minimum stays' and accepts slow immediate exports. Builder now hands off dadabac with seeded Argon2id m=1024KiB,t=1,p=1, ci"
+  },
+  {
+   "id": "21c7b024-99be-417c-b0b1-0181a320b095",
+   "t": 3107.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 1270,
+   "verdicts": [],
+   "preview": "@gatekeeper SCOPE RULING (coordinator, latest; it supersedes my ruling that said \"C is rejected; the OWASP minimum stays\"). The candidate is d1ebec2: dadabac plus a RUN.md-only change.\n1. The written requirements win ove"
+  },
+  {
+   "id": "8e002c7b-c89f-4040-bf42-0c1640757c05",
+   "t": 3281.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 628,
+   "verdicts": [],
+   "preview": "@coordinator @builder On dadabac, prior timing defects are independently fixed: seeded_limits.py exit0,544assertions;1000 distinct reset0.389s/export0.0042s;5000 distinct reset2.0064s/export0.0117s; each immediate burst4"
+  },
+  {
+   "id": "0fe3eae6-a74c-40f4-b1d7-604e204320aa",
+   "t": 3294.4,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1499,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator The newer ruling you need is coordinator message ea7c8af9-5942-4f31-a671-856e4af8025a, which supersedes 9358587b. Quoted verbatim:\n\"RULING (coordinator), REJECT a7a67ec is upheld. I withdraw the "
+  },
+  {
+   "id": "2ec064e1-40dc-4a5d-a9be-937a6e0fc8bf",
+   "t": 3379.7,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 826,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "dadabac"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT dadabac under the latest security ruling delivered to me: expected OWASP-minimum seeded cost (9358587b: 'C is rejected; the OWASP minimum stays'); observedm=1024,t=1. `PYTHONDONTWRITEBYTECODE"
+  },
+  {
+   "id": "2fea50a2-662e-4c3d-8c8f-f0b3b09bb526",
+   "t": 3390.6,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 1252,
+   "verdicts": [],
+   "preview": "@gatekeeper EXACT TEXT of the latest scope ruling (coordinator). It supersedes 9358587b. It was sent to you as room message 21c7b024; this repeats it first-hand:\n1. The written requirements win over seat baselines. \u00a76 re"
+  },
+  {
+   "id": "651da01e-70d6-4314-a9f2-493f93268564",
+   "t": 3394.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 647,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "dadabac"
+    }
+   ],
+   "preview": "@coordinator @builder REJECT dadabac security-scope evidence committed255c3f0 in /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/rejection-dadabac.md. Everything functional now passes, including1000/5"
+  },
+  {
+   "id": "fb513f47-b70b-4bab-98ab-a7cee5f7e2f3",
+   "t": 3400.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 485,
+   "verdicts": [],
+   "preview": "@coordinator Received. This explicitly closes the immediate-export timeout rejection by a scope exception; I will preserve its failed ten-second result and quote your ruling rather than label it a pass. Candidate a7a67ec"
+  },
+  {
+   "id": "529c95ae-6051-4374-8e1e-be517de51906",
+   "t": 3401.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 343,
+   "verdicts": [],
+   "preview": "@builder Review switching to exact dadabac. Its m=1024,t=1 seeded hashes conflict with the latest ruling delivered to me (9358587b: 'C is rejected; the OWASP minimum stays'). I need the later quoted ruling referenced in "
+  },
+  {
+   "id": "ec3fc1b1-3703-4366-bacc-6e7ffcdee5c4",
+   "t": 3402.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1330,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator You still have not received the public-fixture exemption, so here it is again. It is coordinator message ea7c8af9-5942-4f31-a671-856e4af8025a, which came after 9358587b. Exact text: 'RULING (coor"
+  },
+  {
+   "id": "1ede5df6-aee8-4471-9a29-c6e7d21dd715",
+   "t": 3789.4,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "surface"
+   ],
+   "chars": 1430,
+   "verdicts": [
+    {
+     "verdict": "ACCEPT",
+     "rev": "d1ebec2"
+    }
+   ],
+   "preview": "@coordinator @builder @surface ACCEPT d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1. Stage-1 tree c6d424062c5ffab8b21857db3c0310f628effd24. Acceptance manifest committed f0e5147 at /home/ubuntu/work/band-work/current/stage-1/"
+  },
+  {
+   "id": "6ef5c988-fb8d-4023-be19-6da33f84eb0f",
+   "t": 3796.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 392,
+   "verdicts": [],
+   "preview": "@builder The quoted later ruling resolves the scope conflict. I will record its provenance as coordinator ea7c8af9 relayed in this message, preserve the original strict-check failures, and verify the explicit fixture exc"
+  },
+  {
+   "id": "c4f7c247-f69f-40cc-878f-0bee6017bc8b",
+   "t": 3917.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 801,
+   "verdicts": [
+    {
+     "verdict": "ACCEPT",
+     "rev": "d1ebec2"
+    }
+   ],
+   "preview": "@coordinator @builder ACCEPT d1ebec2 unchanged. Final-ruling supplement committed16542a4 in /home/ubuntu/work/band-work/current/stage-1/verification/gatekeeper/acceptance-d1ebec2.json. `PYTHONDONTWRITEBYTECODE=1 python3 "
+  },
+  {
+   "id": "a5a6358f-6763-41fe-98fa-ecc1ed452f22",
+   "t": 3922.1,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 5296,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 2 HANDOFF \u2014 PART 1 OF 7 (plan, ownership, done). Parts 2-4 paste the complete stage-2 requirements verbatim. Parts 5-6 paste the product owner's visual brief in full."
+  },
+  {
+   "id": "38029d6c-c957-4f92-ad88-922f8c33e9b4",
+   "t": 3922.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 7240,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 2 HANDOFF \u2014 PART 2 OF 7 \u2014 stage-2 requirements verbatim (lines 1-130)\n\n# Pocketful \u2014 Stage 2: wallet screens and payment authorizations\n\nThe stage-1 requirements cont"
+  },
+  {
+   "id": "6989c2d8-0387-4372-abf4-e9f02dbdde7a",
+   "t": 3922.5,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 5645,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 2 HANDOFF \u2014 PART 3 OF 7 \u2014 stage-2 requirements verbatim (lines 131-223)\n\n## Competing clients and uncertain outcomes\n\n- Add `wallet-refresh`, a button on `/` that ref"
+  },
+  {
+   "id": "3fc6e191-5590-4b7a-98d9-59e9872fa55c",
+   "t": 3922.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 7640,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 2 HANDOFF \u2014 PART 4 OF 7 \u2014 stage-2 requirements verbatim (lines 224-9999)\n\n## API\n\n### `GET /me`\n\n```json\n{ \"user_id\": \"u_ada\", \"display_name\": \"Ada\", \"handle\": \"ada\","
+  },
+  {
+   "id": "93fd7b45-a5ce-40fe-bd2a-cee7a2813a2b",
+   "t": 3922.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 6698,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 2 HANDOFF \u2014 PART 5 OF 7 \u2014 visual brief /home/ubuntu/work/design-kit/BRIEF.md verbatim (lines 1-105)\n\n# Visual direction for the wallet interface\n\nThis brief is visual"
+  },
+  {
+   "id": "f2a2fcf4-a646-44c1-92e9-a574a86bc05c",
+   "t": 3923.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 4297,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 2 HANDOFF \u2014 PART 6 OF 7 \u2014 visual brief /home/ubuntu/work/design-kit/BRIEF.md verbatim (lines 106-9999)\n\n## Motion\n\nMotion gives personality; it must never cost correc"
+  },
+  {
+   "id": "f982710d-da5f-4da9-859c-026bc69d4e42",
+   "t": 3923.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 1384,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 2 HANDOFF \u2014 PART 7 OF 7 \u2014 LAST PART. Stage-1 coordinator rulings that still bind:\nR1. Request actions: pay or decline on an existing request by anyone who is not its "
+  },
+  {
+   "id": "b7fef06b-d7fa-4f43-b7b2-84915e5148aa",
+   "t": 3924.7,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 354,
+   "verdicts": [],
+   "preview": "@coordinator The accepted manifest already records the reduced fixture cost and strong signup/post-login hashes. I will add this direct final ruling and explicitly verify distinct salts before any login for seeded users "
+  },
+  {
+   "id": "b2c94b8f-07cf-444b-a918-d8d91983d0c0",
+   "t": 3931.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 2233,
+   "verdicts": [],
+   "preview": "@gatekeeper STAGE 1 REPORT (coordinator)\nAccepted revision: d1ebec2 (gatekeeper ACCEPT; manifest committed at f0e5147). stage-1/ is now frozen.\n\nLedger: 145 entries (R1-001 to R1-145), each mapped to a check.\n- Checks: m"
+  },
+  {
+   "id": "1380f116-9e3e-4241-8feb-ae8318f01d02",
+   "t": 3941.5,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 325,
+   "verdicts": [],
+   "preview": "@gatekeeper Noted: ACCEPT d1ebec2 stands, and the supplement is recorded at 16542a4. stage-1/ is frozen as of the acceptance, so make no further commits anywhere under stage-1/, verification included. Put all new evidenc"
+  },
+  {
+   "id": "bccdb5d9-1653-4c01-a819-0ba8ad3de74f",
+   "t": 3959.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 662,
+   "verdicts": [],
+   "preview": "@coordinator SPEC CONFLICT: stage2 UI says authorization-expires-{id} 'Text is the RFC 3339 expires_at'; brief says 'the exact timestamp only on hover or focus, never as the visible text'. Applying written requirement pr"
+  },
+  {
+   "id": "7590b521-8654-49d8-bbf0-0cdcfb43f1d6",
+   "t": 3968.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 1138,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper RULINGS, stage 2 (coordinator).\nS2-1, authorization expiry display. The written requirement wins over the brief. authorization-expires-{id} text is exactly the RFC 3339 expires_at ("
+  },
+  {
+   "id": "9cf192ec-d8f2-4303-92f2-5148a2d51108",
+   "t": 3978.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler",
+    "surface"
+   ],
+   "chars": 1743,
+   "verdicts": [],
+   "preview": "@surface @modeler stage-2/ was created at 7e8d124, a copy of the accepted stage-1 product at d1ebec2 made with git archive, without verification/ and without .git. Builder now owns stage-2/package.json and src/** except "
+  },
+  {
+   "id": "2ff4d6a7-84dc-4cdb-a9be-133c225e07e1",
+   "t": 4128.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 439,
+   "verdicts": [],
+   "preview": "@modeler Stage2 acceptance prep started. I will independently add50-flight hold/payment/capture/void races, expiry precedence, snapshot invariants, and stage1 browser retry continuity. Please include your exact committed"
+  },
+  {
+   "id": "face50ee-87c7-46b8-a241-ea102a466a3f",
+   "t": 4128.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 564,
+   "verdicts": [],
+   "preview": "@surface Stage2 browser acceptance will cover every screen/state at375/1440 and explicit brief rules1\u20138, including lost-response same-key/body recovery, reversed refresh delivery, navigation waiting for writes, reduced m"
+  },
+  {
+   "id": "c228e6b7-3643-49c7-b8f5-aab5f940840e",
+   "t": 4146.8,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 818,
+   "verdicts": [],
+   "preview": "@builder surface: I saw your uncommitted stage-2/src/web.js. I'll adopt it instead of my src/ui hook: the single shell at stage-2/public/index.html is served for text/html on the 6 UI routes, and /static/<path> maps to p"
+  },
+  {
+   "id": "1178cddc-25ad-4322-a2b1-5519ee47660e",
+   "t": 4167.8,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 500,
+   "verdicts": [],
+   "preview": "@coordinator Stage2 ledger revision f73cb580248808365d93497b57ffc0e8e41da9ec ready for audit: /home/ubuntu/work/band-work/current/stage-2/verification/ledger.md preserves145 R1 entries and adds201 R2 entries (API/UI/brie"
+  },
+  {
+   "id": "9b3a4999-a38d-4be9-b682-ab7c274aed8e",
+   "t": 4168.0,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 614,
+   "verdicts": [],
+   "preview": "@builder Stage2 ledger f73cb58 published; API requirements R2-074\u2013148 cover holds/captures/expiry/available/migration (verification source remains off-limits per ownership). Readings before tests: remaining_amount zero w"
+  },
+  {
+   "id": "7d38dec9-1e7b-4639-8237-1eeacb7e190a",
+   "t": 4178.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 907,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 2. Repository: /home/ubuntu/work/band-work/current. Revision f73cb58. File: stage-2/verification/ledger.md (72 KB; entries R2-001 to R2-201 are new, and the 145 R1 entries are carried"
+  },
+  {
+   "id": "beb70206-a0f8-4783-bc4c-642975de343b",
+   "t": 4236.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 1309,
+   "verdicts": [],
+   "preview": "@surface The UI contract is committed in builder revision 95f41e2 (stage-2/src/web.js), with both of your changes. The shell and every static file now send the same headers: CSP default-src 'self'; img-src 'self'; style-"
+  },
+  {
+   "id": "25d484d0-df3d-4ad2-ab51-32a0005e00c5",
+   "t": 4480.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 559,
+   "verdicts": [],
+   "preview": "@coordinator Stage2 fixture ambiguity: seeded authorization status may be captured/voided/expired, but fixture example omits captured_amount/payment_ids. Proposed conservative tests: seed closed statuses to check held0/s"
+  },
+  {
+   "id": "d7449705-6f80-4455-955d-9d5dfd6d3893",
+   "t": 4487.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 1193,
+   "verdicts": [],
+   "preview": "@modeler @builder @gatekeeper RULINGS, stage 2 (coordinator).\nS2-3, seeded closed authorizations. The fixture defines only id, from_user_id, to_user_id, amount, note, visibility, status and expires_at.\n- A seeded capture"
+  },
+  {
+   "id": "5ad9c6fc-8707-4d9d-92bc-be9c0972fb14",
+   "t": 4562.0,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 945,
+   "verdicts": [],
+   "preview": "@coordinator Builder has applied both stage-2 rulings, at 0ff60fa. Code is in cd1e3bb; 0ff60fa fixes the regression check.\nS2-3: a seeded authorization that is captured, voided or expired holds nothing. When the fixture "
+  },
+  {
+   "id": "25145b7e-1270-43bc-93b4-a4eab9579193",
+   "t": 4565.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 567,
+   "verdicts": [],
+   "preview": "@coordinator Modeler live progress on clean product95f41e2: driver5dfddf3 first run exited1 at a generated capture with both closed status and explicit amount0 (expected409, observed422). This is an oracle/generator over"
+  },
+  {
+   "id": "6362a69f-64b6-4971-af10-affb7a80fdeb",
+   "t": 4603.1,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 1832,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT f73cb58** (commit 582aa3c)\n\n**1. Normative sentences with no covering entry**\n\nOne gap: **`pay-uncertain` data-testid.** Spec \u00a7Competing clients: *\"show `pay-uncertain` (nonempty text), not `p"
+  },
+  {
+   "id": "b82cb2ae-d2cc-4317-a96c-0b983f37bf26",
+   "t": 4609.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 880,
+   "verdicts": [],
+   "preview": "@modeler LEDGER AUDIT f73cb58 findings to fix (coordinator; auditor's report is at 582aa3c).\n1. Gap: there is no entry for the pay-uncertain testid. Requirement: \"If a payment response is lost, including after POST /paym"
+  },
+  {
+   "id": "1ecd2c01-583a-44ba-8d0f-21e3bb3a0f97",
+   "t": 4753.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1366,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper Modeler stage2 handoff: verification ab6b0b2aac93ce7b3814f90c952dc8dad1666d00 in /home/ubuntu/work/band-work/current. Ledger stage-2/verification/ledger.md retains145 R1 entries plus201 R2; pure "
+  },
+  {
+   "id": "2f1771f1-24a2-45f3-879c-276a9eb44a89",
+   "t": 4753.6,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 591,
+   "verdicts": [],
+   "preview": "@builder Modeler stage2 HTTP checks on clean95f41e2 passed exit0: 532 sequential operations, persistence/cross-version stage1 import, 50 same-key payment retries, available/held, final/nonfinal captures, expiry, exact2^5"
+  },
+  {
+   "id": "a0f2696c-485e-4c2d-a21c-854df65547df",
+   "t": 4760.7,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 376,
+   "verdicts": [],
+   "preview": "@coordinator All seven parts received. Starting stage-2 verification only; stage-1 remains frozen. I will publish the extended ledger first, then model/driver and migration evidence. One explicit brief conflict to record"
+  },
+  {
+   "id": "c04f2781-fbde-49bd-a788-572b70c04342",
+   "t": 4762.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 627,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 2. Repository: /home/ubuntu/work/band-work/current. Revision ab6b0b2. Audit the change since your f73cb58 audit: git diff f73cb58 ab6b0b2 -- stage-2/verification/ledger.md (80 inserti"
+  },
+  {
+   "id": "e2dd0086-c850-4934-8caa-553b3a3684a5",
+   "t": 4779.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 450,
+   "verdicts": [],
+   "preview": "@coordinator Preparation committed at 9b08762 in /home/ubuntu/work/band-work/current/stage-2/verification/gatekeeper/: hold/capture concurrency checks, browser recovery checks, prior-stage probes, and complete screen/sta"
+  },
+  {
+   "id": "ba531e0b-e415-491d-93ee-f7336d1d91b7",
+   "t": 4788.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 372,
+   "verdicts": [],
+   "preview": "@coordinator All seven parts received, along with S2-1 exact expiry text and S2-2 expiry/capture precedence. Preparing independent Stage2 API/browser/upgrade checks under stage-2/verification/gatekeeper only. Stage1 stay"
+  },
+  {
+   "id": "e481c29e-c221-4bd6-a24e-b59958e042fb",
+   "t": 4800.4,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 392,
+   "verdicts": [],
+   "preview": "@coordinator Recorded S2-1/S2-2 as confirmed in /home/ubuntu/work/band-work/current/stage-2/verification/ledger.md, revision544b284c96ac4450acee648d08224631782f6a0b. Model/driver already match; no code change. git diff -"
+  },
+  {
+   "id": "ddf16ae6-84a9-418c-ae3c-c9bd993603d3",
+   "t": 4817.6,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 2357,
+   "verdicts": [],
+   "preview": "@builder @coordinator SURFACE STAGE-2 READY at 9a5c0e1, repo /home/ubuntu/work/band-work/current. My files: stage-2/public/** (index.html, app.js, app.css, mark.svg, fonts/ with OFL licence files, art/ copied from the de"
+  },
+  {
+   "id": "a30fd3a3-5329-4c9a-8081-7808aad72605",
+   "t": 4821.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 250,
+   "verdicts": [],
+   "preview": "@coordinator I will apply S2-3 to seeded closed-hold checks and S2-4 to upgrade checks: original receipts replay unchanged; fresh activity exposes authorization_id:null. Recording both in the Stage 2 acceptance checklist"
+  },
+  {
+   "id": "567e3f6e-a2ad-4093-b54a-4530f297aaf4",
+   "t": 4828.6,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 478,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper Gatekeeper needs the implementation-defined authorization export record shape and wallet/operator nesting to validate atomic snapshot invariants without torn multi-request reads. Builder: please give"
+  },
+  {
+   "id": "24b804f5-c101-4cb8-983e-95f8cad36d27",
+   "t": 4834.6,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 2040,
+   "verdicts": [],
+   "preview": "@builder I've read all 7 parts of the stage-2 handoff. Proposed UI integration contract below (copying @coordinator):\n1. stage-2/src/ui/index.js (mine) exports `handle(req, res, url) -> boolean`, where url is a WHATWG UR"
+  },
+  {
+   "id": "97c863c7-c418-4c40-878e-3acc3d2f7041",
+   "t": 4846.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 361,
+   "verdicts": [],
+   "preview": "@modeler Received verifier ab6b0b2 and the exact differential command. I will run it against the combined candidate's isolated instances and a frozen d1ebec2 source, then independently check browser migration, hold/captu"
+  },
+  {
+   "id": "82576626-1176-40a8-ae6f-01ec8d9886a3",
+   "t": 4851.9,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 755,
+   "verdicts": [],
+   "preview": "@gatekeeper Noted. Builder will post the combined candidate. My UI files are at 9a5c0e1 in /home/ubuntu/work/band-work/current: stage-2/public/index.html, which is the shell served for text/html on the six UI routes; sta"
+  },
+  {
+   "id": "9b230480-7509-4ab5-aae9-fe177e52df1b",
+   "t": 4869.0,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 180,
+   "verdicts": [],
+   "preview": "@coordinator The diff shows the pay-uncertain gap is closed, coverage markings updated, and observed evidence added. Let me write the audit report.\n\n\n\n"
+  },
+  {
+   "id": "e066eb32-4eb9-4540-a1b8-983c2bf4c0a7",
+   "t": 4878.2,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 2961,
+   "verdicts": [],
+   "preview": "@surface @gatekeeper @coordinator STAGE-2 COMBINED CANDIDATE: 26581d1 in /home/ubuntu/work/band-work/current, branch main. It contains builder 95f41e2, cd1e3bb and 0ff60fa plus surface 9c584cc and 9a5c0e1. Nothing outsid"
+  },
+  {
+   "id": "95dfa489-f324-42d2-9166-59db7f320f01",
+   "t": 4910.1,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 890,
+   "verdicts": [],
+   "preview": "@gatekeeper Driver committed at ab6b0b2aac93ce7b3814f90c952dc8dad1666d00; latest ledger544b284. From /home/ubuntu/work/band-work/current run: PYTHONDONTWRITEBYTECODE=1 python3 -u stage-2/verification/model/driver.py --ba"
+  },
+  {
+   "id": "422ba564-60b6-477f-a070-57f520e921a4",
+   "t": 4955.9,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 385,
+   "verdicts": [],
+   "preview": "@coordinator Recorded S2-3/S2-4 as A6/A4 in /home/ubuntu/work/band-work/current/stage-2/verification/ledger.md at96d834be00d3a4e4b2135f54552a6e4c62dff5ab. Driver already omits comparisons of unspecified closed seeded cap"
+  },
+  {
+   "id": "1f90cdb9-4ffb-4948-97df-29bee090fb93",
+   "t": 4985.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 579,
+   "verdicts": [],
+   "preview": "@coordinator Ledger revision adbb4ccd99fd121594435794390d4e73d923f848 committed at /home/ubuntu/work/band-work/current/stage-2/verification/ledger.md. Added dedicated stable R2-202 for pay-uncertain exact testid, nonempt"
+  },
+  {
+   "id": "40fe1033-b463-4f8b-96b9-97c70d57370e",
+   "t": 4990.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 481,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT target update, stage 2 (coordinator). The latest ledger revision is adbb4cc in /home/ubuntu/work/band-work/current. After your ab6b0b2 report, also audit git diff ab6b0b2 adbb4cc -- stage-2/verifica"
+  },
+  {
+   "id": "3d9d4a04-a4f3-46f0-b67c-686795272452",
+   "t": 5343.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 595,
+   "verdicts": [],
+   "preview": "@coordinator SPEC CONFLICT in the brief, observed on 26581d1: 'Page changes: use the browser\u2019s cross-document view transitions for a quick cross-fade where supported' versus rule 4 'Animations use transform and opacity o"
+  },
+  {
+   "id": "f22c8fa3-edd3-4ecf-bf02-0103f1764d36",
+   "t": 5355.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 940,
+   "verdicts": [],
+   "preview": "@gatekeeper @surface RULING S2-5 (coordinator), on the brief conflict between view transitions and rule 4. Gatekeeper's proposed reading is adopted.\n- Brief, Motion: \"Page changes: use the browser's cross-document view t"
+  },
+  {
+   "id": "d007049d-d201-4f29-bc46-825532023e3a",
+   "t": 5403.6,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1277,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper @builder S2-5 is applied in new surface revision 44c078d (parent 26581d1). Only stage-2/public/app.css changed.\nBefore this, the @view-transition opt-in was unconditional, so the page cross-fade "
+  },
+  {
+   "id": "ec3151b4-4414-465f-93cc-804eb6b86580",
+   "t": 5410.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper"
+   ],
+   "chars": 659,
+   "verdicts": [],
+   "preview": "@gatekeeper @builder STAGE-2 CANDIDATE is now 44c078d in /home/ubuntu/work/band-work/current. 26581d1 is superseded.\n- 44c078d is 26581d1 plus a surface fix to stage-2/public/app.css only: the view-transition opt-in now "
+  },
+  {
+   "id": "87fc7a25-130b-4944-a77d-f88936adc1ed",
+   "t": 5432.2,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 550,
+   "verdicts": [],
+   "preview": "@surface @gatekeeper @coordinator Builder confirms the stage-2 candidate 44c078d, which is 26581d1 plus stage-2/public/app.css (5 lines added, 2 removed); no other product change. Evidence from a clean clone at /tmp/buil"
+  },
+  {
+   "id": "70f3faaf-919e-4873-896b-c3dacb5d23c3",
+   "t": 5441.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 521,
+   "verdicts": [],
+   "preview": "@surface Browser observation on 26581d1, plain HTTP Chromium153: rapid native navigation can emit pageerror 'Transition was aborted because of invalid state. ViewTransition opt-in disabled'. Required flow still reaches t"
+  },
+  {
+   "id": "d841a215-1dd0-4165-8afe-f84ef79f055d",
+   "t": 5480.8,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 870,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @builder I've removed the source of the observed pageerror in new surface revision e8ffe16 (parent 44c078d). Only stage-2/public/app.css changed: the cross-document @view-transition opt-in is gon"
+  },
+  {
+   "id": "5b1e54d8-f4b9-4511-80d1-2fa4f497d6ee",
+   "t": 5487.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 727,
+   "verdicts": [],
+   "preview": "@gatekeeper @surface @builder STAGE-2 CANDIDATE is now e8ffe16 in /home/ubuntu/work/band-work/current. 44c078d is superseded.\n- e8ffe16 is 44c078d plus stage-2/public/app.css only. It removes the cross-document view-tran"
+  },
+  {
+   "id": "f8346aac-b24b-4407-b3e2-7517b26fb799",
+   "t": 5514.5,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 617,
+   "verdicts": [],
+   "preview": "@surface @gatekeeper @coordinator Builder confirms the candidate e8ffe16. It is 44c078d plus stage-2/public/app.css only (2 lines added, 5 removed); the API is unchanged. Evidence from a clean clone at /tmp/builder-s2/cl"
+  },
+  {
+   "id": "678404f4-09a1-4fa6-bd02-3a28129b1784",
+   "t": 5531.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 973,
+   "verdicts": [],
+   "preview": "@coordinator @builder Candidate26581d1 gate progress: clean isolated harness exit0 stage1 147/147, stage2 35/35; applicable stage3 collected6 passed2 failed1(expected) notrun3, claimed2. Shared dispatched harness also ex"
+  },
+  {
+   "id": "f5f2a881-abc3-47db-9d65-c0037697e905",
+   "t": 5542.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 712,
+   "verdicts": [],
+   "preview": "@gatekeeper DIRECT: the combined stage-2 candidate is e8ffe16 (builder confirmed it; its tests pass 23/23). e8ffe16 is 26581d1 plus stage-2/public/app.css changes only: the reduced-motion fix, then removal of the view-tr"
+  },
+  {
+   "id": "1bb9e973-9567-4d5b-b5c0-6b02e941a7ef",
+   "t": 5548.7,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 507,
+   "verdicts": [],
+   "preview": "@surface Visual finding at26581d1: /signup at1440px, phone-coin illustration overlays and obscures the 'made' portion of the large marketing heading. Screenshot /tmp/gatekeeper-s2-l0q3ih4a/screens/1440-states-signup-empt"
+  },
+  {
+   "id": "a0929bf0-40a0-47e3-b5c5-b7d499f8033f",
+   "t": 5626.5,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1215,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @builder The heading legibility fix is committed as surface revision 8038718 (parent e8ffe16). Only stage-2/public/app.css changed. At \u2265900 px the phone-coin art was absolutely positioned over th"
+  },
+  {
+   "id": "9e6e026b-b689-48e5-b8a6-ced66a2ca9e5",
+   "t": 5633.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 730,
+   "verdicts": [],
+   "preview": "@gatekeeper @surface @builder DECISION (coordinator): the stage-2 candidate is now 8038718 in /home/ubuntu/work/band-work/current, replacing e8ffe16.\n- 8038718 is e8ffe16 plus stage-2/public/app.css only: the phone-coin "
+  },
+  {
+   "id": "cc0e5c33-7f39-4ecd-98bc-0d8f7e1708c9",
+   "t": 5659.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 568,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator Builder confirms the stage-2 candidate 8038718. Compared with e8ffe16, the only product change is stage-2/public/app.css, 3 lines added and 3 removed. Evidence from a clean clone at /tmp/builder-"
+  },
+  {
+   "id": "229fcf6a-c5f7-4f27-ba32-955c9f2d5d45",
+   "t": 5739.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "surface"
+   ],
+   "chars": 730,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "26581d1"
+    }
+   ],
+   "preview": "@coordinator @surface @builder REJECT 26581d1: expected readable desktop auth heading, observed phone illustration obscuring 'made' on /signup at1440\u00d7900. Reproduce: headless Chromium GET /signup, screenshot /home/ubuntu"
+  },
+  {
+   "id": "b3e434a1-de0e-43d8-9d6a-f2c4bc0c4bdf",
+   "t": 5747.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 613,
+   "verdicts": [],
+   "preview": "@gatekeeper DIRECT: the combined successor is 8038718 in /home/ubuntu/work/band-work/current. Builder confirmed it on a clean clone: 23/23 tests, docker build exit 0, /health 200.\nIt is 26581d1 plus stage-2/public/app.cs"
+  },
+  {
+   "id": "7ea0a93f-2d23-4079-83bf-f38717fc2ceb",
+   "t": 5750.2,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 730,
+   "verdicts": [],
+   "preview": "@gatekeeper The combined successor is 8038718 in /home/ubuntu/work/band-work/current. The coordinator's decision message names it as the candidate. Compared with 26581d1 it changes only stage-2/public/app.css, in three s"
+  },
+  {
+   "id": "ea6b43e1-6546-47f0-87f3-bc36a38cc85c",
+   "t": 5849.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 485,
+   "verdicts": [],
+   "preview": "@coordinator @builder Surface fixes are concrete at8038718 (native transitions removed and auth art moved into normal flow). I will start the full clean-copy rerun on8038718 now rather than wait for delayed handoff deliv"
+  },
+  {
+   "id": "7286faf8-27f9-4b21-90f9-cf9a5d2303bb",
+   "t": 6337.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 980,
+   "verdicts": [],
+   "preview": "@coordinator @builder Full successor gate results committed83441cf at /home/ubuntu/work/band-work/current/stage-2/verification/gatekeeper/results-8038718.json and review-8038718.md;82screenshots retained. Exact clean8038"
+  },
+  {
+   "id": "1c410e99-6d9c-4f76-bd7a-b67177f390c2",
+   "t": 6343.5,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 731,
+   "verdicts": [],
+   "preview": "@gatekeeper STANDALONE CONFIRMATION (coordinator).\n1. The final combined stage-2 candidate is 8038718. Builder confirmed it on a clean clone (23/23 tests, docker build exit 0, /health 200). Surface confirmed it too (brow"
+  },
+  {
+   "id": "6189a9d5-ac95-42a7-9889-af5e160ddd32",
+   "t": 6344.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 269,
+   "verdicts": [],
+   "preview": "@builder Starting independent acceptance on exact candidate 26581d1. Export schema received; it matches the nested authorization snapshot adapter. I will report observed gate results and any minimal reproductions to you "
+  },
+  {
+   "id": "07dc3b5f-c407-4ae9-83f0-130ebd77a676",
+   "t": 6353.8,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1575,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator The two coordinator messages you are missing, quoted verbatim as they reached builder.\n(1) Message 5b1e54d8-f4b9-4511-80d1-2fa4f497d6ee: \"STAGE-2 CANDIDATE is now e8ffe16 in /home/ubuntu/work/ban"
+  },
+  {
+   "id": "1656090e-f3f5-4f0b-8999-e20a41201fec",
+   "t": 6378.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 447,
+   "verdicts": [],
+   "preview": "@coordinator S2-5 received. All independent gates now pass on8038718 (evidence83441cf). That revision includes e8ffe16 removing native transitions entirely after Chromium pageerrors, rather than retaining them under S2-5"
+  },
+  {
+   "id": "7bea9f3b-9713-4f35-896d-f7bdccaf37c2",
+   "t": 6465.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 390,
+   "verdicts": [],
+   "preview": "@coordinator Transition-removal ruling received; that closes the scope blocker. e8ffe16 still predates the auth-heading fix8038718 for my REJECT26581d1. Exact8038718 has now passed every independent gate, with results/re"
+  },
+  {
+   "id": "d1eef981-03d1-4568-a313-e7188b2777de",
+   "t": 6471.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 259,
+   "verdicts": [],
+   "preview": "@gatekeeper CONFIRMED (coordinator): 8038718 is the final combined stage-2 candidate. Builder and surface have confirmed it, the product is frozen, and nothing outside verification/ changed after it. Post your verdict on"
+  },
+  {
+   "id": "c4499c2f-ebce-4b63-89ba-e3a9c2620cb7",
+   "t": 6550.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "surface"
+   ],
+   "chars": 2125,
+   "verdicts": [
+    {
+     "verdict": "ACCEPT",
+     "rev": "8038718"
+    }
+   ],
+   "preview": "@builder @surface ACCEPT 8038718. Acceptance manifest committed255beef at /home/ubuntu/work/band-work/current/stage-2/verification/gatekeeper/acceptance-8038718.json; review-8038718.md closes all ledger audits and explic"
+  },
+  {
+   "id": "ff4c186f-188d-4a10-915b-0c6735ffb51f",
+   "t": 6556.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 2083,
+   "verdicts": [
+    {
+     "verdict": "ACCEPT",
+     "rev": "8038718"
+    }
+   ],
+   "preview": "@coordinator ACCEPT 8038718. Acceptance manifest committed255beef at /home/ubuntu/work/band-work/current/stage-2/verification/gatekeeper/acceptance-8038718.json; review-8038718.md closes all ledger audits and explicitly "
+  },
+  {
+   "id": "07043c3f-9469-48dd-af20-11207e770e23",
+   "t": 6590.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 1798,
+   "verdicts": [],
+   "preview": "@gatekeeper STAGE 2 REPORT (coordinator)\nAccepted revision: 8038718 (gatekeeper ACCEPT; manifest committed at 255beef). stage-2/ is now FROZEN.\n\nLedger: 346 entries (145 R1 carried over, plus R2-001 to R2-202), each with"
+  },
+  {
+   "id": "f59bac66-dc3e-411e-9d28-47c53c38e02c",
+   "t": 6625.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 5127,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 3 HANDOFF \u2014 PART 1 OF 4 (plan, ownership, done). Parts 2-3 paste the complete stage-3 requirements verbatim. PART 4 is the last part and lists the rulings that still "
+  },
+  {
+   "id": "425d6d13-cee3-4624-b78c-bd8d56e223fd",
+   "t": 6626.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 3732,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 3 HANDOFF \u2014 PART 2 OF 4 \u2014 stage-3 requirements verbatim (lines 1-78)\n\n# Pocketful \u2014 Stage 3: statements and payment corrections\n\nThe requirements from stages 1 and 2 "
+  },
+  {
+   "id": "5e0b2afc-e5d2-4ed6-8ea3-4b196ed17106",
+   "t": 6626.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 6940,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 3 HANDOFF \u2014 PART 3 OF 4 \u2014 stage-3 requirements verbatim (lines 79-end)\n\n## Effective time, recorded time, and corrections\n\nThe service must distinguish **when money t"
+  },
+  {
+   "id": "0ca1e7bb-c89f-4e32-b13d-ccdab3f8a4fa",
+   "t": 6626.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 1937,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 3 HANDOFF \u2014 PART 4 OF 4 \u2014 LAST PART. Rulings that still bind:\nR1. Request actions: a non-payer on pay or decline, or a non-requester on cancel, gets 403; 404 only for"
+  },
+  {
+   "id": "a9751812-ca87-42dc-85ef-39d15733cc97",
+   "t": 6666.9,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 717,
+   "verdicts": [],
+   "preview": "@coordinator SPEC CONFLICT to resolve before temporal checks: prior ruling R6 'Timestamps use second precision with +00:00' versus stage3 'Recorded times for one payment strictly increase' plus 'server-assigned recorded_"
+  },
+  {
+   "id": "3e22763b-186e-4d52-af0f-3bd3771f6b99",
+   "t": 6669.9,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 71,
+   "verdicts": [],
+   "preview": "@coordinator Received. Awaiting parts 2-4."
+  },
+  {
+   "id": "c8fc20a6-7c13-4b31-bfeb-298d2aaf64f6",
+   "t": 6679.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 1289,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper RULING S3-1 (coordinator), timestamps in stage 3.\nR6 (second precision) was an implementation choice, not a requirement. \u00a73.4 requires only \"RFC 3339 with an explicit offset\", and f"
+  },
+  {
+   "id": "5fccebde-956c-493b-b544-26fdb578108a",
+   "t": 6684.6,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 78,
+   "verdicts": [],
+   "preview": "@coordinator Received part 2. Awaiting parts 3-4."
+  },
+  {
+   "id": "65b95064-7f14-4b0f-8333-2a7e36e44f84",
+   "t": 6692.0,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 85,
+   "verdicts": [],
+   "preview": "@coordinator Received part 3. Awaiting part 4 (rulings)."
+  },
+  {
+   "id": "ee927f9d-2418-400c-b9a8-d9c6ff4f7b0c",
+   "t": 6713.6,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 130,
+   "verdicts": [],
+   "preview": "@coordinator All 4 parts received. Standing by for the LEDGER AUDIT request with a specific revision."
+  },
+  {
+   "id": "9551cfb0-30e9-48cb-b3f4-8f6a921f010d",
+   "t": 6717.5,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler",
+    "surface"
+   ],
+   "chars": 1647,
+   "verdicts": [],
+   "preview": "@surface @modeler stage-3/ was created at 7be9798, a copy of the accepted stage-2 product at 8038718 made with git archive, without verification/ and without .git.\n@surface, these are the contracts builder will code agai"
+  },
+  {
+   "id": "7233a173-edc2-47ce-b0e0-c2042ac0dd95",
+   "t": 6735.7,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1056,
+   "verdicts": [],
+   "preview": "@builder @coordinator Surface stage-3 modules are committed at bdf2f7f (parent 7be9798): stage-3/src/validate.js (parseInstant, parseQueryInstant, parseMeQuery, validateStatementQuery, validateCorrection, all as in my co"
+  },
+  {
+   "id": "dba990f3-c674-463d-8662-5745d112488f",
+   "t": 6736.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 625,
+   "verdicts": [],
+   "preview": "@modeler Stage3 independent prep is starting under /home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper. Please hand off your exact committed model/driver and any temporal-boundary rulings. I will independ"
+  },
+  {
+   "id": "a99e1781-9578-4ff4-b5e2-a16de63e3899",
+   "t": 6742.7,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 2895,
+   "verdicts": [],
+   "preview": "@builder STAGE-3 SURFACE CONTRACT (copying @coordinator). The existing result shape is unchanged: { ok: true, value } or { ok: false, error: { status, code, message } }.\nvalidate.js, new exports:\n- parseInstant(raw, fiel"
+  },
+  {
+   "id": "3f6b8219-b671-41a4-b690-0008221c34c7",
+   "t": 6744.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 803,
+   "verdicts": [],
+   "preview": "@surface @builder @modeler @gatekeeper RULING S3-2 (coordinator), '+' in instant query parameters.\nA client that writes as_of=2026-09-24T13:20:00+00:00 without percent-encoding sends a '+', which query decoding turns int"
+  },
+  {
+   "id": "71947151-009a-4b49-8fb2-7fbaf718111e",
+   "t": 6788.9,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 381,
+   "verdicts": [],
+   "preview": "@coordinator Stage3 ledger de870bb3e87ef4ae8b12794c30ac21f7e11c5bf4 ready for audit at /home/ubuntu/work/band-work/current/stage-3/verification/ledger.md: retained R1/R2 IDs plus108 R3 entries, quoted requirements/refuti"
+  },
+  {
+   "id": "8dd0d1e4-c1be-4204-a36b-df010260bc75",
+   "t": 6789.1,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 611,
+   "verdicts": [],
+   "preview": "@builder Stage3 ledger published de870bb3 (verification remains off-limits). Key readings: R3-049/050 historical affordability aggregates all same-instant movements before deciding nonnegative; statement tie-entry interm"
+  },
+  {
+   "id": "5d283f19-3555-49a8-8719-ac36a8abf6f9",
+   "t": 6789.3,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 1538,
+   "verdicts": [],
+   "preview": "@builder Our contracts crossed. Mine is already committed and tested at ea0611b, so please code against it. The mapping to your proposal:\n(A) validate.js:\n- parseInstant(raw, field) returns { raw, ms }. raw is your \"text"
+  },
+  {
+   "id": "af64d1f5-8965-4249-bb16-0edce1851989",
+   "t": 6789.5,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 648,
+   "verdicts": [],
+   "preview": "@coordinator @builder S3-2 is implemented in ea0611b (stage-3/src/validate.js and test/surface3.test.js). For as_of, known_at, from and to, a single space exactly between the time (including any fraction) and an HH:MM of"
+  },
+  {
+   "id": "6edd1ff1-9973-4d0b-b5db-9ef817d9b1d5",
+   "t": 6795.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 868,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 3. Repository: /home/ubuntu/work/band-work/current. Revision de870bb. File: stage-3/verification/ledger.md (108 new R3 entries; R1 and R2 are carried over).\nRequirements: STAGE 3 HAND"
+  },
+  {
+   "id": "d8ef9302-00ad-40f3-b881-c0ca5c886f8e",
+   "t": 6971.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 649,
+   "verdicts": [],
+   "preview": "@coordinator Stage3 verification preparation committedf0303a3 in /home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper. New history.py covers corrections, bitemporal statements, frozen snapshot pagination/o"
+  },
+  {
+   "id": "756ebca6-8007-4e47-8077-01294a521df3",
+   "t": 6976.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 279,
+   "verdicts": [],
+   "preview": "@coordinator All four Stage3 parts received. Preparing independent correction/statement/history concurrency and snapshot probes under stage-3/verification/gatekeeper, carrying forward browser and security regressions. St"
+  },
+  {
+   "id": "a16d1e00-331c-4452-beb2-e0cc2d148ae0",
+   "t": 7005.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 350,
+   "verdicts": [],
+   "preview": "@coordinator S3-1 received. Stage3 checks will permit fractional RFC3339 recorded/closed times, require literal instant ordering for explicit known_at, and treat omitted known_at/current reads as all committed revisions."
+  },
+  {
+   "id": "9a0d310e-06b0-4a77-9de7-2d32ecff4aff",
+   "t": 7050.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 266,
+   "verdicts": [],
+   "preview": "@coordinator S3-2 recorded and raw-plus cases added for as_of, known_at, from and to, including /me echo normalization. Commit will be included in the candidate acceptance checks; syntax validation passed, live behavior "
+  },
+  {
+   "id": "9cde06cc-6ff2-4c43-b0a0-08d993389d93",
+   "t": 7067.5,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 1857,
+   "verdicts": [],
+   "preview": "@coordinator Committed a401a8b.\n\n**LEDGER AUDIT de870bb**\n\n**1. Normative sentences with no covering entry**\n\n**Minor gap: S3-2 ruling (space in offset \u2192 '+').** Coordinator ruling says a decoded space in the offset-sign"
+  },
+  {
+   "id": "7465c99b-e6f5-4114-8c5f-c642af95f319",
+   "t": 7080.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 1355,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper RULINGS on LEDGER AUDIT de870bb (coordinator; report at a401a8b).\nS3-3, snapshot tokens across import. The texts are \"Tokens last until reset\", \u00a710 \"Import is replacement ... Import"
+  },
+  {
+   "id": "106b5020-4349-49e5-b213-aa3e7a4efccd",
+   "t": 7083.7,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 1155,
+   "verdicts": [],
+   "preview": "@surface builder: integration with your validate.js and SnapshotStore works at 2165071 (stage-3 tests: 35 pass). One problem, measured on a clean build of 2165071 (--cpus=2 --memory=2g): 51 first statement reads of a 500"
+  },
+  {
+   "id": "d1409f61-8111-42f0-97a6-902d699e9156",
+   "t": 7095.9,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "surface"
+   ],
+   "chars": 590,
+   "verdicts": [],
+   "preview": "@surface builder addendum for ruling S3-3, to fold into the same SnapshotStore change: (1) exportAll() returns a JSON-safe array [{ token, user_id, params }] in creation order. (2) restore(list) replaces every token with"
+  },
+  {
+   "id": "7102a7c2-179c-453b-a1dd-aa317cca1946",
+   "t": 7143.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 385,
+   "verdicts": [],
+   "preview": "@coordinator S3-3 incorporated into independent history checks: export/reset/import must restore the source snapshot's exact frozen page and token, remove destination-only snapshots, and remove destination-only sessions."
+  },
+  {
+   "id": "b28bdef4-05e0-434b-bb8a-387b4a32e62e",
+   "t": 7163.7,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 411,
+   "verdicts": [],
+   "preview": "@coordinator I see commits citing stage3 S3-1/S3-2/S3-3 but those ruling messages have not yet reached this seat. Please send their text directly so I can align oracle and ledger; only initial handoff plus my questions h"
+  },
+  {
+   "id": "006bf7f2-08cc-4ee2-b62a-2082ae30e328",
+   "t": 7171.2,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1053,
+   "verdicts": [],
+   "preview": "@builder @coordinator Surface stage-3 UI regression at a4af170 (contains fa54326), in a clean clone at /tmp/surface-s2/s3clone.*: docker build -t pocketful-stage3-surface . exited 0. docker run --cpus=2 --memory=2g -e PO"
+  },
+  {
+   "id": "07402464-cb4b-4d4c-ad7e-f0ddd22843cf",
+   "t": 7171.9,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 1384,
+   "verdicts": [],
+   "preview": "@coordinator Builder status on stage 3, plus S3-3.\n- 7be9798 creates stage-3/ as a copy of 8038718.\n- 2165071 is the core. It covers revisions and corrections (stale_revision, insufficient_funds before historical_overdra"
+  },
+  {
+   "id": "1aa43384-1c5f-4c5f-b641-b970e108fe54",
+   "t": 7174.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 1650,
+   "verdicts": [],
+   "preview": "@modeler DIRECT, the stage-3 rulings (coordinator):\nS3-1, timestamps. R6's second precision was an implementation choice; \u00a73.4 needs only RFC 3339 with an offset.\n- recorded_at, closed_at and correction effective_at echo"
+  },
+  {
+   "id": "f086599f-c857-4901-9cce-35cb0db6ed71",
+   "t": 7178.3,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1379,
+   "verdicts": [],
+   "preview": "@builder @coordinator Both requests are in stage-3/src/snapshots.js at fa54326 (S3-3 export/restore came first in 7f8e455).\n- createRef(userId, params) -> token. It stores a deep-frozen structuredClone of params, so late"
+  },
+  {
+   "id": "46f32d59-f1be-48b0-9fcd-1f1d0b1ecf23",
+   "t": 7272.2,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1134,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper @coordinator REJECT fa54326: expected historical held250, observed0. R3-092/104: supplied seeded open hold created2020-01-02, expires2020-01-04 should exist at creation when known_at equals creation,"
+  },
+  {
+   "id": "b54731d3-0953-4ff7-828b-0a14bb3d1574",
+   "t": 7290.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 496,
+   "verdicts": [],
+   "preview": "@coordinator Separate inherited-driver failure was traced to its stage1 max-balance fixture: ending ada2^53 plus original seeded outgoing500 implies stage3 opening2^53+500. Simple persistence passes; only that boundary e"
+  },
+  {
+   "id": "426e4f6e-7ae1-47f0-84fa-f558178dc98d",
+   "t": 7374.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 2075,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @modeler STAGE-3 COMBINED CANDIDATE: 8548455 in /home/ubuntu/work/band-work/current, branch main.\nBuilder: 7be9798 (copy of 8038718), 2165071 (core), 162e852 (snapshot references and S3-3 export/"
+  },
+  {
+   "id": "e217cc9a-8fe5-43c3-8aa2-0b0589cc4240",
+   "t": 7688.1,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 641,
+   "verdicts": [],
+   "preview": "@coordinator Ledger/model revision0d718f65656b983230983bfbafe418a44d01d19e in /home/ubuntu/work/band-work/current/stage-3/verification/ledger.md now adds R3-109 raw-plus query offsets and R3-110 snapshot export preservat"
+  },
+  {
+   "id": "a2ca8918-e692-427a-8936-957e7721e1e1",
+   "t": 7695.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 727,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 3. Repository: /home/ubuntu/work/band-work/current. Revision 0d718f6. Audit the change since your de870bb audit: git diff de870bb 0d718f6 -- stage-3/verification/ledger.md.\nExpected c"
+  },
+  {
+   "id": "7165dd43-6e56-4cb7-a77b-56ad13f1f6d9",
+   "t": 7702.3,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 647,
+   "verdicts": [],
+   "preview": "@coordinator @builder SPEC CONFLICT at 8548455: stage-3 says statement ordering is selected effective_at then payment id. Shared harness command --stage 3 --mode isolated --out /home/ubuntu/work/band-work/checks/pocketfu"
+  },
+  {
+   "id": "081f736b-77fa-45b4-9ea7-69fe4e9cd00a",
+   "t": 7702.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 573,
+   "verdicts": [],
+   "preview": "@modeler Temporal driver at clean 8548455 exited 0: operations=144 revisions/known-effective/snapshots/holds/stage1-import/stage2-import pass. Subsequent inherited model/driver.py --base-url http://172.24.0.5:18080 --sec"
+  },
+  {
+   "id": "ec0a24e6-7014-4836-a7af-4c48a73168e5",
+   "t": 7715.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 1188,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper @modeler RULING S3-4 (coordinator) on gatekeeper's SPEC CONFLICT at 8548455. This is not a conflict: it is our ID format.\n\"Entries are ordered by created_at ascending, then payment id ascending for t"
+  },
+  {
+   "id": "7a749fe4-f203-4393-a8ff-ec1965cab411",
+   "t": 7764.8,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 814,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT 0d718f6** (commit 87a64b6)\n\nAll three concerns from de870bb are resolved:\n\n| Concern | Fix |\n|---|---|\n| S3-2 gap (space in offset \u2192 '+') | R3-109 covers raw '+', space-to-plus decode, malform"
+  },
+  {
+   "id": "8a8bf51e-1945-453c-acec-27ae5fcdf78d",
+   "t": 7765.7,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1334,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper Stage3 modeler handoff complete: verifier/ledger8e485985fa4e7e91e8713443ceb5c85b0527289d in /home/ubuntu/work/band-work/current. Ledger stage-3/verification/ledger.md retains prior IDs plus110 R3"
+  },
+  {
+   "id": "a0365a6a-c3ba-43fd-974a-d2a72b5e1b39",
+   "t": 7765.8,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 398,
+   "verdicts": [],
+   "preview": "@builder Historical-hold rejection of fa54326 is resolved at clean8548455: final verifier8e48598 wrapper exited0 (532 inherited operations,75 temporal operations, both legacy imports and cross-process snapshots). R3-092/"
+  },
+  {
+   "id": "6ba41b6b-aa29-45c7-aa98-0979f6f2cf7b",
+   "t": 7775.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 467,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 3, revision 8e48598 in /home/ubuntu/work/band-work/current. Audit git diff 0d718f6 8e48598 -- stage-3/verification/ledger.md (18 lines added, evidence and coverage). Check that no cov"
+  },
+  {
+   "id": "9a0ec2fe-7b02-4237-823a-bd22f9763eff",
+   "t": 7781.0,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 282,
+   "verdicts": [],
+   "preview": "@coordinator Stage3 ownership received. Stage1/stage2, including verification, remain frozen. I will begin the R3 ledger and model extension once all four parts arrive, preserving existing R1/R2 identifiers and limiting "
+  },
+  {
+   "id": "dd96b40a-3f19-4ad3-8325-8a865f022c06",
+   "t": 7783.2,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1308,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-3 CANDIDATE: ec0bb9c in /home/ubuntu/work/band-work/current. It is 8548455 plus the ruling S3-4 fix, in builder files only: src/store.js and test/history.test.js.\nFix: every newly creat"
+  },
+  {
+   "id": "837dd787-aef2-470d-aa36-19807164c107",
+   "t": 7786.4,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 985,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "8548455"
+    }
+   ],
+   "preview": "@builder @coordinator REJECT 8548455: expected historical balance 9007199254740992, observed 9007199254740991 after a valid correction. Minimal fixture: a ending balance 2^53-1, b ending balance 2; original p_in b->a amo"
+  },
+  {
+   "id": "aa0efb8a-b0f5-40bf-b637-0c62f2b09604",
+   "t": 7828.1,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 347,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT 8e48598** (commit f658ef2)\n\nEvidence-only diff (18 lines). No overstated coverage \u2014 section explicitly says \"These are modeler observations, not independent acceptance.\" S3-4 ruling (statement"
+  },
+  {
+   "id": "1242613c-1d19-4b5c-82f6-0a49088abed7",
+   "t": 7836.0,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 1052,
+   "verdicts": [],
+   "preview": "@gatekeeper Final verifier8e485985fa4e7e91e8713443ceb5c85b0527289d in /home/ubuntu/work/band-work/current; model/driver/RUN at stage-3/verification/model/, ledger at stage-3/verification/ledger.md. Command: PYTHONDONTWRI"
+  },
+  {
+   "id": "452e2789-618a-4162-a979-b2dca33e6ac4",
+   "t": 7859.7,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 452,
+   "verdicts": [],
+   "preview": "@coordinator Gate progress on 8548455: independent history786, historical-holds90, holds1165, baseline917, limits422, large-fixture544, API security152, password32 and boundary2/2 assertions pass (all command exits0). Br"
+  },
+  {
+   "id": "6079fac8-8bfa-4596-96d8-46d1ae6057fb",
+   "t": 7865.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 317,
+   "verdicts": [],
+   "preview": "@gatekeeper @modeler @surface ENVIRONMENT NOTE 6 (coordinator running list): system python3 has no playwright (ModuleNotFoundError). Fix: run browser scripts with /home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python"
+  },
+  {
+   "id": "c8ad2e80-8367-4c09-a0a2-f07e3d8d241b",
+   "t": 7884.4,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1347,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-3 CANDIDATE: fce49ac in /home/ubuntu/work/band-work/current. It is ec0bb9c (the S3-4 ID-order fix) plus the fix for your history_exact REJECT. Builder files only: src/ledger.js, src/sna"
+  },
+  {
+   "id": "097c7b58-1603-43d3-aa74-69f83c37de91",
+   "t": 7891.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 478,
+   "verdicts": [],
+   "preview": "@coordinator Ledger revision6e24461e521bc711b475d94b64408f19f65af10d at /home/ubuntu/work/band-work/current/stage-3/verification/ledger.md now explicitly confirms A2/A5 with quoted text. R3-077 already follows S3-3, R3-0"
+  },
+  {
+   "id": "aab50465-5918-4b48-be84-da633528d7c6",
+   "t": 7903.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 500,
+   "verdicts": [],
+   "preview": "@coordinator All listed rulings/fixes are recorded in latest ledger6e24461e521bc711b475d94b64408f19f65af10d at /home/ubuntu/work/band-work/current/stage-3/verification/ledger.md. R3-077/110 cover source snapshot preserva"
+  },
+  {
+   "id": "8036a987-ff03-4709-b8cd-f9bce6e47991",
+   "t": 7923.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 720,
+   "verdicts": [],
+   "preview": "@builder @coordinator Additional REJECT 8548455 finding, same Number-arithmetic cause but current-state conservation: seed a.balance100, b.balance2^53, original payment p a->b amount1 created2020-01-01 (openings101 and2^"
+  },
+  {
+   "id": "cdd4e8fa-4603-4da2-ab23-4fb0355f407a",
+   "t": 7930.6,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 836,
+   "verdicts": [],
+   "preview": "@gatekeeper This inherited import failure was already isolated and corrected in verifier0d718f6 (included8e48598). Old boundary_case combined ending ada2^53 with seeded outgoing500, implying stage3 opening2^53+500 outsid"
+  },
+  {
+   "id": "1e0131ef-3859-497c-99eb-70bd852355d0",
+   "t": 7964.1,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 462,
+   "verdicts": [],
+   "preview": "@coordinator S3-4 recorded as S3-A7 in /home/ubuntu/work/band-work/current/stage-3/verification/ledger.md at3051b3d67fa62ff011f40b0256f89e80cff17eda. Oracle already uses plain string payment-ID ordering and preserves see"
+  },
+  {
+   "id": "48d5eaf0-0510-499e-983c-0d72e13f9988",
+   "t": 7966.5,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 718,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator The credit-above-2^53 finding is already fixed in fce49ac: the correction guard compares BigInt(credited.balance) + BigInt(move) > 2^53. The balance update runs only after that passes, so it is e"
+  },
+  {
+   "id": "27031f77-8a5d-40b0-9f7d-7b4567188c07",
+   "t": 8065.3,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 437,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "8548455"
+    }
+   ],
+   "preview": "@coordinator REJECT 8548455 evidence and exact-arithmetic regression are committed at 97ba9d6: /home/ubuntu/work/band-work/current/stage-3/verification/gatekeeper/reject-8548455.md and history_exact.py. Browser/security "
+  },
+  {
+   "id": "da537d2f-6274-4a53-b99c-d421cf338df0",
+   "t": 8072.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 503,
+   "verdicts": [],
+   "preview": "@gatekeeper DIRECT (coordinator): the combined stage-3 candidate is ba9fdf0.\nIt is 8548455 plus:\n- the S3-4 ID-order fix (ec0bb9c);\n- exact BigInt accumulation and the correction credit guard (fce49ac);\n- a regression te"
+  },
+  {
+   "id": "16c1e6a6-ea57-4fd4-9922-2dd111a55872",
+   "t": 8198.4,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 734,
+   "verdicts": [],
+   "preview": "@builder @coordinator Additional REJECT 8548455: invalid imported temporal state accepted. Minimal: reset one wallet100 with no payments; login; export; change that user's state.openings entry opening to -1; POST /_test/"
+  },
+  {
+   "id": "99572e7c-4c74-403c-85cf-85149805df68",
+   "t": 8253.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 749,
+   "verdicts": [],
+   "preview": "@builder Temporal import validation follow-up before your next candidate: independent checks on 8548455 also accept (204) these invalid edits to a valid export with an open20 hold partially captured5: auth_events[0].init"
+  },
+  {
+   "id": "d1c1ac9b-6165-483d-8492-56d5a694dde0",
+   "t": 8333.7,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1889,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-3 CANDIDATE: b0d95f6 in /home/ubuntu/work/band-work/current. It fixes every finding reported against 8548455 and ec0bb9c. Builder files only.\n(1) S3-4 tie order, at ec0bb9c: new IDs are"
+  },
+  {
+   "id": "2de75ae6-01bc-4e08-b8b9-802ded2f59ed",
+   "t": 8357.3,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 694,
+   "verdicts": [],
+   "preview": "@builder @coordinator Full finding set for 8548455 is now reported: temporal rounding; current correction overflow; invalid temporal import (openings, negative hold/capture events, original recorded_at mismatch); provide"
+  },
+  {
+   "id": "57613c46-8538-402f-81d3-bb347e898b8b",
+   "t": 8365.4,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 497,
+   "verdicts": [],
+   "preview": "@gatekeeper DIRECT (coordinator): the combined successor is b0d95f6. Builder posted it with a clean build, /health 200 and 44/44 tests. It covers every finding in your list:\n- ID tie order (ec0bb9c);\n- exact temporal ari"
+  },
+  {
+   "id": "71fb9ecc-2858-450f-88e0-0a60b1c5e659",
+   "t": 8548.4,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 974,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "b0d95f6"
+    }
+   ],
+   "preview": "@builder @coordinator REJECT b0d95f6 preflight: expected valid historical available and own-export import204; observed available=-100 and unchanged-export import422. Minimal: a100,b0; authorize a->b100; void; immediately"
+  },
+  {
+   "id": "28bec65c-148a-46d2-a69f-d868df5cb4f0",
+   "t": 8548.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler"
+   ],
+   "chars": 564,
+   "verdicts": [],
+   "preview": "@modeler Model import failure classification: verifier0d718f6 passed on8548455 (532+75), so old boundary fixture was the first verifier issue. Against b0d95f6 its run_all exits1 R1-118 because product generates negative "
+  },
+  {
+   "id": "f388a753-f26b-4d73-bdad-24ef0e0b887a",
+   "t": 8563.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 1015,
+   "verdicts": [],
+   "preview": "@builder @gatekeeper @modeler RULING S3-5 (coordinator), clarifying S3-1 after REJECT b0d95f6.\n\"Stage-1/2 receipts and created_at stay as they are\" in S3-1 means stored, imported or replayed records are never rewritten. "
+  },
+  {
+   "id": "9edf981c-92d3-4666-a33a-301565a47154",
+   "t": 8643.9,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 677,
+   "verdicts": [],
+   "preview": "@coordinator SPEC CONFLICT / interpretation needed for tied statement intermediates: \u00a74 says 'no operation produces a balance outside \u00b12^53' and exact arithmetic; Stage3 says boundary balances combine all movements at th"
+  },
+  {
+   "id": "2a399cd8-e76c-4b9f-9cc1-e36fa5d1e28a",
+   "t": 8652.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 719,
+   "verdicts": [],
+   "preview": "@gatekeeper @modeler @builder RULING S3-6 (coordinator), statement intermediates beyond 2^53 at tied instants.\n\u00a74: \"no operation produces a balance outside \u00b12\u2075\u00b3\". This is a stated bound on the inputs the service will see"
+  },
+  {
+   "id": "b44531dd-fc97-4ce3-9f24-14b87387ac25",
+   "t": 8731.5,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 1819,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @surface NEW STAGE-3 CANDIDATE: 30a5e90 in /home/ubuntu/work/band-work/current. It is b0d95f6 plus the ruling S3-5 fix for REJECT b0d95f6. Builder files only: src/store.js, src/ledger.js, src/sna"
+  },
+  {
+   "id": "5158037f-2f79-457b-8ace-9f1a1ab91b37",
+   "t": 8749.2,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 486,
+   "verdicts": [],
+   "preview": "@gatekeeper Use verifier93e2833 or later: S3-6 revealed another inherited boundary fixture issue\u2014max2^53 wallet net settlement incoming-first implied a statement intermediate2^53+1. Stage3 probe now orders outgoing-first"
+  },
+  {
+   "id": "87ae6e6a-6598-4395-aef7-7a67a7e7585f",
+   "t": 8769.3,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1127,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @builder Surface UI regression on candidate 30a5e90 passed. Clean clone checked out at 30a5e90 (/tmp/surface-s2/s3c.*), from stage-3:\n- docker build -t pocketful-stage3-30a5e90 . exited 0. docker"
+  },
+  {
+   "id": "a49e1a49-76ab-4eae-907c-b93695a22551",
+   "t": 8836.9,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1109,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator Chronology coverage/recheck complete at verifier5ba69bc282bc8075fb46d38ca2e8c17f8da707c4 in /home/ubuntu/work/band-work/current. Cleanb0d95f6 rejected by immediate_lifecycle; clean30a5e90 passes."
+  },
+  {
+   "id": "48af14e9-d518-4aad-a167-5158c269df97",
+   "t": 8842.5,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 585,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 3, revision 5ba69bc in /home/ubuntu/work/band-work/current. Audit git diff 3051b3d 5ba69bc -- stage-3/verification/ledger.md (new S3-A8/A9 and R3-111/112).\nBound rulings:\n- S3-5: ever"
+  },
+  {
+   "id": "99fb41ca-386b-4c9d-a6cf-f24ddc94cce7",
+   "t": 8843.2,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 839,
+   "verdicts": [],
+   "preview": "@gatekeeper Added no-delay immediate_lifecycle regression in verifierabb8af11afa5a05dea4463dcf00f63ac10489f6e, /home/ubuntu/work/band-work/current/stage-3/verification/model/temporal_driver.py; included in run_all tempor"
+  },
+  {
+   "id": "4784f840-44d3-41c9-a886-e5111931accf",
+   "t": 8843.4,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 478,
+   "verdicts": [],
+   "preview": "@coordinator S3-5 recorded in ledgerabb8af11afa5a05dea4463dcf00f63ac10489f6e at /home/ubuntu/work/band-work/current/stage-3/verification/ledger.md (S3-A8/R3-111). Added no-delay authorize100\u2192void\u2192pay100 regression, histo"
+  },
+  {
+   "id": "3ee92ce3-d6eb-4716-b9a2-dec0a5713f41",
+   "t": 8843.6,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 645,
+   "verdicts": [],
+   "preview": "@coordinator S3-6 recorded as S3-A9/R3-112 in ledger93e2833514c724479185d30c5af708dfca90d812. Adapted stage3 max-wallet net settlement to outgoing-first so no per-entry intermediate exceeds2^53; frozen earlier stages unt"
+  },
+  {
+   "id": "22b9ae7c-8073-4ccd-b5be-55345d70ea53",
+   "t": 8844.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 448,
+   "verdicts": [],
+   "preview": "@coordinator I found and built the committed timestamp successor30a5e90 in a fresh clone, so acceptance work continues without waiting for delayed handoff delivery. Provided harness is running on that exact revision. Led"
+  },
+  {
+   "id": "991ddc6a-1cc6-4e02-803e-3e4868e04d0d",
+   "t": 8862.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 322,
+   "verdicts": [],
+   "preview": "@gatekeeper CONFIRMED (coordinator): 30a5e90 is the combined stage-3 candidate. Builder posted it with a clean build and 45/45 tests; surface's UI regression on it passed 106/106 with UPGRADE OK. Run all gates, including"
+  },
+  {
+   "id": "a2a704db-2554-4554-a625-5254af644294",
+   "t": 8931.4,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 372,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT 5ba69bc** (commit 50a8376)\n\n**New entries:** S3-A8/A9, R3-111/112 \u2014 all faithful to coordinator rulings S3-5 (monotonic millisecond clock) and S3-6 (per-entry balance_after bounds). No misread"
+  },
+  {
+   "id": "9171bfbb-65fa-4f64-ab5b-6ca377671d9c",
+   "t": 8947.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 846,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "30a5e90"
+    }
+   ],
+   "preview": "@builder @coordinator REJECT 30a5e90 provided-check gate: dispatched shared harness at verification-only HEAD5ba69bc exited1; stage1 147/147, stage2 35/35, stage3 5/6. test_a_statement_walks_the_balance_forward now expec"
+  },
+  {
+   "id": "3e736bd7-4304-4b5b-bec4-a5e422944b49",
+   "t": 8995.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 570,
+   "verdicts": [],
+   "preview": "@builder @coordinator Independent deterministic reproduction for REJECT30a5e90: seed a100,b0; use one persistent HTTP connection for50 sequential POST/payments amount1 a->b, unique keys, each201; immediately GET/statemen"
+  },
+  {
+   "id": "52323e3a-54fb-423d-9c4f-043be49ea14d",
+   "t": 9054.0,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1450,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-3 CANDIDATE: 5e403de in /home/ubuntu/work/band-work/current. It is 30a5e90 plus the read-clock fix for REJECT 30a5e90. Builder files only: src/server.js, src/store.js, test/history.test"
+  },
+  {
+   "id": "56854883-2c4b-4d1c-b1de-fa606e692464",
+   "t": 9060.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 524,
+   "verdicts": [],
+   "preview": "@gatekeeper Coordinator: the stage-3 candidate is 5e403de (30a5e90 plus builder's read-clock fix; builder reports 46/46 tests and the clone harness passing stages 1-3). In your read_clock reproduction at 30a5e90 you obse"
+  },
+  {
+   "id": "e904c798-f6ce-4e02-b0d5-611d8011ec88",
+   "t": 9227.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 836,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "5e403de"
+    }
+   ],
+   "preview": "@builder @coordinator REJECT 5e403de: unchanged own export fails for valid past-expiry seeded authorizations. Minimal fixture: users a100,b0; authorization {id:a_past,from_user_id:a,to_user_id:b,amount:10,note:'',visibil"
+  },
+  {
+   "id": "3c837905-c5f0-44b6-8256-a3863e7bb344",
+   "t": 9344.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 687,
+   "verdicts": [],
+   "preview": "@builder @coordinator Past-expiry seed finding also affects upgrades: exports produced by accepted Stage2 image8038718 with seeded open/expired holds (expires2020-01-01, created_at omitted) import into5e403de with422. Se"
+  },
+  {
+   "id": "74851def-a66b-4751-a01a-55c1bb9f23d2",
+   "t": 9412.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 545,
+   "verdicts": [],
+   "preview": "@coordinator I am testing committed successor c4b5c5f from a fresh clone; its isolated harness is running. The seven temporal fault mutations now all produce the intended semantic failures (runner corrected), alongside e"
+  },
+  {
+   "id": "a5ac06d1-96da-4364-ab44-4a45d3ef259d",
+   "t": 9424.7,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 491,
+   "verdicts": [],
+   "preview": "@gatekeeper Coordinator: builder has since committed e33b85a on top of c4b5c5f. It covers the stage-2-export case: a hold whose deadline is not after its creation carries no lifecycle. Builder has not posted its clean-ch"
+  },
+  {
+   "id": "aaaf52d1-dce3-4efa-a4e0-60c51ee9027a",
+   "t": 9472.6,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1719,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-3 CANDIDATE: e33b85a in /home/ubuntu/work/band-work/current. It is 5e403de plus fixes for REJECT 5e403de and your stage-2 upgrade follow-up. Builder files only: src/snapshot.js and test"
+  },
+  {
+   "id": "bf99b2e6-d139-4f6c-8390-f39d3fe14baf",
+   "t": 9478.5,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 482,
+   "verdicts": [],
+   "preview": "@gatekeeper CONFIRMED (coordinator): e33b85a is the final combined stage-3 candidate. Builder's clean clone shows 48/48 tests, docker build exit 0, /health 200, and the check tool with stages 1-3 passing and stage 4 fail"
+  },
+  {
+   "id": "13925e7e-95ed-4592-9780-74811b047d6a",
+   "t": 9580.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 762,
+   "verdicts": [],
+   "preview": "@builder @coordinator Remaining import consistency hole in c4b5c5f (same validator in e33b85a): create a valid open20 authorization, export, change only its auth_events.noHistory to true, then import. Expected422; observ"
+  },
+  {
+   "id": "3946da61-7648-41f6-a41c-c0dddafca759",
+   "t": 9637.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 739,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "c4b5c5f"
+    }
+   ],
+   "preview": "@builder @coordinator REJECT c4b5c5f: expected legacy seeded past-expiry exports and their re-exports to import204, observed422 (fix e33b85a is in history, retest pending). Also expected422 for an open authorization's ex"
+  },
+  {
+   "id": "6e968e47-d54e-45ff-ae8b-0abed184a8c1",
+   "t": 9685.2,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1501,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator COMBINED STAGE-3 SUCCESSOR: b67e03c in /home/ubuntu/work/band-work/current. It contains both fixes. Builder files only after 5e403de: src/snapshot.js and test/history.test.js.\n(1) Legacy seeded p"
+  },
+  {
+   "id": "b32f35d5-f195-4c0d-a960-44d571e31fe5",
+   "t": 9690.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 447,
+   "verdicts": [],
+   "preview": "@gatekeeper CONFIRMED (coordinator): b67e03c is the final combined stage-3 candidate. It contains e33b85a (legacy seeded past-expiry) and b67e03c (hold-event reconciliation). Builder's clean clone shows 49/49 tests, dock"
+  },
+  {
+   "id": "b23c455b-c8e6-4442-bfe7-7fdc9bdfcb49",
+   "t": 9867.8,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 552,
+   "verdicts": [],
+   "preview": "@coordinator @builder Backend gates on exact b67e03c are now all green: both isolated harness invocations; model532+75; all arithmetic/import/clock/legacy-seed regressions; mixed50-flight invariants;5000-payment and5000-"
+  },
+  {
+   "id": "679c6f4b-61ac-4724-a9e6-bf0ba38eb0f4",
+   "t": 10329.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 2314,
+   "verdicts": [
+    {
+     "verdict": "ACCEPT",
+     "rev": "b67e03c"
+    }
+   ],
+   "preview": "@coordinator @builder ACCEPT b67e03c. Repository /home/ubuntu/work/band-work/current. Exact revision b67e03ca55327b506096b2d6da35c45447199097; stage-3 tree37785abd9264e46290eec77e837810a295251cda. Acceptance manifest and"
+  },
+  {
+   "id": "e85fa461-dbd9-4b20-965b-61a9db44ab09",
+   "t": 10344.6,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 332,
+   "verdicts": [],
+   "preview": "@builder Starting exact8548455 acceptance in a clean copy. I will independently verify the expired seeded-open hold regression, all temporal and snapshot rules, both earlier-stage imports, and inherited browser/limits/se"
+  },
+  {
+   "id": "96c2b44d-1453-44fc-93aa-d2dd9c1a0ad6",
+   "t": 10351.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 2400,
+   "verdicts": [],
+   "preview": "@gatekeeper STAGE 3 REPORT (coordinator)\nAccepted revision: b67e03c (gatekeeper ACCEPT; manifest committed at cbdf5b8). stage-3/ is now FROZEN.\n\nLedger: 459 entries (145 R1, 202 R2, 112 R3).\n- Checks: modeler's run_all ("
+  },
+  {
+   "id": "1d6d178e-0f9e-451f-8583-a357c33136a5",
+   "t": 10372.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 4241,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 4 HANDOFF \u2014 PART 1 OF 2 (plan, ownership, done). PART 2 is the last part and pastes the complete stage-4 requirements verbatim. Stages 1-3 requirements continue to ap"
+  },
+  {
+   "id": "6d2d5c29-2845-4a46-ac13-a83a745ee5be",
+   "t": 10372.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 4656,
+   "verdicts": [],
+   "preview": "@modeler @builder @surface @gatekeeper @auditor\nSTAGE 4 HANDOFF \u2014 PART 2 OF 2 \u2014 LAST PART \u2014 stage-4 requirements verbatim\n\n# Pocketful \u2014 Stage 4: refunds and batch corrections\n\nRecipients can refund payments. Settlement "
+  },
+  {
+   "id": "a6a18ea7-7afd-45f6-b143-eeb01fcc0af0",
+   "t": 10408.1,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "modeler",
+    "surface"
+   ],
+   "chars": 1217,
+   "verdicts": [],
+   "preview": "@surface @modeler stage-4/ was created at b05a823, a copy of the accepted stage-3 product at b67e03c made with git archive, without verification/.\n@surface, these are the validators builder will code against. Same result"
+  },
+  {
+   "id": "442511b8-ad03-421e-a2f8-1dfe79fabd08",
+   "t": 10412.9,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 75,
+   "verdicts": [],
+   "preview": "@coordinator Received PART 1. Awaiting PART 2."
+  },
+  {
+   "id": "f343e94d-32e1-438b-9049-66f9ee70bfbf",
+   "t": 10452.3,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 129,
+   "verdicts": [],
+   "preview": "@coordinator Both parts received. Standing by for the LEDGER AUDIT request with a specific revision."
+  },
+  {
+   "id": "23a739e7-7404-4009-8c37-8c4a3d42f14a",
+   "t": 10455.2,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1076,
+   "verdicts": [],
+   "preview": "@builder @coordinator Surface stage-4 validators are committed at 7ca1a0d (parent b05a823), in stage-4/src/validate.js: validateRefund, validateBatchShape, validateCorrectionItem and sameInstant. parseInstant now also re"
+  },
+  {
+   "id": "75556b0a-1180-4597-a5c5-bfd458434271",
+   "t": 10459.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 617,
+   "verdicts": [],
+   "preview": "@coordinator @builder Stage4 model readings before tests: refund amount uses ordinary payment integer1..1e9 (zero invalid422); refund cap compares cumulative refund payments with latest corrected amount, never original r"
+  },
+  {
+   "id": "c3133dbe-b718-4643-a7cc-8781791f0453",
+   "t": 10461.1,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1572,
+   "verdicts": [],
+   "preview": "@builder STAGE-4 SURFACE CONTRACT (copying @coordinator). Everything from stage 3 stays the same. New validate.js exports, all returning { ok, value } or { ok: false, error }:\n- validateRefund(body) -> { amount }. amount"
+  },
+  {
+   "id": "c2fedafe-def9-4fcb-8929-0cb040706712",
+   "t": 10472.6,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 913,
+   "verdicts": [],
+   "preview": "@builder Our messages crossed again. Mine is committed at 7ca1a0d; please code against it. It matches your plan except for the names:\n(1) validateRefund(body) -> { amount }: same as yours.\n(2) validateBatchShape(body) ->"
+  },
+  {
+   "id": "8ed4adad-f21d-4aae-bb4c-af0dc4af5024",
+   "t": 10539.3,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 372,
+   "verdicts": [],
+   "preview": "@coordinator Stage4 ledger02cefe50c732b8560a57942cce7bced7981cbfbf ready for audit: /home/ubuntu/work/band-work/current/stage-4/verification/ledger.md preserves R1\u2013R3 IDs and adds53 R4 entries with quotes, refuting check"
+  },
+  {
+   "id": "5033d6f0-b740-472a-adb8-82654e3bf1a2",
+   "t": 10544.9,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 592,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 4. Repository: /home/ubuntu/work/band-work/current. Revision 02cefe5. File: stage-4/verification/ledger.md (53 new R4 entries; R1-R3 are carried over).\nRequirements: STAGE 4 HANDOFF P"
+  },
+  {
+   "id": "d2acfe6a-62b7-49a6-bf1e-e7768fbd849f",
+   "t": 10728.3,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper",
+    "surface"
+   ],
+   "chars": 2709,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @surface STAGE-4 COMBINED CANDIDATE: e0a4e34 in /home/ubuntu/work/band-work/current, branch main. It is builder b05a823 (copy of b67e03c) + surface 7ca1a0d (stage-4 validators) + builder e0a4e34 "
+  },
+  {
+   "id": "b82f4ff2-273e-45fe-bef3-25d7bb1e2657",
+   "t": 10750.6,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 843,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT 02cefe5** (commit ba4aa55)\n\n**1. Missing normative statements:** None \u2014 all 52 R4 entries cover every normative sentence in the spec.\n\n**2. Misreadings:** None. R4-008 (zero invalid for refund"
+  },
+  {
+   "id": "2ecd8f1c-da6b-4b5d-8bfe-d07f2ed1d202",
+   "t": 10760.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "gatekeeper",
+    "modeler"
+   ],
+   "chars": 967,
+   "verdicts": [],
+   "preview": "@modeler @gatekeeper @builder RULINGS on LEDGER AUDIT 02cefe5 (coordinator; report ba4aa55).\nS4-1: refund amount follows the ordinary payment amount rule, 1..1000000000, so 0 is 422 (\"Invalid amount is 422 validation_fai"
+  },
+  {
+   "id": "4cf56dcf-e684-4369-bf4c-5b8447085982",
+   "t": 10779.8,
+   "from": "surface",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1201,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator @builder Surface regression on candidate e0a4e34 passed. Clean clone checked out at e0a4e34 (/tmp/surface-s2/s4c.*), from stage-4:\n- docker build -t pocketful-stage4-e0a4e34 . exited 0. docker ru"
+  },
+  {
+   "id": "574f633a-3075-4549-9f75-6223317f2cc9",
+   "t": 10951.2,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 299,
+   "verdicts": [],
+   "preview": "@builder I now hold both stage-4 handoff parts and S4-1..S4-3. Repository product is e0a4e34 and surface reported its regression. Please post the standalone combined-candidate confirmation with exact revision; I am prepa"
+  },
+  {
+   "id": "62e0c451-ea69-46f1-a853-24c9283c3b2e",
+   "t": 10963.8,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1614,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator COMBINED STAGE-4 CANDIDATE: e0a4e34 in /home/ubuntu/work/band-work/current, branch main.\nCommits: builder b05a823 (copy of the accepted stage-3 b67e03c, without verification/), surface 7ca1a0d (v"
+  },
+  {
+   "id": "467fd1b5-6ef8-4987-90b5-7ab42318b495",
+   "t": 11147.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1408,
+   "verdicts": [],
+   "preview": "@coordinator @gatekeeper Stage4 modeler handoff complete: verifiere0695bc269a4c64cd1c8f22d2018fd61daea0518 in /home/ubuntu/work/band-work/current. Ledger stage-4/verification/ledger.md preserves R1\u2013R3 plus53 R4 entries; "
+  },
+  {
+   "id": "6f6b5a34-c187-4832-bf2d-21c3af78a19f",
+   "t": 11147.7,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder"
+   ],
+   "chars": 544,
+   "verdicts": [],
+   "preview": "@builder Stage4 modeler checks on clean e0a4e34 passed: inherited532, temporal75, refunds/batches40 random plus deterministic cases, stage1/2/3 imports, same-version refund/batch snapshot/retry roundtrip. R4-001\u2013053 cove"
+  },
+  {
+   "id": "ffb9cef7-3ad2-4ddc-bef2-4c1c5f0ca642",
+   "t": 11153.0,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 581,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 4, revision e0695bc in /home/ubuntu/work/band-work/current. Audit git diff 02cefe5 e0695bc -- stage-4/verification/ledger.md.\nBound rulings:\n- S4-1: refund amount 1..1e9.\n- S4-2: the "
+  },
+  {
+   "id": "a24fc8d4-e7a0-4152-94ec-8b2a04e655d4",
+   "t": 11156.6,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 224,
+   "verdicts": [],
+   "preview": "@coordinator Stage4 ownership received. Stages1\u20133, including verification, remain frozen. I will extend the ledger/model only under stage-4/verification/ once the final requirements part arrives."
+  },
+  {
+   "id": "aeed7bd2-aa3e-4944-a1a0-dc2ea92435fe",
+   "t": 11242.1,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 428,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT e0695bc** (commit c6b826c)\n\nCoverage-only diff. S4-1/2/3 rulings already present in prior R4 entries and S4 ambiguity readings \u2014 no change needed. No misreadings. No overstated coverage: R4-05"
+  },
+  {
+   "id": "8548df3a-526f-45c7-9033-70cf0ca56055",
+   "t": 11245.0,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1328,
+   "verdicts": [
+    {
+     "verdict": "REJECT",
+     "rev": "e0a4e34"
+    }
+   ],
+   "preview": "@builder @coordinator REJECT e0a4e34: expected 422 validation_failed with unchanged destination for invalid stage-4 imports, observed 204 in five cases. Reproduce on a clean e0a4e34 service: seed a=200,b=0,c=0 operator c"
+  },
+  {
+   "id": "37544ddc-5cf4-485b-8421-af208fefecd7",
+   "t": 11388.5,
+   "from": "builder",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator",
+    "gatekeeper"
+   ],
+   "chars": 1628,
+   "verdicts": [],
+   "preview": "@gatekeeper @coordinator NEW STAGE-4 CANDIDATE: a288cc4 in /home/ubuntu/work/band-work/current. It is e0a4e34 plus the fix for REJECT e0a4e34. Builder files only: src/snapshot.js and test/refunds.test.js; public/ and the"
+  },
+  {
+   "id": "db928798-be41-4ed5-9c6a-c85fddaf9895",
+   "t": 11507.4,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 626,
+   "verdicts": [],
+   "preview": "@gatekeeper Verification update 6999d84 at /home/ubuntu/work/band-work/current: S4-3/R4-054 now explicitly require null correction_batch_id for ordinary revision1/corrections/imported fresh histories; legacy replay stays"
+  },
+  {
+   "id": "eb004f7c-63b5-4db7-84fa-a0df6fb3b280",
+   "t": 11510.5,
+   "from": "modeler",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 803,
+   "verdicts": [],
+   "preview": "@coordinator Updated and committed 6999d84 in /home/ubuntu/work/band-work/current. R4-054 and S4-A5 now require correction_batch_id:null on ordinary revision objects; oracle checks revision1, ordinary corrections and imp"
+  },
+  {
+   "id": "e9840e46-5a24-4877-871d-2a7ec7e60d1e",
+   "t": 11516.1,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor"
+   ],
+   "chars": 375,
+   "verdicts": [],
+   "preview": "@auditor LEDGER AUDIT request, stage 4, revision 6999d84 in /home/ubuntu/work/band-work/current. Audit git diff e0695bc 6999d84 -- stage-4/verification/ledger.md: new R4-054 and an updated S4-A5 for ruling S4-3 (correcti"
+  },
+  {
+   "id": "449d735b-951d-44d8-8666-e4b42a964db7",
+   "t": 11516.7,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 433,
+   "verdicts": [],
+   "preview": "@coordinator @builder I found successor a288cc4 in history and moved clean-copy gates to it. Its isolated harness exits0, stages1\u20134pass, claimed4; full model has also exited0. Rejection e0a4e34 and runnable independent c"
+  },
+  {
+   "id": "9188d868-65bb-4fbc-9961-bd0beaddde9d",
+   "t": 11525.3,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 348,
+   "verdicts": [],
+   "preview": "@gatekeeper CONFIRMED (coordinator): a288cc4 is the combined stage-4 candidate. Builder posted it with 61/61 tests, a clean build, /health 200 and the check tool passing stages 1-4. Surface files are unchanged since 7ca1"
+  },
+  {
+   "id": "a4595cd7-3631-4512-a9e6-0e3bdce1734b",
+   "t": 11604.4,
+   "from": "auditor",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 319,
+   "verdicts": [],
+   "preview": "@coordinator **LEDGER AUDIT 6999d84** (commit 61ec56a)\n\nTrivial diff: S4-A5 updated to reference S4-3 ruling, R4-054 added (`correction_batch_id:null` on ordinary revisions, `null` on batch revisions, legacy replays exac"
+  },
+  {
+   "id": "f7d76376-a407-42bb-a7ba-99aa2a615b35",
+   "t": 11983.5,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "builder",
+    "coordinator"
+   ],
+   "chars": 1553,
+   "verdicts": [
+    {
+     "verdict": "ACCEPT",
+     "rev": "a288cc4"
+    }
+   ],
+   "preview": "@coordinator @builder ACCEPT a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9. Stage-4 tree37810a489fdcfd6335464527a1d9f5b935f2bbc0. Manifest/evidence committed f34fd29 at /home/ubuntu/work/band-work/current/stage-4/verification"
+  },
+  {
+   "id": "8ef884b3-b861-4c7e-9585-4fdf953e4862",
+   "t": 11995.1,
+   "from": "gatekeeper",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "coordinator"
+   ],
+   "chars": 300,
+   "verdicts": [],
+   "preview": "@coordinator Both stage-4 parts received. I am preparing independent refund/batch and regression gates under stage-4/verification only. I have S4-1 through S4-3. Current product commit is e0a4e34; awaiting builder's comb"
+  },
+  {
+   "id": "d4cac4bf-ba04-4dc5-b882-33a49ed2e755",
+   "t": 11998.2,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "gatekeeper"
+   ],
+   "chars": 1373,
+   "verdicts": [],
+   "preview": "@gatekeeper STAGE 4 REPORT (coordinator)\nAccepted revision: a288cc4 (gatekeeper ACCEPT; manifest committed at f34fd29). stage-4/ is now FROZEN.\n\nLedger: 513 entries; its checks cover all of them, with partial coverage di"
+  },
+  {
+   "id": "18094c39-884d-472d-9b46-c18003280f66",
+   "t": 12017.8,
+   "from": "coordinator",
+   "human": false,
+   "kind": "text",
+   "to": [
+    "auditor",
+    "builder",
+    "gatekeeper",
+    "modeler",
+    "surface"
+   ],
+   "chars": 3744,
+   "verdicts": [],
+   "preview": "FINAL REPORT\nPocketful, all four stages accepted by the gatekeeper. Repository: /home/ubuntu/work/band-work/current (branch main).\n\nAccepted revisions (each folder frozen after acceptance):\n- stage-1: d1ebec2 (manifest f"
+  }
+ ],
+ "commits": [
+  {
+   "sha": "8b07e2e6f24f57ba20c46253be4674afda3d5e7a",
+   "author": "surface",
+   "t": 190.5,
+   "subject": "stage-1: add service edge (validate.js), Dockerfile, .dockerignore, RUN.md",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "ae53a809f1d257beac80b055425377bb85a3cd50",
+   "author": "surface",
+   "t": 219.5,
+   "subject": "stage-1: base image node:24-slim for built-in crypto.argon2 (coordinator decision)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f98e70e4d41d954aa233541bb90266d6041e4f36",
+   "author": "modeler",
+   "t": 293.5,
+   "subject": "Record stage 1 requirements and explicit ambiguity rulings for independent verification",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "3fab2bb4204f96f1fd140b09b9923da324cbb1bb",
+   "author": "gatekeeper",
+   "t": 321.5,
+   "subject": "Add independent API race histories and state round-trip checks",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "0faab5f2af49b5e8388b4393ba40a8de9034cc58",
+   "author": "builder",
+   "t": 550.5,
+   "subject": "stage-1: package.json and Argon2id password storage (\u00a76, security baseline)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "494db919cc0f4f0a63bc741354033682edde8547",
+   "author": "builder",
+   "t": 550.5,
+   "subject": "stage-1: product core - state, routing, idempotency, money movement (\u00a71,\u00a73-\u00a711)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "466f53fae037ff264abb3f05cf521c07fc08c3d4",
+   "author": "builder",
+   "t": 550.5,
+   "subject": "stage-1: builder regression checks over HTTP (\u00a71 invariants, \u00a77, \u00a78, \u00a79, \u00a710, \u00a711)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e3f5e4ae66f9af5d35d34427308c3baf31951e9d",
+   "author": "builder",
+   "t": 617.5,
+   "subject": "stage-1: bound imported hash parameters; OWASP-minimum argon2id for reset fixtures over 64 users (\u00a73.3 10 s reset budget, \u00a76)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "2d61f076472a096242cbb85541436315a59c773f",
+   "author": "surface",
+   "t": 699.5,
+   "subject": "stage-1: reject inexact money literals; record password storage in RUN.md",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "b5fac7f1ba3bf65077afac09efa330d903742c64",
+   "author": "builder",
+   "t": 701.5,
+   "subject": "stage-1: zero split shares are payable (\u00a79, ledger R1-114)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e8dfb7dd4a1aa59652e1ac23b3c8f30cf46e3346",
+   "author": "modeler",
+   "t": 876.5,
+   "subject": "Add pure stage 1 state model and shrinking HTTP differential driver",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "2299fe83ee780dc6b1667d4591617a97940a2920",
+   "author": "builder",
+   "t": 881.5,
+   "subject": "stage-1: request actions give 403 to any non-party caller, 404 only for unknown ids (\u00a78 pay/decline/cancel, coordinator final ruling)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f0a96508add342a23aec0d0db73271d652e60e6d",
+   "author": "modeler",
+   "t": 968.5,
+   "subject": "Map ledger requirements to executable checks and disclose unchecked boundaries",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "67dbebca407e3f8f977c305bf44a774295af7cf3",
+   "author": "modeler",
+   "t": 1078.5,
+   "subject": "Bind symbolic request IDs by full URL segment to prevent prefix collisions",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e148d3a374f64876da9ec52bdd38acc896ff8b48",
+   "author": "modeler",
+   "t": 1165.5,
+   "subject": "Correct the 20-character derived-handle oracle to match the requirement",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "34d30b2598dfa19782f7ff1154f3681cc73a861b",
+   "author": "modeler",
+   "t": 1165.5,
+   "subject": "Record passing stage 1 differential evidence and verifier corrections",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "145a95feaf634cef46af5ebf19b0cdc579758b80",
+   "author": "builder",
+   "t": 1350.5,
+   "subject": "stage-1: balances valid up to and including 2^53, checked in BigInt (\u00a74, ledger R1-041, coordinator ruling)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "9a272adcfdab91c0068e5c0b2e6f1cb8447c4bf3",
+   "author": "surface",
+   "t": 1429.5,
+   "subject": "stage-1: derive handles on the fully lowercased local part; reject inexact integer literals",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "db566a1a1ee91658c766f16fb3c62693acea4699",
+   "author": "gatekeeper",
+   "t": 1440.5,
+   "subject": "Record stage 1 rejection and independent boundary, limits, and fault checks",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "895ee97915282ab22100234337bb802580c14aa2",
+   "author": "modeler",
+   "t": 1447.5,
+   "subject": "Verify inclusive 2^53 balance boundary and exact migration totals",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "18805af24c11b91e62fff9f7ecb503aaf23f69ac",
+   "author": "modeler",
+   "t": 1495.5,
+   "subject": "Record final request-action authorization ruling in ledger",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "eb261eb0b3c623c892229f2d1762721a31aca2aa",
+   "author": "modeler",
+   "t": 1614.5,
+   "subject": "Record coordinator audit rulings for amounts splits and Unicode",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "ed67fb81a641fbce9e9a24a09bf3a8f78b0aaaca",
+   "author": "builder",
+   "t": 1830.5,
+   "subject": "stage-1: compute the login dummy hash once at startup behind one shared promise (\u00a72 5 s limit with 50 in flight; REJECT 18805af)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "aa2f706f8ed14be1c4a4037368d3a838f9d56063",
+   "author": "gatekeeper",
+   "t": 1876.5,
+   "subject": "Reject cold login timeout and extend independent resource-limit checks",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e434c09e9edecab36e1452054ca6976d761332ec",
+   "author": "builder",
+   "t": 2308.5,
+   "subject": "stage-1: hash each distinct seeded password once per reset (\u00a72 10 s reset budget, \u00a73.3; coordinator scope ruling)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "12ad51c64b1b8f088aaab3c797ade6a5db1d43f3",
+   "author": "gatekeeper",
+   "t": 2419.5,
+   "subject": "Record reset timeout rejection and complete security integrity evidence",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "a7a67ec925a1df1cb70d6bab1fb5a3d8d0b7ad8f",
+   "author": "builder",
+   "t": 2514.5,
+   "subject": "stage-1: large reset fixtures hash seeded passwords in the background (\u00a72 10 s reset, \u00a73.3 immediate login; REJECT ed67fb8, coordinator option b)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "2074899dd35dbda73f71c6b2e308b693f5382706",
+   "author": "gatekeeper",
+   "t": 2964.5,
+   "subject": "Reject delayed export timeout after distinct-password reset",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "dadabacc74b1236f56adae6ff9a5116fc7bcebb0",
+   "author": "builder",
+   "t": 3009.5,
+   "subject": "stage-1: seeded passwords hashed per user at reduced Argon2id cost, rehashed with full params after first login (\u00a72, \u00a76, \u00a710 10 s test-control limit; REJECT a7a67ec, coordinator ruling)",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1",
+   "author": "surface",
+   "t": 3052.5,
+   "subject": "stage-1: RUN.md password storage reflects seeded-fixture hashing at dadabac",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "255c3f07f7c3f00fa2f03041b07ce6db9258c639",
+   "author": "gatekeeper",
+   "t": 3379.5,
+   "subject": "Record seeded hash scope conflict and verified large-fixture timing fixes",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f0e5147e76b6a7ae0f06aee2db3f209afc89ea87",
+   "author": "gatekeeper",
+   "t": 3752.5,
+   "subject": "Accept stage 1 d1ebec2 with complete evidence and explicit seeded-hash ruling",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "16542a4c5b8c846c927bfdd11bedf90849b5729a",
+   "author": "gatekeeper",
+   "t": 3904.5,
+   "subject": "Verify unique seeded salts and record final hash-cost limitation",
+   "stages": [
+    1
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "7e8d124f36403b020cc3531604d5727bffd7979c",
+   "author": "builder",
+   "t": 3929.5,
+   "subject": "stage-2: start from the accepted stage-1 product at d1ebec2 (verification/ excluded)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f73cb580248808365d93497b57ffc0e8e41da9ec",
+   "author": "modeler",
+   "t": 4149.5,
+   "subject": "Extend frozen ledger with stage 2 API UI and visual refutation checks",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "95f41e2a4c43b80fa8af35971c99970a34df8e34",
+   "author": "builder",
+   "t": 4211.5,
+   "subject": "stage-2: authorizations, holds and captures; available/held; stage-1 import; UI delivery (stage-2 spec: Authorizations and captures, Model, API, Existing clients after an upgrade; rulings S2-2, R1-R6)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "cd1e3bb4c66e0dbeabe82fb90e513474a911babf",
+   "author": "builder",
+   "t": 4511.5,
+   "subject": "stage-2: seeded captured authorization without captured_amount reports its full amount (ruling S2-3)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "5dfddf35842cc09a6917e5e73ceb305dc133803f",
+   "author": "modeler",
+   "t": 4536.5,
+   "subject": "Extend pure model and differential driver for holds captures expiry and upgrades",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "0ff60fa11df13148058bed397d50563d5b4cfb43",
+   "author": "builder",
+   "t": 4550.5,
+   "subject": "stage-2: fix builder regression check for ruling S2-3 (fresh fixture and tokens before the over-held reset case)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "582aa3cb807c6f41be601aafeb0625771cff98d5",
+   "author": "auditor",
+   "t": 4568.5,
+   "subject": "LEDGER AUDIT f73cb58: one gap (pay-uncertain testid), no misreadings, three unresolved ambiguities noted",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "9c584cc8771be78b96ea89e2c6780fe6114ee3a2",
+   "author": "surface",
+   "t": 4710.5,
+   "subject": "stage-2: browser UI (public/), bundled fonts and art, Dockerfile copies public/",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "ab6b0b2aac93ce7b3814f90c952dc8dad1666d00",
+   "author": "modeler",
+   "t": 4730.5,
+   "subject": "Refine capture error probes and record passing stage 2 migration evidence",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "9b08762b83e9e0c316dee0e1139339d4521cea38",
+   "author": "gatekeeper",
+   "t": 4768.5,
+   "subject": "Prepare independent hold races and browser recovery acceptance checks",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "544b284c96ac4450acee648d08224631782f6a0b",
+   "author": "modeler",
+   "t": 4786.5,
+   "subject": "Confirm stage 2 expiry display and capture precedence rulings",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "9a5c0e19a455c728b37df59c0f651c4914ad1d19",
+   "author": "surface",
+   "t": 4805.5,
+   "subject": "stage-2 UI: wallet tolerates a /me without available/held (pre-upgrade backend)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "26581d1a895c74f6e96f2cab3f60bf266f596837",
+   "author": "gatekeeper",
+   "t": 4818.5,
+   "subject": "Record closed seed and immutable upgrade receipt rulings",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "345d012c279a5e8cee05188c153542bb4645b842",
+   "author": "auditor",
+   "t": 4830.5,
+   "subject": "LEDGER AUDIT ab6b0b2: pay-uncertain gap closed, S2 rulings faithful, no new misreadings",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "96d834be00d3a4e4b2135f54552a6e4c62dff5ab",
+   "author": "modeler",
+   "t": 4939.5,
+   "subject": "Record stage 2 seeded authorization and upgrade replay rulings",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "adbb4ccd99fd121594435794390d4e73d923f848",
+   "author": "modeler",
+   "t": 4973.5,
+   "subject": "Add dedicated uncertainty selector entry and confirm capture history ruling",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "8a47c4d7f2cb6bd8bb886e65f50e8198dd356432",
+   "author": "auditor",
+   "t": 5050.5,
+   "subject": "LEDGER AUDIT adbb4cc: all gaps closed, rulings faithful, one new ambiguity noted (S2-A6 defaults)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "44c078d0830d31caab283d8b9d9cea73c8a93079",
+   "author": "surface",
+   "t": 5392.5,
+   "subject": "stage-2 UI: cross-document view transition only without reduced motion (ruling S2-5)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e8ffe167fae85c0081bd737df683dee64320db02",
+   "author": "surface",
+   "t": 5470.5,
+   "subject": "stage-2 UI: drop cross-document view transitions",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "803871815fafa082a022c4d418b0cfb43b149530",
+   "author": "surface",
+   "t": 5615.5,
+   "subject": "stage-2 UI: keep the auth marketing heading legible (gatekeeper finding)",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "870a2742218e3440713b08b7cbea9cbd425226c3",
+   "author": "gatekeeper",
+   "t": 5729.5,
+   "subject": "Reject obscured auth heading and record stage 2 independent gate evidence",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "8f18bd924002b671b33a293ede593fa77219e52d",
+   "author": "gatekeeper",
+   "t": 5864.5,
+   "subject": "Exercise capture replay races and JPY BHD browser precision",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "83441cffe872d85852cb85d6457ebfc1d3da9371",
+   "author": "gatekeeper",
+   "t": 6307.5,
+   "subject": "Record passing successor gates and browser evidence pending scope ruling",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "0df0008f9df3578df6122f9bba0c28b3f05c3244",
+   "author": "gatekeeper",
+   "t": 6459.5,
+   "subject": "Close native transition scope question with coordinator ruling",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "255beefc350fc704823c222a0f53a3812045c6f5",
+   "author": "gatekeeper",
+   "t": 6514.5,
+   "subject": "Accept stage 2 revision 8038718 after independent gates and scope closure",
+   "stages": [
+    2
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "7be97984e24412f071f5eb7c8531064907070004",
+   "author": "builder",
+   "t": 6630.5,
+   "subject": "stage-3: start from the accepted stage-2 product at 8038718 (verification/ excluded)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "bdf2f7f0edb4b5c4c2329d1c3fa95c0370489bb5",
+   "author": "surface",
+   "t": 6728.5,
+   "subject": "stage-3: strict RFC 3339 instants, temporal query and correction validators, statement snapshots",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "ea0611b5441d6b23459eb961c02478d05dfaeff2",
+   "author": "surface",
+   "t": 6763.5,
+   "subject": "stage-3: read an unencoded '+' offset in instant query parameters (ruling S3-2)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "de870bb3e87ef4ae8b12794c30ac21f7e11c5bf4",
+   "author": "modeler",
+   "t": 6770.5,
+   "subject": "Carry forward frozen ledger and enumerate stage 3 temporal requirements",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f0303a36527143ad6d7098dee8dbc09ad03ec274",
+   "author": "gatekeeper",
+   "t": 6953.5,
+   "subject": "Prepare stage 3 history snapshot and correction race acceptance probes",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "382da78fdabf0ef22cce0bc0bc91482ab5fc0231",
+   "author": "gatekeeper",
+   "t": 6998.5,
+   "subject": "Record millisecond history and default knowledge timestamp ruling",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "21650714b3afd90c8922a879d2b828b4ae6e733d",
+   "author": "builder",
+   "t": 7038.5,
+   "subject": "stage-3: revisions, corrections, as_of/known_at, statements with snapshots, historical holds, history-preserving imports (stage-3 spec; rulings S3-1, S3-2)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "7c64693397256318d80c8577cf05512eb219b9c8",
+   "author": "gatekeeper",
+   "t": 7041.5,
+   "subject": "Cover lenient raw plus temporal query offsets under S3-2",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "a401a8bfcd79cedd52d3b2a246ff28ae59c4733e",
+   "author": "auditor",
+   "t": 7050.5,
+   "subject": "LEDGER AUDIT de870bb: S3-2 gap (offset space), R3-077 import lifetime concern, R3-019 effective ordering note",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "7f8e45513e35cc48e669e3eb34015feec3abdd71",
+   "author": "surface",
+   "t": 7098.5,
+   "subject": "stage-3: SnapshotStore export/restore so statement tokens survive import (ruling S3-3)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "fa54326593d9dcd9f9acfd50aefd4e840a9612b0",
+   "author": "surface",
+   "t": 7121.5,
+   "subject": "stage-3: parameter-based snapshot refs (createRef/resolve) and exportAll",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "a4af17095cdf1b8af875d2ab67958a9180d2db56",
+   "author": "gatekeeper",
+   "t": 7130.5,
+   "subject": "Verify snapshot export restoration and destination replacement under S3-3",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "162e852efc70003054bcb6b127acf3632c7402a0",
+   "author": "builder",
+   "t": 7229.5,
+   "subject": "stage-3: statement snapshots as recomputable references; snapshot tokens exported and restored on import (ruling S3-3; 2 GiB limit)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "538be586893e71d0b42db99727afbbce4ed034b7",
+   "author": "modeler",
+   "t": 7240.5,
+   "subject": "Add pure temporal model and differential history snapshot and migration checks",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "85484551dbecc597a1357175c727dba791fbbc7b",
+   "author": "builder",
+   "t": 7325.5,
+   "subject": "stage-3: a seeded open hold keeps its lifecycle even when already expired at reset (R3-092/R3-104 reproduction from modeler)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "0d718f65656b983230983bfbafe418a44d01d19e",
+   "author": "modeler",
+   "t": 7672.5,
+   "subject": "Cover temporal rulings snapshot portability and immutable original receipts",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "8e485985fa4e7e91e8713443ceb5c85b0527289d",
+   "author": "modeler",
+   "t": 7744.5,
+   "subject": "Record passing clean stage 3 model suite and migration evidence",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "ec0bb9ca5786fc8042d8670eaa849000e786bcc4",
+   "author": "builder",
+   "t": 7747.5,
+   "subject": "stage-3: new ids sort in creation order (ruling S3-4; REJECT 8548455)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "87a64b6ee82f129a223fe6023ef97d6dd545d3e2",
+   "author": "auditor",
+   "t": 7750.5,
+   "subject": "LEDGER AUDIT 0d718f6: all de870bb concerns resolved, no new issues",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f658ef2eb37ad17391952f72092d0245bde95d62",
+   "author": "auditor",
+   "t": 7816.5,
+   "subject": "LEDGER AUDIT 8e48598: evidence-only diff, no overstated coverage, S3-4 consistent",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "fce49aceb564aa3c2400f8b26a3c6640c3abc30b",
+   "author": "builder",
+   "t": 7848.5,
+   "subject": "stage-3: exact BigInt accumulation for historical balances, statements, openings and the overdraft sweep (R2; REJECT 8548455 history_exact reproduction)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "6e24461e521bc711b475d94b64408f19f65af10d",
+   "author": "modeler",
+   "t": 7873.5,
+   "subject": "Confirm stage 3 aggregate boundary and correction authorization rulings",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "ba9fdf0cf166a7abb370f73b57585419ca00eda3",
+   "author": "builder",
+   "t": 7948.5,
+   "subject": "stage-3: regression check for a correction credit above 2^53 (gatekeeper finding on 8548455; guard made exact in fce49ac)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "3051b3d67fa62ff011f40b0256f89e80cff17eda",
+   "author": "modeler",
+   "t": 7951.5,
+   "subject": "Record plain-string tie ordering and new ID policy under S3-4",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "97ba9d6b0457169c886e611a0f02604c9f722770",
+   "author": "gatekeeper",
+   "t": 8037.5,
+   "subject": "Detect temporal rounding and correction overflow; record rejected candidate evidence",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "cb00a624bfcd4ff1e145254ca890c7f3f2cb47d6",
+   "author": "builder",
+   "t": 8234.5,
+   "subject": "stage-3: import validates temporal consistency before the swap (\u00a710; gatekeeper finding on 8548455)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "cb401da6a533be848b7caaf7de4e1d3a0d127062",
+   "author": "gatekeeper",
+   "t": 8252.5,
+   "subject": "Check mixed correction races and reject inconsistent imported temporal state",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "b0d95f69ec608fd52889d217dbace036e96217bc",
+   "author": "builder",
+   "t": 8298.5,
+   "subject": "stage-3: import refuses impossible hold event logs and altered revision 1 (\u00a710; gatekeeper follow-up)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "c4c620276e1b0318bf124caafe8796fe84130cf7",
+   "author": "gatekeeper",
+   "t": 8374.5,
+   "subject": "Verify large temporal ledgers and migration after destroying the accepted source",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "795dba1f8d306c0064752e923b67e64fc733f247",
+   "author": "gatekeeper",
+   "t": 8643.5,
+   "subject": "Catch release-dependent events backdated by timestamp truncation",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "abb8af11afa5a05dea4463dcf00f63ac10489f6e",
+   "author": "modeler",
+   "t": 8649.5,
+   "subject": "Detect immediate void and payment chronology violations under S3-5",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "30a5e906628d47cc8ed0b12b067ba4fc3f52eb3f",
+   "author": "builder",
+   "t": 8686.5,
+   "subject": "stage-3: one monotonic millisecond clock for every new event (ruling S3-5; REJECT b0d95f6)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "93e2833514c724479185d30c5af708dfca90d812",
+   "author": "modeler",
+   "t": 8734.5,
+   "subject": "Keep stage 3 boundary probes inside the S3-6 statement range",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "5289f9e6ec45d7d791d16a185c240c2893e6c3a1",
+   "author": "gatekeeper",
+   "t": 8797.5,
+   "subject": "Read structured semantic failures from the temporal mutation checks",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "5ba69bc282bc8075fb46d38ca2e8c17f8da707c4",
+   "author": "modeler",
+   "t": 8818.5,
+   "subject": "Record chronology regression rejection and clean monotonic-clock recheck",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "50a8376add80c73f7358a81d66c03eb299d4b75c",
+   "author": "auditor",
+   "t": 8920.5,
+   "subject": "LEDGER AUDIT 5ba69bc: S3-5/S3-6 faithful, no overstated coverage",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "5e403deed4cfcb6b511dc68faf224b71d65e95de",
+   "author": "builder",
+   "t": 8988.5,
+   "subject": "stage-3: read-time defaults follow committed event times (REJECT 30a5e90 provided-check timing)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "b8b0760ffb53e5dd6e48bfb7c3b350aeb8aa6798",
+   "author": "gatekeeper",
+   "t": 9057.5,
+   "subject": "Reject default statements that omit already committed millisecond payments",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "9daa4ea0d950fccc8ffa31f1f352ad5cd0bf6b9b",
+   "author": "gatekeeper",
+   "t": 9122.5,
+   "subject": "Report exact-history regression assertion counts",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "c4b5c5f543ddf1aa57bdbf4be15c7db2454c5d3a",
+   "author": "builder",
+   "t": 9303.5,
+   "subject": "stage-3: own exports with seeded past-expiry or closed holds re-import (REJECT 5e403de)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "5a4ebae873bc00c122f689d3599d9ab6fd586a9f",
+   "author": "gatekeeper",
+   "t": 9375.5,
+   "subject": "Reject exports that cannot restore valid seeded past-expiry holds",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e33b85ace271359373b50ab3dad0d19ce0326ef7",
+   "author": "builder",
+   "t": 9405.5,
+   "subject": "stage-3: holds whose deadline is not after creation carry no lifecycle, also from stage-2 exports (upgrade follow-up to REJECT 5e403de)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "b67e03ca55327b506096b2d6da35c45447199097",
+   "author": "builder",
+   "t": 9620.5,
+   "subject": "stage-3: import reconciles hold event logs with the authorization record (gatekeeper follow-up on c4b5c5f/e33b85a)",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f122623a133cbf4eb53f01aa3491612b982c84b1",
+   "author": "gatekeeper",
+   "t": 9637.5,
+   "subject": "Require active hold history to agree with imported authorization records",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "cbdf5b8ea240257843c6950249d8387e7b03a286",
+   "author": "gatekeeper",
+   "t": 10283.5,
+   "subject": "Accept stage 3 b67e03c with independent gates, audit closure and browser evidence",
+   "stages": [
+    3
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "b05a823bf6dad84afc90cb75783d91e044134729",
+   "author": "builder",
+   "t": 10375.5,
+   "subject": "stage-4: start from the accepted stage-3 product at b67e03c (verification/ excluded)",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "7ca1a0d965663800811c6b05520165b1e24a3e10",
+   "author": "surface",
+   "t": 10441.5,
+   "subject": "stage-4: refund and correction-batch validators, exact instant equality",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "02cefe50c732b8560a57942cce7bced7981cbfbf",
+   "author": "modeler",
+   "t": 10479.5,
+   "subject": "Extend frozen ledger with stage 4 refund and batch correction requirements",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e0a4e34ffdde7abcf822114be0a924bd2be9222c",
+   "author": "builder",
+   "t": 10645.5,
+   "subject": "stage-4: refunds and correction batches; import of stage-1..4 exports (stage-4 spec)",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "ba4aa55b9aad561df462c354a12e58a9f694db15",
+   "author": "auditor",
+   "t": 10733.5,
+   "subject": "LEDGER AUDIT 02cefe5: all R4 entries faithful, no gaps or misreadings",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "39a7c60cbe9ce04016c3f719cd4639e9d5f40f09",
+   "author": "modeler",
+   "t": 10956.5,
+   "subject": "Model refunds batch precedence and migration from all three frozen stages",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "e0695bc269a4c64cd1c8f22d2018fd61daea0518",
+   "author": "modeler",
+   "t": 11119.5,
+   "subject": "Verify refund batch state portability and record passing stage 4 evidence",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "c6b826c6ed0d81f542596293947b15d2105599d4",
+   "author": "auditor",
+   "t": 11221.5,
+   "subject": "LEDGER AUDIT e0695bc: S4 rulings faithful, no overstated coverage",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9",
+   "author": "builder",
+   "t": 11316.5,
+   "subject": "stage-4: import checks refund copies and batch consistency (REJECT e0a4e34)",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f2f6f0f285a08ab1e5036550f5075f202c71569c",
+   "author": "gatekeeper",
+   "t": 11326.5,
+   "subject": "Add stage-4 refund and batch acceptance probes and record invalid-import rejection",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "6999d8492f2866dfe6a856b0934ec4234a93b844",
+   "author": "modeler",
+   "t": 11489.5,
+   "subject": "Require nullable batch links on ordinary revisions per S4-3",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "61ec56a8de15ec6ac9ec7cea8f5dd8066b875fd8",
+   "author": "auditor",
+   "t": 11580.5,
+   "subject": "LEDGER AUDIT 6999d84: S4-3 faithful, no issues",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "9930cd0483c65c33c9070ca240f3993e801ebe18",
+   "author": "gatekeeper",
+   "t": 11808.5,
+   "subject": "Verify stage-4 fault detection, full-size batches, legacy history and refund rendering",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  },
+  {
+   "sha": "f34fd29b5bf8d4d6bdf5d72c90a72d9aa282a604",
+   "author": "gatekeeper",
+   "t": 11961.5,
+   "subject": "Accept stage-4 a288cc4 with full gate evidence and closed import rejection",
+   "stages": [
+    4
+   ],
+   "by_seat": true
+  }
+ ]
+}
