@@ -356,6 +356,100 @@ function validateTransferEntry(t) {
   });
 }
 
+// ---- stage 3: instants, temporal queries, corrections -------------------
+
+const INSTANT_RE = /^([0-9]{4})-([0-9]{2})-([0-9]{2})[Tt]([0-9]{2}):([0-9]{2}):([0-9]{2})(\.[0-9]+)?(?:([Zz])|([+-])([0-9]{2}):([0-9]{2}))$/;
+
+function daysInMonth(y, m) {
+  if (m === 2) return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0 ? 29 : 28;
+  return [4, 6, 9, 11].includes(m) ? 30 : 31;
+}
+
+// Strict RFC 3339 date-time with a required offset. Value: { raw, ms } where
+// raw is the original string (for echoes) and ms the epoch milliseconds
+// (fraction floored to the millisecond). Anything else is 422.
+function parseInstant(raw, field) {
+  const bad = () => invalid(`${field} must be an RFC 3339 instant with an offset, e.g. 2026-09-24T13:20:00+00:00`);
+  if (typeof raw !== 'string') return bad();
+  const m = INSTANT_RE.exec(raw);
+  if (!m) return bad();
+  const [y, mo, d, h, mi, sec] = m.slice(1, 7).map(Number);
+  if (mo < 1 || mo > 12 || d < 1 || d > daysInMonth(y, mo) || h > 23 || mi > 59 || sec > 59) return bad();
+  let offsetMin = 0;
+  if (!m[8]) {
+    const oh = Number(m[10]);
+    const om = Number(m[11]);
+    if (oh > 23 || om > 59) return bad();
+    offsetMin = (m[9] === '-' ? -1 : 1) * (oh * 60 + om);
+  }
+  const frac = m[7] ? Number(m[7].slice(1, 4).padEnd(3, '0')) : 0;
+  const date = new Date(0);
+  date.setUTCFullYear(y, mo - 1, d);
+  date.setUTCHours(h, mi, sec, frac);
+  const ms = date.getTime() - offsetMin * 60000;
+  if (!Number.isFinite(ms)) return bad();
+  return ok({ raw, ms });
+}
+
+// Optional instant query parameter: absent -> null; present (even empty) is
+// parsed strictly.
+function parseQueryInstant(params, name) {
+  if (!params.has(name)) return ok(null);
+  return parseInstant(params.get(name), name);
+}
+
+// GET /me temporal parameters: { as_of, known_at }, each null or { raw, ms }.
+function parseMeQuery(params) {
+  const asOf = parseQueryInstant(params, 'as_of');
+  if (!asOf.ok) return asOf;
+  const knownAt = parseQueryInstant(params, 'known_at');
+  if (!knownAt.ok) return knownAt;
+  return ok({ as_of: asOf.value, known_at: knownAt.value });
+}
+
+// GET /statement parameters. A snapshot read takes only limit and offset:
+// from, to or known_at alongside snapshot is 422. snapshot is the raw string
+// (possibly "") or null when absent.
+function validateStatementQuery(params) {
+  const snapshot = params.has('snapshot') ? params.get('snapshot') : null;
+  if (snapshot !== null && ['from', 'to', 'known_at'].some((k) => params.has(k))) {
+    return invalid('snapshot cannot be combined with from, to or known_at');
+  }
+  const page = parsePagination(params);
+  if (!page.ok) return page;
+  const out = { snapshot, from: null, to: null, known_at: null, limit: page.value.limit, offset: page.value.offset };
+  if (snapshot === null) {
+    for (const k of ['from', 'to', 'known_at']) {
+      const r = parseQueryInstant(params, k);
+      if (!r.ok) return r;
+      out[k] = r.value;
+    }
+  }
+  return ok(out);
+}
+
+// POST /payments/{id}/corrections body; every invalid case is 422.
+// Value: { expected_revision, amount, reason, effective_at: { raw, ms } }.
+function validateCorrection(body, nowMs) {
+  const rev = body.expected_revision;
+  if (typeof rev !== 'number' || !Number.isInteger(rev) || rev < 1 || rev > Number.MAX_SAFE_INTEGER) {
+    return invalid('expected_revision must be a positive integer');
+  }
+  const amount = body.amount;
+  if (typeof amount !== 'number' || !Number.isInteger(amount) || amount < 0 || amount > MAX_AMOUNT) {
+    return invalid(`amount must be an integer from 0 to ${MAX_AMOUNT}`);
+  }
+  const reason = body.reason;
+  if (typeof reason !== 'string') return invalid('reason must be a string');
+  const n = charLength(reason);
+  if (n < 1 || n > MAX_NOTE_CHARS) return invalid(`reason must be 1 to ${MAX_NOTE_CHARS} characters`);
+  if (body.effective_at === undefined) return invalid('effective_at is required');
+  const eff = parseInstant(body.effective_at, 'effective_at');
+  if (!eff.ok) return eff;
+  if (eff.value.ms > nowMs) return invalid('effective_at must not be later than now');
+  return ok({ expected_revision: rev, amount: amount === 0 ? 0 : amount, reason, effective_at: eff.value });
+}
+
 // ---- idempotency helper ----------------------------------------------------
 
 // Canonical text of a parsed JSON value: object keys sorted, no whitespace.
@@ -401,4 +495,9 @@ module.exports = {
   validateTransfersShape,
   validateTransferEntry,
   canonicalJson,
+  parseInstant,
+  parseQueryInstant,
+  parseMeQuery,
+  validateStatementQuery,
+  validateCorrection,
 };
