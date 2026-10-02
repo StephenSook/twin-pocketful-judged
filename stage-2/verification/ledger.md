@@ -222,7 +222,7 @@ The executable check is `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/
 
 - S2-A1 (confirmed coordinator S2-1): “Text is the RFC 3339 expires_at” controls authorization-expires-{id}; its visible text stays exact. A separate relative label is permitted. The brief's hover-only exact timestamp rule applies elsewhere.
 - S2-A2 (confirmed coordinator S2-2): “The authorisation is not open | 409 authorization_not_open” and “expires_at is at or before now | 409 authorization_expired” resolve as follows: clock-expired or seeded-expired capture returns authorization_expired even after a read materializes expiry; captured/voided returns authorization_not_open even after its deadline. Void of captured/expired returns authorization_not_open. Existing model behavior matches this ruling.
-- S2-A3: captured_amount/payment_ids persist after void/expiry; remaining_amount is zero when closed rather than amount minus captured.
+- S2-A3 (confirmed coordinator audit ruling): “Void and expiry can close a partially captured authorization, release only the remainder, and preserve all capture records.” After void/expiry, captured_amount and payment_ids remain visible; remaining_amount is0. API-created partial histories are compared exactly through closure and import.
 - S2-A4 (confirmed coordinator S2-4): stage-1 §7 requires “body identical to the original response as a JSON value”. Imported stage-1 receipt replays retain the original body exactly, without adding authorization_id. Fresh reads such as GET /activity expose authorization_id:null on non-authorization payments.
 - S2-A5: model takes explicit logical time as operation input, never reads a clock internally. Live driver binds service timestamps; no time-sensitive random run crosses deadlines accidentally.
 - S2-A6 (coordinator S2-3, seeded closed authorizations): “Only open holds anything.” Seeded captured/voided/expired hold zero. Tests assert status, visibility, held0 and409 codes, never capture-history values omitted by the fixture. Service defaults remain: captured_amount is amount for captured and0 otherwise; payment_ids=[], payment_id=null, remaining_amount=0. Partial-capture history is tested through API-created state and exports. The existing driver deliberately omits comparisons of unspecified seeded capture-history values.
@@ -441,6 +441,12 @@ All entries start **unchecked**. Each row specifies an intended falsifier, not o
 | R2-201 | “Before handing off, capture every required screen in a real browser at 375 px and at 1440 px, in its empty, filled, loading, refused and uncertain states where they exist, and save the images in the verification area. Check contrast and keyboard focus on each.” | Capture all six screens at375/1440 in applicable states; fail if evidence or contrast/focus inspection missing. | unchecked |
 
 ## Stage 2 coverage limits and evidence
+
+### Additional stable entry from ledger audit
+
+| ID | Quoted requirement | Reading and refuting check | Coverage |
+|---|---|---|---|
+| R2-202 | “If a payment response is lost, including after POST /payments commits, show pay-uncertain (nonempty text), not pay-error”; “Successful retry removes both error/uncertainty elements” | Drop the response after commit: a visible data-testid="pay-uncertain" element exists with nonempty text, and data-testid="pay-error" is absent. Retry the unchanged form with the identical key and body; after success both elements are absent and money moved only once. See also R2-065–067 and browser-plan step4. | unchecked browser check |
 
 - All browser and visual/motion entries remain unchecked by modeler. `browser-plan.md` gives executable scenarios for gatekeeper; no browser or screenshot pass is implied. R2-071–074 browser continuity still needs browser execution; the HTTP migration check covers original token, pending request and exact old receipt semantics only.
 - R2-075/077/081/148: sequential invariants plus inherited payment retry race are covered. Transient internal state and full concurrency linearizability across holds/captures/void/expiry remain independent gatekeeper work.
