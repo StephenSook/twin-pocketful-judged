@@ -487,7 +487,9 @@
       h('div', { class: 'skeleton skeleton-amount' }), h('div', { class: 'skeleton skeleton-line' }));
     let last = null;
     walletViews.push({
-      render(m) {
+      render(raw) {
+        // A pre-upgrade /me has only balance: no holds, everything available.
+        const m = { ...raw, available: typeof raw.available === 'number' ? raw.available : raw.balance, held: typeof raw.held === 'number' ? raw.held : 0 };
         const changed = last !== null && last !== m.available;
         last = m.available;
         box.removeAttribute('aria-busy');
