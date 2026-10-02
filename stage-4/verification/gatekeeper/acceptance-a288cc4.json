@@ -1,0 +1,1148 @@
+{
+  "verdict": "ACCEPT",
+  "revision": "a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9",
+  "stage": 4,
+  "stage_tree": "37810a489fdcfd6335464527a1d9f5b935f2bbc0",
+  "clean_copy": "/tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4",
+  "image": "gatekeeper-s4-a288cc4",
+  "product_identity": {
+    "command": "git diff --exit-code a288cc4 61ec56a -- stage-4 ':!stage-4/verification'",
+    "exit": 0,
+    "result": "empty; shared harness product matches exact clean candidate"
+  },
+  "frozen_previous_stages": {
+    "command": "git diff --exit-code cbdf5b8 HEAD -- stage-1 stage-2 stage-3",
+    "exit": 0,
+    "result": "no changes"
+  },
+  "build": {
+    "command": "docker build -t gatekeeper-s4-a288cc4 /tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4/stage-4",
+    "exit": 0
+  },
+  "harness": [
+    {
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "-m",
+        "harness",
+        "run",
+        "--track",
+        "pocketful",
+        "--repo",
+        "/tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4",
+        "--stage",
+        "4",
+        "--mode",
+        "isolated",
+        "--out",
+        "/tmp/gatekeeper-s4-qhvnpd4n/check-a288cc4"
+      ],
+      "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+      "exit": 0,
+      "revision": "a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9",
+      "claimed_stage": "4",
+      "counts": {
+        "stage-2": {
+          "collected": 35,
+          "passed": 35,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_2/test_sample.py": {
+              "passed": 10,
+              "total": 10
+            },
+            "stage_2/test_ui.py": {
+              "passed": 25,
+              "total": 25
+            }
+          }
+        },
+        "stage-3": {
+          "collected": 6,
+          "passed": 6,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_3/test_sample.py": {
+              "passed": 6,
+              "total": 6
+            }
+          }
+        },
+        "stage-1": {
+          "collected": 147,
+          "passed": 147,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_1/test_me_payments.py": {
+              "passed": 24,
+              "total": 24
+            },
+            "stage_1/test_requests_splits_feed.py": {
+              "passed": 39,
+              "total": 39
+            },
+            "stage_1/test_retries_splits_input.py": {
+              "passed": 51,
+              "total": 51
+            },
+            "stage_1/test_sample.py": {
+              "passed": 19,
+              "total": 19
+            },
+            "stage_1/test_seeded_state.py": {
+              "passed": 14,
+              "total": 14
+            }
+          }
+        },
+        "stage-4": {
+          "collected": 5,
+          "passed": 5,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_4/test_sample.py": {
+              "passed": 5,
+              "total": 5
+            }
+          }
+        }
+      },
+      "later_suite": "None reported applicable; stage 4 is the final provided suite. No independent stage-5 probe was made."
+    },
+    {
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "-m",
+        "harness",
+        "run",
+        "--track",
+        "pocketful",
+        "--repo",
+        "/home/ubuntu/work/band-work/current",
+        "--stage",
+        "4",
+        "--mode",
+        "isolated",
+        "--out",
+        "/home/ubuntu/work/band-work/checks/pocketful-judged/s4-1"
+      ],
+      "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+      "exit": 0,
+      "revision": "61ec56a8de15ec6ac9ec7cea8f5dd8066b875fd8",
+      "claimed_stage": "4",
+      "counts": {
+        "stage-2": {
+          "collected": 35,
+          "passed": 35,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_2/test_sample.py": {
+              "passed": 10,
+              "total": 10
+            },
+            "stage_2/test_ui.py": {
+              "passed": 25,
+              "total": 25
+            }
+          }
+        },
+        "stage-3": {
+          "collected": 6,
+          "passed": 6,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_3/test_sample.py": {
+              "passed": 6,
+              "total": 6
+            }
+          }
+        },
+        "stage-1": {
+          "collected": 147,
+          "passed": 147,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_1/test_me_payments.py": {
+              "passed": 24,
+              "total": 24
+            },
+            "stage_1/test_requests_splits_feed.py": {
+              "passed": 39,
+              "total": 39
+            },
+            "stage_1/test_retries_splits_input.py": {
+              "passed": 51,
+              "total": 51
+            },
+            "stage_1/test_sample.py": {
+              "passed": 19,
+              "total": 19
+            },
+            "stage_1/test_seeded_state.py": {
+              "passed": 14,
+              "total": 14
+            }
+          }
+        },
+        "stage-4": {
+          "collected": 5,
+          "passed": 5,
+          "failed": 0,
+          "errors": 0,
+          "skipped": 0,
+          "deselected": 0,
+          "xfailed": 0,
+          "files": {
+            "stage_4/test_sample.py": {
+              "passed": 5,
+              "total": 5
+            }
+          }
+        }
+      },
+      "later_suite": "None reported applicable; stage 4 is the final provided suite. No independent stage-5 probe was made."
+    }
+  ],
+  "model": {
+    "verifier": "6999d84",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -u stage-4/verification/model/run_all.py --base-url http://172.24.0.9:18080 --second-url http://172.24.0.10:18080 --stage1-url http://172.24.0.8:18080 --stage2-url http://172.24.0.2:18080 --stage3-url http://172.24.0.5:18080 --no-shrink",
+    "exit": 0,
+    "inherited_operations": 532,
+    "temporal_operations": 75,
+    "refund_batch_random_operations": 40,
+    "legacy_imports": "3/3",
+    "result": "PASS"
+  },
+  "independent_commands": [
+    {
+      "name": "refund_batches",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/refund_batches.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 870,
+        "concurrency": 50,
+        "max_request_seconds": 0.0227
+      }
+    },
+    {
+      "name": "refund_batch_import",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/refund_batch_import.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 81,
+        "failed_cases": []
+      }
+    },
+    {
+      "name": "refund_batch_races",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/refund_batch_races.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 232,
+        "concurrency": 50,
+        "atomic_snapshots": 6,
+        "linearization": "one correction, 24 stale conflicts, fifteen commuting refunds; atomic reads satisfy revision/cap/available invariants"
+      }
+    },
+    {
+      "name": "history_exact",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/history_exact.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 36,
+        "cases": 3
+      }
+    },
+    {
+      "name": "history_import",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/history_import.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 80
+      }
+    },
+    {
+      "name": "lifecycle_clock",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/lifecycle_clock.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 57
+      }
+    },
+    {
+      "name": "read_clock",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/read_clock.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 63
+      }
+    },
+    {
+      "name": "history",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/history.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 786,
+        "max_request_seconds": 0.0269
+      }
+    },
+    {
+      "name": "historical_holds",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/historical_holds.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 90,
+        "max_request_seconds": 0.0269
+      }
+    },
+    {
+      "name": "correction_races",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/correction_races.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "in_flight": 50,
+        "assertions": 329,
+        "atomic_snapshots": 6,
+        "linearization": "one winning correction plus commuting affordable payments, holds and captures; nine stale corrections after winner"
+      }
+    },
+    {
+      "name": "holds",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/holds.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 1165,
+        "max_request_seconds": 0.0425
+      }
+    },
+    {
+      "name": "probe",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/probe.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 917,
+        "max_request_seconds": 0.0306
+      }
+    },
+    {
+      "name": "boundaries",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/boundaries.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "checks": [
+          {
+            "case": "inclusive 2^53 balance",
+            "expected_status": 204,
+            "observed_status": 204,
+            "passed": true
+          },
+          {
+            "case": "lowercase then replace",
+            "expected_handle": "i_",
+            "observed_handle": "i_",
+            "passed": true
+          }
+        ],
+        "passed": 2,
+        "failed": 0
+      }
+    },
+    {
+      "name": "history_limits",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/history_limits.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "payments": 5000,
+        "statement_snapshots": 200,
+        "corrections": 50,
+        "assertions": 997,
+        "reset_seconds": 0.0713,
+        "export_seconds": 0.0393,
+        "import_seconds": 0.1682,
+        "max_request_seconds": 0.1517
+      }
+    },
+    {
+      "name": "seeded_limits",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/seeded_limits.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 544,
+        "cases": 2
+      }
+    },
+    {
+      "name": "security",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/security.py",
+        "http://172.24.0.9:18080",
+        "--fixture-exemption"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 152,
+        "fixture_exemption": true,
+        "identifier_kinds": [
+          "bearer token",
+          "request ID",
+          "recipient/payer handle",
+          "settlement handles",
+          "idempotency key"
+        ],
+        "authorization_ruling": "known request wrong role 403; unknown request 404",
+        "pages": "not applicable; API-only"
+      }
+    },
+    {
+      "name": "password_scope",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/password_scope.py",
+        "http://172.24.0.9:18080",
+        "--fixture-exemption"
+      ],
+      "exit": 0,
+      "output": {
+        "initial_seed_parameters": "m=1024,t=1,p=1",
+        "signup_parameters": "m=47104,t=2,p=1",
+        "after_login_parameters": "m=47104,t=2,p=1",
+        "initial_seed_meets_original_minimum": false,
+        "fixture_exemption": true,
+        "unique_seed_salts_before_login": true,
+        "behavior_checks": "PASS",
+        "assertions": 32
+      }
+    },
+    {
+      "name": "browser_checks",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/browser_checks.py",
+        "http://172.24.0.10:18080",
+        "/tmp/gatekeeper-s4-qhvnpd4n/a288cc4/screens-browser_checks"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 88,
+        "viewports": [
+          {
+            "width": 375,
+            "result": "PASS",
+            "screenshots": 11
+          },
+          {
+            "width": 1440,
+            "result": "PASS",
+            "screenshots": 11
+          }
+        ]
+      }
+    },
+    {
+      "name": "browser_states",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/browser_states.py",
+        "http://172.24.0.10:18080",
+        "/tmp/gatekeeper-s4-qhvnpd4n/a288cc4/screens-browser_states"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 330,
+        "viewports": [
+          {
+            "width": 375,
+            "result": "PASS"
+          },
+          {
+            "width": 1440,
+            "result": "PASS"
+          }
+        ]
+      }
+    },
+    {
+      "name": "visual_rules",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/visual_rules.py",
+        "http://172.24.0.10:18080",
+        "/tmp/gatekeeper-s4-qhvnpd4n/a288cc4/screens-visual_rules"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 178,
+        "contrast": [
+          {
+            "width": 375,
+            "route": "/",
+            "count": 47,
+            "bad": []
+          },
+          {
+            "width": 375,
+            "route": "/requests",
+            "count": 28,
+            "bad": []
+          },
+          {
+            "width": 375,
+            "route": "/split",
+            "count": 24,
+            "bad": []
+          },
+          {
+            "width": 375,
+            "route": "/authorizations",
+            "count": 42,
+            "bad": []
+          },
+          {
+            "width": 375,
+            "route": "/signup",
+            "count": 31,
+            "bad": []
+          },
+          {
+            "width": 375,
+            "route": "/login",
+            "count": 28,
+            "bad": []
+          },
+          {
+            "width": 1440,
+            "route": "/",
+            "count": 47,
+            "bad": []
+          },
+          {
+            "width": 1440,
+            "route": "/requests",
+            "count": 28,
+            "bad": []
+          },
+          {
+            "width": 1440,
+            "route": "/split",
+            "count": 24,
+            "bad": []
+          },
+          {
+            "width": 1440,
+            "route": "/authorizations",
+            "count": 42,
+            "bad": []
+          },
+          {
+            "width": 1440,
+            "route": "/signup",
+            "count": 31,
+            "bad": []
+          },
+          {
+            "width": 1440,
+            "route": "/login",
+            "count": 28,
+            "bad": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "web_security",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/web_security.py",
+        "http://172.24.0.10:18080",
+        "/tmp/gatekeeper-s4-qhvnpd4n/a288cc4/screens-web_security"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 84,
+        "headers": 8,
+        "traversals": 4,
+        "xss": "inert"
+      }
+    },
+    {
+      "name": "browser_upgrade",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/browser_upgrade.py",
+        "http://172.24.0.10:18080",
+        "/tmp/gatekeeper-s4-qhvnpd4n/a288cc4/screens-browser_upgrade",
+        "gatekeeper-s1-d1ebec2",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 42,
+        "viewports": [
+          375,
+          1440
+        ],
+        "source_destroyed_before_import": true
+      }
+    },
+    {
+      "name": "environment",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/environment.py",
+        "gatekeeper-s4-a288cc4",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 423,
+        "startup_seconds": [
+          0.415,
+          0.3561
+        ],
+        "max_request_seconds": 2.7409,
+        "origin": "plain HTTP on non-loopback container IP"
+      }
+    },
+    {
+      "name": "cold_login",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/cold_login.py",
+        "gatekeeper-s4-a288cc4",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "requests": 50,
+        "statuses": {
+          "401": 50
+        },
+        "max_seconds": 2.5069
+      }
+    },
+    {
+      "name": "batch_limits",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/batch_limits.py",
+        "http://172.24.0.9:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 358,
+        "payments": 5050,
+        "batch_size": 32,
+        "concurrency": 50,
+        "reset_seconds": 0.0631,
+        "export_seconds": 0.0393,
+        "import_seconds": 0.133,
+        "max_request_seconds": 0.1119
+      }
+    },
+    {
+      "name": "seeded_history_import",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/seeded_history_import.py",
+        "http://172.24.0.9:18080",
+        "gatekeeper-s2-8038718",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 191,
+        "cases": 8
+      }
+    },
+    {
+      "name": "upgrade_holds",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/upgrade_holds.py",
+        "http://172.24.0.9:18080",
+        "gatekeeper-s2-8038718",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 67,
+        "source_destroyed_before_import": true,
+        "source_stage": 2
+      }
+    },
+    {
+      "name": "upgrade_history",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/upgrade_history.py",
+        "http://172.24.0.9:18080",
+        "gatekeeper-s3-b67e03c",
+        "gatekeeper-s1-internal"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 81,
+        "source_stage": 3,
+        "source_destroyed_before_import": true
+      }
+    },
+    {
+      "name": "integrity",
+      "command": [
+        "python3",
+        "/home/ubuntu/work/band-work/current/stage-4/verification/gatekeeper/integrity.py",
+        "/tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4",
+        "/home/ubuntu/work/dark-factory-wearedevs",
+        "/tmp/gatekeeper-s3-x6k0z8vs/provided-baseline.json"
+      ],
+      "exit": 0,
+      "output": {
+        "provided_files": 30,
+        "provided_changed": [],
+        "tracked_files_scanned": 395,
+        "credential_pattern_hit_files": [],
+        "product_files": 9,
+        "check_identifier_hit_files": [],
+        "declared_package_dependencies": 0,
+        "advisory_audit": "empty package inventory",
+        "result": "PASS"
+      }
+    },
+    {
+      "name": "new_path_controls",
+      "command": [
+        "python3",
+        "stage-4/verification/gatekeeper/new_path_controls.py",
+        "http://172.24.0.11:18080"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 182,
+        "new_paths": 2
+      }
+    },
+    {
+      "name": "browser_refunds",
+      "command": [
+        "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+        "stage-4/verification/gatekeeper/browser_refunds.py",
+        "http://172.24.0.10:18080",
+        "/tmp/gatekeeper-s4-qhvnpd4n/a288cc4/screens-browser_refunds"
+      ],
+      "exit": 0,
+      "output": {
+        "result": "PASS",
+        "assertions": 46,
+        "viewports": [
+          375,
+          1440
+        ],
+        "refund_and_original_receipt_visible": true
+      }
+    },
+    {
+      "name": "mutate",
+      "command": [
+        "python3",
+        "stage-4/verification/gatekeeper/mutate.py",
+        "/tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4/stage-4",
+        "gatekeeper-s1-internal",
+        "/tmp/gatekeeper-s4-qhvnpd4n/mutants-base"
+      ],
+      "exit": 0,
+      "output": {
+        "planted": 8,
+        "caught": 8,
+        "results": [
+          {
+            "fault": "overdraft",
+            "caught": true,
+            "exit": 1,
+            "check": "every snapshot nonnegative"
+          },
+          {
+            "fault": "credit",
+            "caught": true,
+            "exit": 1,
+            "check": "every snapshot conserves total"
+          },
+          {
+            "fault": "idempotency",
+            "caught": true,
+            "exit": 1,
+            "check": "one original among 50 identical writes"
+          },
+          {
+            "fault": "request_guard",
+            "caught": true,
+            "exit": 1,
+            "check": "request paid once among 50 distinct keys"
+          },
+          {
+            "fault": "private_feed",
+            "caught": true,
+            "exit": 1,
+            "check": "private visibility including operator"
+          },
+          {
+            "fault": "held_spend",
+            "caught": true,
+            "exit": 1,
+            "check": "error /payments insufficient_funds"
+          },
+          {
+            "fault": "capture_limit",
+            "caught": true,
+            "exit": 1,
+            "check": "error /authorizations/a_0muqdfkaf000094f4707455/capture capture_exceeds_authorization"
+          },
+          {
+            "fault": "nonfinal",
+            "caught": true,
+            "exit": 1,
+            "check": "wallet total/held/available exact"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mutate_history",
+      "command": [
+        "python3",
+        "stage-4/verification/gatekeeper/mutate_history.py",
+        "/tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4/stage-4",
+        "gatekeeper-s1-internal",
+        "/tmp/gatekeeper-s4-qhvnpd4n/mutants-history"
+      ],
+      "exit": 0,
+      "output": {
+        "planted": 7,
+        "caught": 7,
+        "results": [
+          {
+            "fault": "stale_revision",
+            "exit": 1,
+            "caught": true,
+            "assertion": "stale expected revision"
+          },
+          {
+            "fault": "historical_overdraft",
+            "exit": 1,
+            "caught": true,
+            "assertion": "future-effective funding removal rejected"
+          },
+          {
+            "fault": "known_at",
+            "exit": 1,
+            "caught": true,
+            "assertion": "historical balances expected"
+          },
+          {
+            "fault": "snapshot_cutoff",
+            "exit": 1,
+            "caught": true,
+            "assertion": "snapshot frozen after correction"
+          },
+          {
+            "fault": "snapshot_owner",
+            "exit": 1,
+            "caught": true,
+            "assertion": "snapshot bound to user"
+          },
+          {
+            "fault": "inclusive_boundary",
+            "exit": 1,
+            "caught": true,
+            "assertion": "historical balances expected"
+          },
+          {
+            "fault": "original_receipt",
+            "exit": 1,
+            "caught": true,
+            "assertion": "original activity unchanged"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mutate_refunds",
+      "command": [
+        "python3",
+        "stage-4/verification/gatekeeper/mutate_refunds.py",
+        "/tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4/stage-4",
+        "gatekeeper-s1-internal",
+        "/tmp/gatekeeper-s4-qhvnpd4n/mutants-refunds"
+      ],
+      "exit": 0,
+      "output": {
+        "planted": 7,
+        "caught": 7,
+        "results": [
+          {
+            "fault": "refund_cap",
+            "exit": 1,
+            "caught": true,
+            "assertion": "expected 422 refund_exceeds_payment observed 409 insufficient_funds"
+          },
+          {
+            "fault": "refund_target",
+            "exit": 1,
+            "caught": true,
+            "assertion": "expected 422 invalid_refund_target observed 201 None"
+          },
+          {
+            "fault": "refund_direction",
+            "exit": 1,
+            "caught": true,
+            "assertion": "expected 403 forbidden observed 201 None"
+          },
+          {
+            "fault": "correction_refund_floor",
+            "exit": 1,
+            "caught": true,
+            "assertion": "expected 422 refund_exceeds_payment observed 409 insufficient_funds"
+          },
+          {
+            "fault": "settlement_complete",
+            "exit": 1,
+            "caught": true,
+            "assertion": "expected 422 incomplete_settlement observed 409 insufficient_funds"
+          },
+          {
+            "fault": "settlement_instant",
+            "exit": 1,
+            "caught": true,
+            "assertion": "expected 422 validation_failed observed 201 None"
+          },
+          {
+            "fault": "refund_note_import",
+            "exit": 1,
+            "caught": true,
+            "assertion": [
+              "refund must copy original note"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "screenshot_count": 88,
+  "evidence_directory": "stage-4/verification/gatekeeper/evidence-a288cc4",
+  "mandate": {
+    "1_provided_checks": "Both clean-copy and dispatched shared-path isolated commands exit0; stage1 147/147, stage2 35/35, stage3 6/6, stage4 5/5.",
+    "2_ledger_model": "513 entries: R1 145, R2 202, R3 112, R4 54. Latest full model wrapper passes; limits remain disclosed in model RUN and ledger.",
+    "3_concurrency": "50-flight refund cap, identical-key refunds/batches, overlapping batch/single revisions, and mixed refunds/corrections/snapshots/atomic exports. One correction winner; all other shared-revision writes stale. Atomic reads conserve totals, match latest revisions, enforce refund caps and nonnegative available. Additional 50 simultaneous batches of 32 items pass.",
+    "4_limits": "Clean image resource tests: 2 CPUs/2GiB, isolated internal Docker network with no outbound access; startup and 5s/10s budgets pass. 5000 distinct users; 5000-payment ledger; 50 maximum batches and 5050-payment roundtrip pass.",
+    "5_upgrade": "Model imports all three frozen stages. Independent browser upgrade destroys stage1 source; upgrade_holds destroys stage2 source; upgrade_history destroys stage3 source before import, preserving sessions, receipts, pending requests, revisions, membership and saved statements.",
+    "6_tamper": "30 original provided files byte-identical; bounded credential and check-branch scans clean; product/public code reviewed for automation-specific behavior.",
+    "7_faults": "22/22 observable faults caught: 8 financial, 7 temporal, 7 refund/batch. No uncaught or discarded observable faults.",
+    "8_security": "Identifier access rules follow endpoint-specific rulings; operator does not see private feed. Security152, new path controls182, web84. Unique salted Argon2id, login upgrade, fixture exception recorded. Zero external package dependencies, empty package advisory inventory. No credentials or raw exports retained in evidence.",
+    "9_staged": "All earlier and own provided suites pass separately; tool claims stage4. No later suite reported applicable.",
+    "10_origin": "Headless browser gates use plain non-loopback http://172.24.0.10:18080, at375/1440; error-free flows, retries, upgrade and refund rendering."
+  },
+  "brief_rules": [
+    {
+      "rule": 1,
+      "result": "PASS",
+      "evidence": "Required controls visible/clickable when ready; browser/visual checks include loading states and zero-opacity ancestor checks."
+    },
+    {
+      "rule": 2,
+      "result": "PASS",
+      "evidence": "Hit testing confirms overlays do not intercept controls; intro pointer-events none."
+    },
+    {
+      "rule": 3,
+      "result": "PASS",
+      "evidence": "Ordinary navigation; no smooth-scroll library or navigation replacement."
+    },
+    {
+      "rule": 4,
+      "result": "PASS",
+      "evidence": "All authored animations transform/opacity only, no view transitions, requests/results never await animation."
+    },
+    {
+      "rule": 5,
+      "result": "PASS",
+      "evidence": "Required money elements display final exact values; no count-up."
+    },
+    {
+      "rule": 6,
+      "result": "PASS",
+      "evidence": "Bundled CSS/JS/fonts/art; offline internal-network browser succeeds."
+    },
+    {
+      "rule": 7,
+      "result": "PASS",
+      "evidence": "No automation/client detection branches; same non-loopback behavior."
+    },
+    {
+      "rule": 8,
+      "result": "PASS",
+      "evidence": "No native dialogs, hidden ambient loops or hover movement of controls; reduced-motion behavior checked."
+    }
+  ],
+  "visual": {
+    "contrast_samples": 400,
+    "contrast_failures": 0,
+    "manual_review": [
+      "375-home-held.png: available headline, held/total secondary, labelled forms, no overflow",
+      "1440-states-signup-empty.png: heading legible, art outside heading area"
+    ],
+    "refund_screenshots": 2
+  },
+  "audits": [
+    {
+      "revision": "02cefe5",
+      "report": "stage-4/verification/audit/02cefe5-audit.md",
+      "items": "No missing entries. S4-A1/A2 confirmed by S4-1/S4-2. S4-A5 ordinary omission superseded by S4-3: every revision object carries correction_batch_id:null when not made by a batch; original stored receipts/replays remain identical. Closed by ledger/driver6999d84."
+    },
+    {
+      "revision": "e0695bc",
+      "report": "stage-4/verification/audit/e0695bc-audit.md",
+      "items": "No gaps or overclaim. Partial concurrency coverage filled by independent 50-flight gates; model limits remain explicit."
+    },
+    {
+      "revision": "6999d84",
+      "report": "stage-4/verification/audit/6999d84-audit.md",
+      "items": "S4-3 nullable field and legacy replay exception faithful; no open items."
+    }
+  ],
+  "rejections_closed": [
+    {
+      "revision": "e0a4e34",
+      "expected": "invalid refund/batch state import422 atomically",
+      "observed": "204 for five inconsistent edits",
+      "fixed_in": "a288cc4",
+      "closure": "refund_batch_import exit0 assertions81, six cases including self-refund control; all full gates rerun"
+    }
+  ],
+  "earlier_stage_rejections": "See frozen stage-1/2/3 acceptance manifests and coordinator reports. No earlier-stage product files changed.",
+  "verification_errors_not_passes": [
+    "Initial scratch clone used harness repository and checkout e0a4e34 failed; corrected absolute product clone was used for all reported gates.",
+    "One later model rerun used a stage3 destination by mistake and failed R1-118; correct two-stage4 five-target run then exited0.",
+    "First new_path_controls invocation targeted a stage3 container and failed; rerun on inspected stage4 container172.24.0.11 exited0.",
+    "One manual image-open path did not exist; corrected actual screenshot was opened and reviewed."
+  ],
+  "known_limits": [
+    "Public seeded fixture passwords use explicitly authorized reduced-cost Argon2id m1024,t1,p1, unique salts; successful login upgrades to signup strength m47104,t2.",
+    "S3-6 excludes fixtures with statement intermediate balances outside \u00b12^53; no such excluded case is claimed checked.",
+    "Finite tests and sampled atomic exports cannot prove every possible concurrency history; synchronous state-change implementation and targeted faults reviewed."
+  ]
+}

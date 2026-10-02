@@ -1,0 +1,212 @@
+[
+  {
+    "command": [
+      "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+      "-m",
+      "harness",
+      "run",
+      "--track",
+      "pocketful",
+      "--repo",
+      "/tmp/gatekeeper-s4-qhvnpd4n/product-a288cc4",
+      "--stage",
+      "4",
+      "--mode",
+      "isolated",
+      "--out",
+      "/tmp/gatekeeper-s4-qhvnpd4n/check-a288cc4"
+    ],
+    "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+    "exit": 0,
+    "revision": "a288cc48240d0ecd6ca2f01c92c0e7f1e2469ca9",
+    "claimed_stage": "4",
+    "counts": {
+      "stage-2": {
+        "collected": 35,
+        "passed": 35,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_2/test_sample.py": {
+            "passed": 10,
+            "total": 10
+          },
+          "stage_2/test_ui.py": {
+            "passed": 25,
+            "total": 25
+          }
+        }
+      },
+      "stage-3": {
+        "collected": 6,
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_3/test_sample.py": {
+            "passed": 6,
+            "total": 6
+          }
+        }
+      },
+      "stage-1": {
+        "collected": 147,
+        "passed": 147,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_1/test_me_payments.py": {
+            "passed": 24,
+            "total": 24
+          },
+          "stage_1/test_requests_splits_feed.py": {
+            "passed": 39,
+            "total": 39
+          },
+          "stage_1/test_retries_splits_input.py": {
+            "passed": 51,
+            "total": 51
+          },
+          "stage_1/test_sample.py": {
+            "passed": 19,
+            "total": 19
+          },
+          "stage_1/test_seeded_state.py": {
+            "passed": 14,
+            "total": 14
+          }
+        }
+      },
+      "stage-4": {
+        "collected": 5,
+        "passed": 5,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_4/test_sample.py": {
+            "passed": 5,
+            "total": 5
+          }
+        }
+      }
+    },
+    "later_suite": "None reported applicable; stage 4 is the final provided suite. No independent stage-5 probe was made."
+  },
+  {
+    "command": [
+      "/home/ubuntu/work/dark-factory-wearedevs/.venv/bin/python",
+      "-m",
+      "harness",
+      "run",
+      "--track",
+      "pocketful",
+      "--repo",
+      "/home/ubuntu/work/band-work/current",
+      "--stage",
+      "4",
+      "--mode",
+      "isolated",
+      "--out",
+      "/home/ubuntu/work/band-work/checks/pocketful-judged/s4-1"
+    ],
+    "cwd": "/home/ubuntu/work/dark-factory-wearedevs",
+    "exit": 0,
+    "revision": "61ec56a8de15ec6ac9ec7cea8f5dd8066b875fd8",
+    "claimed_stage": "4",
+    "counts": {
+      "stage-2": {
+        "collected": 35,
+        "passed": 35,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_2/test_sample.py": {
+            "passed": 10,
+            "total": 10
+          },
+          "stage_2/test_ui.py": {
+            "passed": 25,
+            "total": 25
+          }
+        }
+      },
+      "stage-3": {
+        "collected": 6,
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_3/test_sample.py": {
+            "passed": 6,
+            "total": 6
+          }
+        }
+      },
+      "stage-1": {
+        "collected": 147,
+        "passed": 147,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_1/test_me_payments.py": {
+            "passed": 24,
+            "total": 24
+          },
+          "stage_1/test_requests_splits_feed.py": {
+            "passed": 39,
+            "total": 39
+          },
+          "stage_1/test_retries_splits_input.py": {
+            "passed": 51,
+            "total": 51
+          },
+          "stage_1/test_sample.py": {
+            "passed": 19,
+            "total": 19
+          },
+          "stage_1/test_seeded_state.py": {
+            "passed": 14,
+            "total": 14
+          }
+        }
+      },
+      "stage-4": {
+        "collected": 5,
+        "passed": 5,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "deselected": 0,
+        "xfailed": 0,
+        "files": {
+          "stage_4/test_sample.py": {
+            "passed": 5,
+            "total": 5
+          }
+        }
+      }
+    },
+    "later_suite": "None reported applicable; stage 4 is the final provided suite. No independent stage-5 probe was made."
+  }
+]

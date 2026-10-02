@@ -1,0 +1,4 @@
+DIFFERENTIAL PASS operations=532 seed=20261001 persistence=pass concurrency=50 auth-controls=pass boundary=pass holds-expiry=pass migration=pass
+TEMPORAL DIFFERENTIAL PASS operations=75 revisions=pass known-effective=pass snapshots=pass holds=pass stage1-import=pass stage2-import=pass
+REFUND BATCH PASS random_operations=40 refunds=pass batches=pass precedence=pass state-import=pass imports=3/3
+STAGE4 MODEL SUITE PASS inherited=pass temporal=pass refunds-batches=pass three-legacy-imports=pass
