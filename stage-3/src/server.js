@@ -7,6 +7,10 @@ const { planFixture, buildFixtureState, buildImportedState } = require('./snapsh
 const passwords = require('./passwords');
 const seeding = require('./seeding');
 const web = require('./web');
+const { SnapshotStore } = require('./snapshots');
+const { INF } = require('./ledger');
+
+const snapshots = new SnapshotStore();
 
 const TEST_BODY_BYTES = 64 * 1024 * 1024;
 
@@ -90,8 +94,48 @@ async function login(req, res) {
   v.sendJson(res, 200, { user_id: current.id, display_name: current.display_name, token });
 }
 
-function getMe(req, res) {
-  v.sendJson(res, 200, store.me(requireUser(req)));
+function getMe(req, res, url) {
+  const started = Date.now();
+  const user = requireUser(req);
+  const { as_of: asOf, known_at: knownAt } = take(v.parseMeQuery(url.searchParams));
+  if (asOf === null && knownAt === null) {
+    v.sendJson(res, 200, store.me(user));
+    return;
+  }
+  const echo = {};
+  if (asOf !== null) echo.as_of = asOf.raw;
+  if (knownAt !== null) echo.known_at = knownAt.raw;
+  // Without as_of the view is the instant the request began; without known_at, everything committed.
+  v.sendJson(res, 200, store.meAt(user, asOf ? asOf.ms : started, knownAt ? knownAt.ms : INF, echo));
+}
+
+// ---- stage 3: statements, corrections, revisions ----------------------------------
+
+function getStatement(req, res, url) {
+  const started = Date.now();
+  const user = requireUser(req);
+  const q = take(v.validateStatementQuery(url.searchParams));
+  if (q.snapshot !== null) {
+    v.sendJson(res, 200, take(snapshots.page(user.id, q.snapshot, q.limit, q.offset)));
+    return;
+  }
+  const full = store.statementFor(user, q.from ? q.from.ms : null, q.to ? q.to.ms : started, q.known_at ? q.known_at.ms : INF);
+  if (q.known_at) full.known_at = q.known_at.raw;
+  const token = snapshots.create(user.id, full);
+  v.sendJson(res, 200, take(snapshots.page(user.id, token, q.limit, q.offset)));
+}
+
+function correctPayment(req, res, id, path) {
+  return idempotentWrite(req, res, path, {}, (caller, body) => {
+    const c = take(v.validateCorrection(body, Date.now()));
+    return store.correctPayment(caller, id, c);
+  });
+}
+
+function paymentRevisions(req, res, id) {
+  const user = requireUser(req);
+  req.resume();
+  v.sendJson(res, 200, store.revisionsOf(user, id));
 }
 
 function createPayment(req, res) {
@@ -181,6 +225,7 @@ async function reset(req, res) {
   // Hashing runs before the swap, which is one assignment (seeding.js).
   const hashes = await seeding.hashFixturePasswords(plan);
   store.replace(buildFixtureState(plan, hashes));
+  snapshots.clear();
   v.sendNoContent(res);
 }
 
@@ -193,6 +238,7 @@ function exportState(req, res) {
 async function importState(req, res) {
   const doc = await readObject(req, { maxBytes: TEST_BODY_BYTES });
   store.replace(buildImportedState(doc));
+  snapshots.clear();
   v.sendNoContent(res);
 }
 
@@ -245,6 +291,7 @@ function listAuthorizations(req, res, url) {
 // ---- routing ------------------------------------------------------------------------
 
 const REQUEST_ACTION = /^\/requests\/([^/]+)\/(pay|decline|cancel)$/;
+const PAYMENT_HISTORY = /^\/payments\/([^/]+)\/(corrections|revisions)$/;
 const AUTHORIZATION_ACTION = /^\/authorizations\/([^/]+)\/(capture|void)$/;
 
 async function route(req, res) {
@@ -272,7 +319,8 @@ async function route(req, res) {
     '/_test/import': { POST: () => importState(req, res) },
     '/auth/signup': { POST: () => signup(req, res) },
     '/auth/login': { POST: () => login(req, res) },
-    '/me': { GET: () => getMe(req, res) },
+    '/me': { GET: () => getMe(req, res, url) },
+    '/statement': { GET: () => getStatement(req, res, url) },
     '/payments': { POST: () => createPayment(req, res) },
     '/requests': { POST: () => createRequest(req, res), GET: () => listRequests(req, res, url) },
     '/splits': { POST: () => createSplit(req, res) },
@@ -323,6 +371,24 @@ async function route(req, res) {
           return voidAuthorization(req, res, id);
         },
       };
+    }
+  }
+  if (!handlers) {
+    const a = PAYMENT_HISTORY.exec(path);
+    if (a) {
+      let id;
+      try {
+        id = decodeURIComponent(a[1]);
+      } catch {
+        id = null;
+      }
+      const unknown = () => {
+        requireUser(req);
+        throw new ApiError(404, 'not_found', 'not found');
+      };
+      handlers = a[2] === 'corrections'
+        ? { POST: () => (id === null ? unknown() : correctPayment(req, res, id, path)) }
+        : { GET: () => (id === null ? unknown() : paymentRevisions(req, res, id)) };
     }
   }
   if (!handlers) throw new ApiError(404, 'not_found', 'not found');

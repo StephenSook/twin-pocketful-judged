@@ -6,7 +6,8 @@
 // the returned state in with one synchronous assignment.
 
 const v = require('./validate');
-const { ApiError, emptyState, rfc3339, MAX_ID, MAX_BALANCE } = require('./store');
+const { ApiError, emptyState, rfc3339, MAX_ID, MAX_BALANCE, indexPayment, pushTo } = require('./store');
+const ledger = require('./ledger');
 
 const AUTH_STATUSES = new Set(['open', 'captured', 'voided', 'expired']);
 const { isPasswordHash } = require('./passwords');
@@ -80,6 +81,8 @@ function planFixture(f) {
     if (!isShare(p.amount)) fail('payment amount must be a nonnegative integer');
     if (p.note !== undefined && !isNote(p.note)) fail('payment note must be a string');
     if (p.visibility !== undefined && !VISIBILITIES.has(p.visibility)) fail('payment visibility is invalid');
+    // stage 3: a seeded created_at in the future is a reset error
+    if (p.created_at !== undefined && p.created_at !== null && timestampMs(p.created_at, 0) > Date.now()) fail('payment created_at is in the future');
     paymentIds.add(p.id);
     return p;
   });
@@ -247,6 +250,7 @@ function buildFixtureState(plan, hashes) {
   let lastMs = now;
   for (const list of [payments, requests, auths]) for (const x of list) if (x.ms > lastMs) lastMs = x.ms;
   s.lastMs = lastMs;
+  deriveHistory(s, { seeded: true });
   return s;
 }
 
@@ -384,7 +388,9 @@ function buildImportedState(doc) {
   for (const item of authList) {
     if (!isObj(item) || !isMs(item.ms) || item.ms < prevMs || !isObj(item.authorization)) fail('state authorization is invalid');
     const a = item.authorization;
-    if (Object.keys(a).length !== AUTH_KEYS.length || !AUTH_KEYS.every((k) => k in a)) fail('state authorization fields are invalid');
+    const authKeys = 'closed_at' in a ? [...AUTH_KEYS, 'closed_at'] : AUTH_KEYS;
+    if (Object.keys(a).length !== authKeys.length || !authKeys.every((k) => k in a)) fail('state authorization fields are invalid');
+    if ('closed_at' in a && a.closed_at !== null && (typeof a.closed_at !== 'string' || !Number.isFinite(Date.parse(a.closed_at)))) fail('state authorization closed_at is invalid');
     if (!isId(a.authorization_id) || s.authorizationById.has(a.authorization_id)) fail('state authorization id is invalid');
     if (!userMatches(a.from_user_id, a.from_handle) || !userMatches(a.to_user_id, a.to_handle) || a.from_user_id === a.to_user_id) fail('state authorization user is invalid');
     if (!isAmount(a.amount) || a.currency !== s.currency || !isNote(a.note) || !VISIBILITIES.has(a.visibility) || !AUTH_STATUSES.has(a.status)) fail('state authorization is invalid');
@@ -399,6 +405,7 @@ function buildImportedState(doc) {
     prevMs = item.ms;
     const copy = {};
     for (const k of AUTH_KEYS) copy[k] = k === 'payment_ids' ? a[k].slice() : a[k];
+    if ('closed_at' in a) copy.closed_at = a.closed_at;
     s.authorizations.push({ ms: item.ms, a: copy });
     s.authorizationById.set(copy.authorization_id, copy);
     if (copy.status === 'open') {
@@ -409,7 +416,110 @@ function buildImportedState(doc) {
   for (const [id, h] of heldBy) if (h > s.users.get(id).balance) fail('state holds exceed a balance');
   const lastOf = (arr) => (arr.length ? arr[arr.length - 1].ms : 0);
   s.lastMs = Math.max(s.lastMs, lastOf(s.payments), lastOf(s.requests), lastOf(s.authorizations));
+  deriveHistory(s, importHistory(st, s));
   return s;
+}
+
+// ---- stage-3 history ---------------------------------------------------------------
+
+// Revisions, per-user indexes, opening balances and hold event logs.
+// extras: { seeded, revisions: Map, openings: Map, authEvents: Map } (all optional).
+function deriveHistory(s, extras) {
+  const revisions = extras.revisions || new Map();
+  for (const { p } of s.payments) indexPayment(s, p, revisions.get(p.payment_id));
+  const openings = extras.openings || new Map();
+  for (const u of s.users.values()) {
+    if (openings.has(u.id)) {
+      u.opening = openings.get(u.id);
+      continue;
+    }
+    // Opening = ending balance minus the net effect of the payments (current revisions).
+    let net = 0;
+    for (const p of s.paymentsByUser.get(u.id) || []) {
+      const revs = s.revisions.get(p.payment_id);
+      const amount = revs[revs.length - 1].amount;
+      net += p.from_user_id === u.id ? -amount : amount;
+    }
+    u.opening = u.balance - net;
+  }
+  const events = extras.authEvents || new Map();
+  for (const { a } of s.authorizations) {
+    pushTo(s.authorizationsByPayer, a.from_user_id, a);
+    const captures = a.payment_ids.map((id) => s.paymentById.get(id)).filter(Boolean)
+      .map((p) => ({ ms: Date.parse(p.created_at), amount: p.amount }));
+    const lastCapture = captures.length ? captures[captures.length - 1].ms : null;
+    const createdMs = Date.parse(a.created_at);
+    const expMs = Date.parse(a.expires_at);
+    if (!('closed_at' in a)) {
+      a.closed_at = a.status === 'open' ? null
+        : a.status === 'expired' ? a.expires_at
+          : a.status === 'captured' && lastCapture !== null ? ledger.stamp(lastCapture) : a.created_at;
+    }
+    if (events.has(a.authorization_id)) {
+      s.authEvents.set(a.authorization_id, events.get(a.authorization_id));
+      continue;
+    }
+    // Seeded closed holds (and seeded open holds already past expiry) have no lifecycle (stage 3).
+    const noHistory = extras.seeded === true && a.status !== 'open';
+    const capturedKnown = captures.reduce((n, c) => n + c.amount, 0);
+    s.authEvents.set(a.authorization_id, {
+      createdMs,
+      initialHold: a.amount - a.captured_amount + capturedKnown,
+      expMs,
+      captures,
+      closedMs: a.status === 'open' ? null : a.status === 'expired' ? expMs : Date.parse(a.closed_at),
+      closedKind: a.status === 'open' ? null : a.status,
+      noHistory,
+    });
+  }
+}
+
+// History carried by a stage-3 export; absent in stage-1/2 exports.
+function importHistory(st, s) {
+  const extras = { seeded: false };
+  if (st.revisions !== undefined) {
+    if (!Array.isArray(st.revisions)) fail('state.revisions must be an array');
+    extras.revisions = new Map();
+    for (const item of st.revisions) {
+      if (!isObj(item) || !s.paymentById.has(item.payment_id) || !Array.isArray(item.revisions) || item.revisions.length < 1) fail('state revision is invalid');
+      const p = s.paymentById.get(item.payment_id);
+      let prev = null;
+      const revs = item.revisions.map((r, i) => {
+        if (!isObj(r) || r.revision !== i + 1 || !isShare(r.amount) || r.amount > 1000000000 && i > 0 || typeof r.reason !== 'string') fail('state revision is invalid');
+        for (const k of ['effective_at', 'recorded_at']) if (typeof r[k] !== 'string' || !Number.isFinite(Date.parse(r[k]))) fail('state revision time is invalid');
+        const rev = { revision: r.revision, amount: r.amount, effMs: Date.parse(r.effective_at), recMs: Date.parse(r.recorded_at), effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason };
+        if (prev && rev.recMs <= prev.recMs) fail('state revision recorded times must increase');
+        prev = rev;
+        return rev;
+      });
+      if (revs[0].amount !== p.amount || revs[0].effective_at !== p.created_at) fail('state revision 1 must match the payment');
+      extras.revisions.set(item.payment_id, revs);
+    }
+  }
+  if (st.openings !== undefined) {
+    if (!Array.isArray(st.openings)) fail('state.openings must be an array');
+    extras.openings = new Map();
+    for (const o of st.openings) {
+      if (!isObj(o) || !s.users.has(o.user_id) || !Number.isInteger(o.opening) || Math.abs(o.opening) > MAX_BALANCE) fail('state opening is invalid');
+      extras.openings.set(o.user_id, o.opening);
+    }
+  }
+  if (st.auth_events !== undefined) {
+    if (!Array.isArray(st.auth_events)) fail('state.auth_events must be an array');
+    extras.authEvents = new Map();
+    for (const e of st.auth_events) {
+      const okNum = (x) => Number.isSafeInteger(x);
+      if (!isObj(e) || !s.authorizationById.has(e.authorization_id) || !okNum(e.createdMs) || !okNum(e.initialHold) || !okNum(e.expMs)
+        || !Array.isArray(e.captures) || !e.captures.every((c) => isObj(c) && okNum(c.ms) && okNum(c.amount))
+        || !(e.closedMs === null || okNum(e.closedMs)) || typeof e.noHistory !== 'boolean') fail('state authorization history is invalid');
+      extras.authEvents.set(e.authorization_id, {
+        createdMs: e.createdMs, initialHold: e.initialHold, expMs: e.expMs,
+        captures: e.captures.map((c) => ({ ms: c.ms, amount: c.amount })),
+        closedMs: e.closedMs, closedKind: e.closedKind === undefined ? null : e.closedKind, noHistory: e.noHistory,
+      });
+    }
+  }
+  return extras;
 }
 
 module.exports = { planFixture, buildFixtureState, buildImportedState };

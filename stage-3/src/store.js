@@ -12,6 +12,7 @@
 // most once.
 
 const crypto = require('node:crypto');
+const ledger = require('./ledger');
 
 // §4: no balance outside ±2^53; 2^53 itself is in range (coordinator ruling,
 // ledger R1-041). Every integer up to 2^53 is exact as a double; balance
@@ -60,7 +61,28 @@ function emptyState() {
     authorizations: [], // {ms, a} oldest first; a is the public authorization object
     authorizationById: new Map(),
     openAuthorizations: new Set(), // a objects with status 'open' (possibly past expiry until expireDue runs)
+    // stage 3: history
+    revisions: new Map(), // payment_id -> [{revision, amount, effMs, recMs, effective_at, recorded_at, reason}]
+    paymentsByUser: new Map(), // user id -> [payment objects the user sent or received]
+    authorizationsByPayer: new Map(), // user id -> [authorization objects the user authorized]
+    authEvents: new Map(), // authorization_id -> {createdMs, initialHold, expMs, captures:[{ms, amount}], closedMs, closedKind, noHistory}
   };
+}
+
+function pushTo(map, key, value) {
+  const list = map.get(key);
+  if (list) list.push(value);
+  else map.set(key, [value]);
+}
+
+// Indexes a payment for history: revision 1 at created_at (stage 3).
+function indexPayment(s, p, revs) {
+  const t = Date.parse(p.created_at);
+  s.revisions.set(p.payment_id, revs || [{
+    revision: 1, amount: p.amount, effMs: t, recMs: t, effective_at: p.created_at, recorded_at: p.created_at, reason: '',
+  }]);
+  pushTo(s.paymentsByUser, p.from_user_id, p);
+  if (p.to_user_id !== p.from_user_id) pushTo(s.paymentsByUser, p.to_user_id, p);
 }
 
 // Authorization expiry instant in ms (expires_at has second precision).
@@ -131,6 +153,84 @@ class Store {
     };
   }
 
+  // GET /me with as_of (T) and/or known_at (K): all four money fields for that view.
+  meAt(user, T, K, echo) {
+    this.expireDue();
+    const { total, held } = ledger.moneyAt(this.s, user, T, K);
+    return {
+      user_id: user.id,
+      display_name: user.display_name,
+      handle: user.handle,
+      balance: total,
+      total,
+      available: total - held,
+      held,
+      currency: this.s.currency,
+      minor_units: this.s.minor_units,
+      ...echo,
+    };
+  }
+
+  // ---- stage 3: corrections, revisions, statements --------------------------------
+
+  // POST /payments/{id}/corrections, after body validation. Appends one
+  // revision and moves the difference between the same two wallets in one step.
+  correctPayment(caller, id, { expected_revision, amount, effective_at, reason }) {
+    this.expireDue();
+    const p = this.s.paymentById.get(id);
+    if (!p) throw notFound();
+    if (p.from_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the original sender may correct this payment');
+    if (p.settlement_id !== null || p.authorization_id !== null) {
+      throw new ApiError(422, 'linked_payment_immutable', 'settlement members and captures cannot be corrected');
+    }
+    const revs = this.s.revisions.get(id);
+    const last = revs[revs.length - 1];
+    if (expected_revision !== last.revision) throw new ApiError(409, 'stale_revision', 'expected_revision is not the latest revision');
+    const sender = this.s.users.get(p.from_user_id);
+    const receiver = this.s.users.get(p.to_user_id);
+    const diff = amount - last.amount;
+    const debited = diff > 0 ? sender : receiver;
+    const credited = diff > 0 ? receiver : sender;
+    const move = Math.abs(diff);
+    if (move > 0 && debited.balance - this.held(debited) < move) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
+    if (credited.balance + move > MAX_BALANCE) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
+    const now = Date.now();
+    const recMs = Math.max(now, last.recMs + 1); // recorded times strictly increase (ruling S3-1)
+    const rev = {
+      revision: last.revision + 1,
+      amount,
+      effMs: effective_at.ms,
+      recMs,
+      effective_at: ledger.stamp(effective_at.ms),
+      recorded_at: ledger.stamp(recMs),
+      reason,
+    };
+    const override = { paymentId: id, revs: [...revs, rev] };
+    // Balances move only after both wallets' histories are proven sound.
+    const balances = new Map([[sender, sender.balance], [receiver, receiver.balance]]);
+    balances.set(debited, debited.balance - move);
+    balances.set(credited, credited.balance + move);
+    for (const u of [sender, receiver]) {
+      if (!ledger.historyIsSound(this.s, u, override, Math.max(now, recMs))) {
+        throw new ApiError(409, 'historical_overdraft', 'the correction would make a past balance negative');
+      }
+    }
+    revs.push(rev);
+    for (const [u, b] of balances) u.balance = b;
+    return ledger.revisionView(id, rev);
+  }
+
+  // GET /payments/{id}/revisions: only the two parties; anyone else gets 404.
+  revisionsOf(caller, id) {
+    const p = this.s.paymentById.get(id);
+    if (!p || (p.from_user_id !== caller.id && p.to_user_id !== caller.id)) throw notFound();
+    return { revisions: this.s.revisions.get(id).map((r) => ledger.revisionView(id, r)) };
+  }
+
+  statementFor(user, fromMs, toMs, K) {
+    return ledger.statement(this.s, user, fromMs, toMs, K);
+  }
+
   authenticate(token) {
     const id = this.s.tokens.get(tokenDigest(token));
     return id === undefined ? null : this.s.users.get(id) || null;
@@ -148,7 +248,7 @@ class Store {
     if (this.s.byEmail.has(emailKey)) throw new ApiError(409, 'email_taken', 'email already registered');
     if (this.s.byHandle.has(handle)) throw new ApiError(409, 'handle_taken', 'handle already taken');
     const id = this.newId('u', (x) => this.s.users.has(x));
-    const user = { id, email, email_key: emailKey, display_name: displayName, handle, balance: 0, password_hash: passwordHash };
+    const user = { id, email, email_key: emailKey, display_name: displayName, handle, balance: 0, opening: 0, password_hash: passwordHash };
     this.s.users.set(id, user);
     this.s.byHandle.set(handle, user);
     this.s.byEmail.set(emailKey, user);
@@ -188,6 +288,12 @@ class Store {
       if (expiryMs(a) <= now) {
         a.status = 'expired';
         a.remaining_amount = 0;
+        a.closed_at = a.expires_at;
+        const ev = this.s.authEvents.get(a.authorization_id);
+        if (ev && ev.closedMs === null) {
+          ev.closedMs = ev.expMs;
+          ev.closedKind = 'expired';
+        }
         this.s.openAuthorizations.delete(a);
       }
     }
@@ -250,6 +356,7 @@ class Store {
       };
       this.s.payments.push({ ms, p });
       this.s.paymentById.set(p.payment_id, p);
+      indexPayment(this.s, p);
       return p;
     });
     for (const [user, next] of nextBalance) user.balance = next;
@@ -437,10 +544,16 @@ class Store {
       payment_id: null,
       payment_ids: [],
       created_at: rfc3339(createdSec * 1000),
+      closed_at: null,
     };
     this.s.authorizations.push({ ms, a });
     this.s.authorizationById.set(a.authorization_id, a);
     this.s.openAuthorizations.add(a);
+    pushTo(this.s.authorizationsByPayer, caller.id, a);
+    this.s.authEvents.set(a.authorization_id, {
+      createdMs: createdSec * 1000, initialHold: amount, expMs: Date.parse(a.expires_at),
+      captures: [], closedMs: null, closedKind: null, noHistory: false,
+    });
     return authorizationView(a);
   }
 
@@ -475,8 +588,16 @@ class Store {
     a.remaining_amount -= released;
     a.payment_id = p.payment_id;
     a.payment_ids.push(p.payment_id);
+    const ev = this.s.authEvents.get(a.authorization_id);
+    const at = Date.parse(p.created_at);
+    if (ev) ev.captures.push({ ms: at, amount: take });
     if (closes) {
       a.status = 'captured';
+      a.closed_at = p.created_at;
+      if (ev) {
+        ev.closedMs = at;
+        ev.closedKind = 'captured';
+      }
       this.s.openAuthorizations.delete(a);
     }
     return { ...p };
@@ -486,8 +607,15 @@ class Store {
     const a = this.existingAuthorization(id);
     if (a.from_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the payer may void this authorization');
     if (a.status === 'open') {
+      const ev = this.s.authEvents.get(a.authorization_id);
+      const at = Math.max(Date.now(), ev ? ev.createdMs : 0);
       a.status = 'voided';
       a.remaining_amount = 0;
+      a.closed_at = ledger.stamp(at);
+      if (ev) {
+        ev.closedMs = at;
+        ev.closedKind = 'voided';
+      }
       this.s.openAuthorizations.delete(a);
     } else if (a.status !== 'voided') {
       throw new ApiError(409, 'authorization_not_open', 'authorization is not open');
@@ -542,9 +670,16 @@ class Store {
         last_ms: s.lastMs,
         authorization_ttl_seconds: s.authorizationTtlSeconds,
         authorizations: s.authorizations.map(({ ms, a }) => ({ ms, authorization: authorizationView(a) })),
+        // stage 3 history
+        openings: [...s.users.values()].map((u) => ({ user_id: u.id, opening: u.opening })),
+        revisions: [...s.revisions].filter(([, revs]) => revs.length > 1).map(([paymentId, revs]) => ({
+          payment_id: paymentId,
+          revisions: revs.map((r) => ({ revision: r.revision, amount: r.amount, effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason })),
+        })),
+        auth_events: [...s.authEvents].map(([id, e]) => ({ authorization_id: id, ...e, captures: e.captures.map((c) => ({ ...c })) })),
       },
     };
   }
 }
 
-module.exports = { Store, ApiError, emptyState, authorizationView, rfc3339, tokenDigest, MAX_ID, MAX_BALANCE };
+module.exports = { Store, ApiError, emptyState, authorizationView, rfc3339, tokenDigest, MAX_ID, MAX_BALANCE, indexPayment, pushTo };
