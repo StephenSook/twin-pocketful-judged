@@ -622,8 +622,8 @@ def boundary_case():
         op('ada', '/payments', {'to_handle': 'bob', 'amount': 1}, 'boundary-out'),
         op('bob', '/payments', {'to_handle': 'ada', 'amount': 1}, 'boundary-back'),
         op('ada', '/settlements', {'transfers': [
-            {'from_handle': 'bob', 'to_handle': 'ada', 'amount': 1},
-            {'from_handle': 'ada', 'to_handle': 'bob', 'amount': 1}
+            {'from_handle': 'ada', 'to_handle': 'bob', 'amount': 1},
+            {'from_handle': 'bob', 'to_handle': 'ada', 'amount': 1}
         ]}, 'boundary-net')]
     return fixture, operations
 
