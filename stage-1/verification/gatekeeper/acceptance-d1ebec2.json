@@ -1,5 +1,14 @@
 {
   "verdict": "ACCEPT",
+  "known_limitation": "Seeded public-fixture hashes initially use reduced-cost Argon2id m=1024 KiB,t=1,p=1 and therefore do not meet the general OWASP minimum. This is explicitly authorized for fixture accounts only; signup hashes use m=47104 KiB,t=2, and successful seeded login upgrades to those full parameters. No plaintext is persisted or exported and no reset/export/import timeout waiver applies.",
+  "direct_final_ruling": {
+    "source": "coordinator21c7b024-99be-417c-b0b1-0181a320b095",
+    "quote": "Seeded fixture passwords are public test input. They may use Argon2id at reduced cost (m=1024 KiB, t=1, p=1) with a unique salt per user, and are rehashed with the signup parameters after the user's first successful login. Signups keep the full parameters (m=47104 KiB, t=2). No plaintext is persisted or exported.",
+    "salt_followup_command": "PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/gatekeeper/password_scope.py http://172.24.0.8:18080 --fixture-exemption",
+    "salt_followup_exit_status": 0,
+    "salt_followup_result": "PASS: identical seeded passwords have distinct salts before any login; initial export has no plaintext; wrong-password login does not rehash; successful login upgrades to full signup cost.",
+    "salt_followup_log": "/tmp/gatekeeper-s1-v_ns6w8t/password-scope-d1ebec2-final-ruling.log"
+  },
   "revision": "d1ebec2a8131b8ae2df3b5f0e64cbefda4ebe2c1",
   "stage": 1,
   "stage_folder": "stage-1",

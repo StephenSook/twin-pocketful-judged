@@ -11,10 +11,15 @@ import probe as p
 
 fixture = {'currency': 'EUR', 'minor_units': 2, 'users': [
     {'id': 'seed', 'email': 'seed@example.test', 'password': p.PASSWORD,
-     'display_name': 'Seed', 'handle': 'seed', 'balance': 1}], 'payments': [], 'requests': []}
+     'display_name': 'Seed', 'handle': 'seed', 'balance': 1},
+    {'id': 'seed2', 'email': 'seed2@example.test', 'password': p.PASSWORD,
+     'display_name': 'Seed2', 'handle': 'seed2', 'balance': 1}], 'payments': [], 'requests': []}
 p.check(p.call('POST', '/_test/reset', fixture)[0] == 204, 'reset password scope')
 _, exported = p.call('GET', '/_test/export')
 original = exported['state']['users'][0]['password_hash']
+initial_hashes = [u['password_hash'] for u in exported['state']['users']]
+p.check(len({h.split('$')[4] for h in initial_hashes}) == len(initial_hashes), 'same seeded password has distinct per-user salts before login')
+p.check(p.PASSWORD not in json.dumps(exported), 'initial seeded export contains no plaintext password')
 initial = original.split('$')[3]
 _, signup = p.call('POST', '/auth/signup', {'email': 'signup@example.test', 'password': p.PASSWORD, 'display_name': 'Signup'})
 _, exported = p.call('GET', '/_test/export')
@@ -40,5 +45,6 @@ fixture_exemption = '--fixture-exemption' in sys.argv[2:]
 p.check(int(params['m']) >= 1024 and int(params['t']) >= 1, 'seed retains declared reduced Argon2id cost')
 print(json.dumps({'initial_seed_parameters': initial, 'signup_parameters': signup_hash.split('$')[3],
                   'after_login_parameters': upgraded.split('$')[3], 'initial_seed_meets_original_minimum': minimum,
-                  'fixture_exemption': fixture_exemption, 'behavior_checks': 'PASS', 'assertions': p.COUNT}))
+                  'fixture_exemption': fixture_exemption, 'unique_seed_salts_before_login': True,
+                  'behavior_checks': 'PASS', 'assertions': p.COUNT}))
 raise SystemExit(0 if minimum or fixture_exemption else 1)
