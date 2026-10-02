@@ -1,9 +1,9 @@
 # Run
 
-Build and start the service on port 8080 (from this `stage-3/` directory):
+Build and start the service on port 8080 (from this `stage-4/` directory):
 
 ```sh
-docker build -t pocketful-stage3 . && docker run --rm -e PORT=8080 -p 8080:8080 pocketful-stage3
+docker build -t pocketful-stage4 . && docker run --rm -e PORT=8080 -p 8080:8080 pocketful-stage4
 ```
 
 Then `curl http://localhost:8080/health` returns `{"status":"ok"}`.

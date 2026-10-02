@@ -366,8 +366,9 @@ function daysInMonth(y, m) {
 }
 
 // Strict RFC 3339 date-time with a required offset. Value: { raw, ms } where
-// raw is the original string (for echoes) and ms the epoch milliseconds
-// (fraction floored to the millisecond). Anything else is 422.
+// raw is the original string (for echoes), ms the epoch milliseconds
+// (fraction floored to the millisecond) and sub the fraction digits beyond
+// the millisecond without trailing zeros. Anything else is 422.
 function parseInstant(raw, field) {
   const bad = () => invalid(`${field} must be an RFC 3339 instant with an offset, e.g. 2026-09-24T13:20:00+00:00`);
   if (typeof raw !== 'string') return bad();
@@ -383,12 +384,13 @@ function parseInstant(raw, field) {
     offsetMin = (m[9] === '-' ? -1 : 1) * (oh * 60 + om);
   }
   const frac = m[7] ? Number(m[7].slice(1, 4).padEnd(3, '0')) : 0;
+  const sub = m[7] ? m[7].slice(4).replace(/0+$/, '') : '';
   const date = new Date(0);
   date.setUTCFullYear(y, mo - 1, d);
   date.setUTCHours(h, mi, sec, frac);
   const ms = date.getTime() - offsetMin * 60000;
   if (!Number.isFinite(ms)) return bad();
-  return ok({ raw, ms });
+  return ok({ raw, ms, sub });
 }
 
 // A '+' offset sent without percent-encoding arrives as a space: a single
@@ -455,6 +457,43 @@ function validateCorrection(body, nowMs) {
   return ok({ expected_revision: rev, amount: amount === 0 ? 0 : amount, reason, effective_at: eff.value });
 }
 
+// ---- stage 4: refunds and correction batches ------------------------------
+
+// Two parsed instants denote the same moment (offset spellings may differ).
+function sameInstant(a, b) {
+  return a.ms === b.ms && (a.sub || '') === (b.sub || '');
+}
+
+// POST /payments/{id}/refunds body: amount by the ordinary payment rule.
+function validateRefund(body) {
+  const amount = validateAmount(body.amount);
+  if (!amount.ok) return amount;
+  return ok({ amount: amount.value });
+}
+
+const MAX_BATCH = 32;
+
+// POST /correction-batches whole-body rules: corrections is an array of
+// 1..32 objects with distinct string payment_ids. Items are validated one by
+// one with validateCorrectionItem, in input order.
+function validateBatchShape(body) {
+  const items = body.corrections;
+  if (!Array.isArray(items)) return invalid('corrections must be an array');
+  if (items.length < 1 || items.length > MAX_BATCH) return invalid(`corrections must contain 1 to ${MAX_BATCH} items`);
+  if (!items.every(isPlainObject)) return invalid('each correction must be an object');
+  if (!items.every((c) => typeof c.payment_id === 'string')) return invalid('each correction needs a payment_id string');
+  if (new Set(items.map((c) => c.payment_id)).size !== items.length) return invalid('payment_ids must be distinct');
+  return ok({ items });
+}
+
+// One batch item: the ordinary correction fields plus payment_id.
+function validateCorrectionItem(item, nowMs) {
+  if (typeof item.payment_id !== 'string') return invalid('payment_id must be a string');
+  const c = validateCorrection(item, nowMs);
+  if (!c.ok) return c;
+  return ok({ payment_id: item.payment_id, ...c.value });
+}
+
 // ---- idempotency helper ----------------------------------------------------
 
 // Canonical text of a parsed JSON value: object keys sorted, no whitespace.
@@ -505,4 +544,8 @@ module.exports = {
   parseMeQuery,
   validateStatementQuery,
   validateCorrection,
+  sameInstant,
+  validateRefund,
+  validateBatchShape,
+  validateCorrectionItem,
 };

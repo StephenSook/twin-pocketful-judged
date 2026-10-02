@@ -9,7 +9,7 @@ const q = (s) => new URLSearchParams(s);
 
 test('parseInstant accepts strict RFC 3339 instants with an offset', () => {
   const r = v.parseInstant('2026-09-24T13:20:00+02:00', 'as_of');
-  a.deepStrictEqual(r.value, { raw: '2026-09-24T13:20:00+02:00', ms: Date.UTC(2026, 8, 24, 11, 20, 0) });
+  a.deepStrictEqual(r.value, { raw: '2026-09-24T13:20:00+02:00', ms: Date.UTC(2026, 8, 24, 11, 20, 0), sub: '' });
   a.strictEqual(v.parseInstant('2026-09-24T13:20:00Z', 'x').value.ms, Date.UTC(2026, 8, 24, 13, 20));
   a.strictEqual(v.parseInstant('2026-09-24t13:20:00z', 'x').ok, true);
   a.strictEqual(v.parseInstant('2026-09-24T13:20:00.9999-01:30', 'x').value.ms, Date.UTC(2026, 8, 24, 14, 50, 0, 999));
@@ -55,7 +55,7 @@ test('GET /me and /statement query parsing', () => {
 test('validateCorrection: all fields required, every invalid case 422', () => {
   const now = Date.UTC(2026, 8, 24, 12);
   const good = { expected_revision: 1, amount: 400, effective_at: '2026-09-20T12:00:00+00:00', reason: 'corrected amount' };
-  a.deepStrictEqual(v.validateCorrection(good, now).value, { expected_revision: 1, amount: 400, reason: 'corrected amount', effective_at: { raw: good.effective_at, ms: Date.UTC(2026, 8, 20, 12) } });
+  a.deepStrictEqual(v.validateCorrection(good, now).value, { expected_revision: 1, amount: 400, reason: 'corrected amount', effective_at: { raw: good.effective_at, ms: Date.UTC(2026, 8, 20, 12), sub: '' } });
   a.strictEqual(v.validateCorrection({ ...good, amount: 0 }, now).value.amount, 0);
   a.strictEqual(v.validateCorrection({ ...good, effective_at: '2026-09-24T12:00:00Z' }, now).ok, true);
   a.strictEqual(v.validateCorrection({ ...good, reason: '😀'.repeat(200) }, now).ok, true);
