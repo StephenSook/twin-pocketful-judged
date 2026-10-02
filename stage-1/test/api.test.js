@@ -79,6 +79,19 @@ test.before(async () => {
 
 test.after(() => child.kill());
 
+// Runs first, against a freshly started process (regression: a cold burst of
+// unknown-email logins used to compute 50 separate dummy hashes).
+test('cold burst of 50 unknown-email logins answers every request within 5 s', async () => {
+  const started = Date.now();
+  const rs = await Promise.all(Array.from({ length: 50 }, (_, i) => {
+    const t0 = Date.now();
+    return call('POST', '/auth/login', { body: { email: `ghost${i}@nowhere.io`, password: 'whatever pw' } }).then((r) => ({ ...r, ms: Date.now() - t0 }));
+  }));
+  assert.ok(rs.every((r) => r.status === 401 && r.body.error.code === 'unauthenticated'));
+  const worst = Math.max(...rs.map((r) => r.ms));
+  assert.ok(worst < 5000, `slowest unknown-email login took ${worst} ms (wall ${Date.now() - started} ms)`);
+});
+
 test('auth, me and errors', async () => {
   const t = await resetAndLogin();
   const me = await call('GET', '/me', { token: t.ada });

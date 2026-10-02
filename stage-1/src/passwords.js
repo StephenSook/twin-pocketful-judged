@@ -68,11 +68,19 @@ async function verifyPassword(password, stored) {
 
 // A real hash of a random secret: unknown-email logins verify against it so
 // they cost the same time as a wrong password.
+// Computed once, eagerly at startup, and shared as one promise: a cold burst
+// of unknown-email logins must not each compute their own dummy hash.
 let dummyHash = null;
+function dummyHashReady() {
+  if (dummyHash === null) {
+    dummyHash = hashPassword(crypto.randomBytes(18).toString('base64url'));
+    dummyHash.catch(() => { dummyHash = null; });
+  }
+  return dummyHash;
+}
 async function dummyVerify(password) {
-  if (dummyHash === null) dummyHash = await hashPassword(crypto.randomBytes(18).toString('base64url'));
-  await verifyPassword(password, dummyHash);
+  await verifyPassword(password, await dummyHashReady());
   return false;
 }
 
-module.exports = { hashPassword, verifyPassword, isPasswordHash, dummyVerify, paramsForFixture, PARAMS, BULK_PARAMS };
+module.exports = { dummyHashReady, hashPassword, verifyPassword, isPasswordHash, dummyVerify, paramsForFixture, PARAMS, BULK_PARAMS };

@@ -267,6 +267,8 @@ server.keepAliveTimeout = 65000;
 server.headersTimeout = 66000;
 server.requestTimeout = 30000;
 
+passwords.dummyHashReady().catch(() => {});
+
 const port = Number(process.env.PORT) || 8080;
 server.listen(port, '0.0.0.0', () => {
   process.stdout.write(`pocketful listening on 0.0.0.0:${port}\n`);
