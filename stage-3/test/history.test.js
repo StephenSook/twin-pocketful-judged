@@ -434,3 +434,21 @@ test('a statement read right after a payment always includes it (default to foll
     assert.strictEqual(m.balance, (await me(t.ada)).balance);
   }
 });
+
+test('seeded holds past expiry or closed, created_at omitted: own export re-imports', async () => {
+  for (const status of ['expired', 'open', 'voided', 'captured']) {
+    const users = [
+      { id: 'u_a', email: 'a@x.io', password: 'correct horse', display_name: 'A', handle: 'a', balance: 100 },
+      { id: 'u_b', email: 'b@x.io', password: 'correct horse', display_name: 'B', handle: 'b', balance: 0 },
+    ];
+    const authorizations = [{ id: 'a_past', from_user_id: 'u_a', to_user_id: 'u_b', amount: 10, note: '', visibility: 'private', status, expires_at: '2020-01-01T00:00:00+00:00' }];
+    assert.strictEqual((await call('POST', '/_test/reset', { body: { currency: 'EUR', minor_units: 2, users, authorizations } })).status, 204, status);
+    const exp = await call('GET', '/_test/export');
+    assert.strictEqual((await call('POST', '/_test/import', { raw: exp.text })).status, 204, status);
+    const a = (await call('POST', '/auth/login', { body: { email: 'a@x.io', password: 'correct horse' } })).body.token;
+    for (const at of ['2019-12-31T00:00:00+00:00', '2020-01-02T00:00:00+00:00']) {
+      const m = await me(a, `?as_of=${q(at)}`);
+      assert.deepStrictEqual([m.total, m.held, m.available], [100, 0, 100], `${status} at ${at}`);
+    }
+  }
+});

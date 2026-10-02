@@ -253,6 +253,7 @@ function buildFixtureState(plan, hashes) {
   // Holds seeded as open have a lifecycle (created, then expiry at expires_at)
   // even when already expired at reset time; seeded closed holds do not.
   deriveHistory(s, { seeded: true, seededOpen: new Set(plan.authorizations.filter((x) => x.status === 'open').map((x) => x.id)) });
+  validateHistory(s);
   return s;
 }
 
@@ -419,9 +420,16 @@ function buildImportedState(doc) {
   const lastOf = (arr) => (arr.length ? arr[arr.length - 1].ms : 0);
   s.lastMs = Math.max(s.lastMs, lastOf(s.payments), lastOf(s.requests), lastOf(s.authorizations));
   deriveHistory(s, importHistory(st, s));
-  // The imported history must be consistent (§10 invalid state is 422): each
-  // opening is nonnegative, opening plus the net of current revisions equals
-  // the balance, and total and available never go negative at any boundary.
+  validateHistory(s);
+  return s;
+}
+
+// The history must be consistent (§10 invalid state is 422; stage 3 "seeded
+// history is consistent and nonnegative"): each opening is nonnegative, opening
+// plus the net of current revisions equals the balance, and total, held and
+// available never go negative at any boundary. Applied to reset fixtures too,
+// so every state the service accepts re-imports from its own export.
+function validateHistory(s) {
   const now = Date.now();
   for (const u of s.users.values()) {
     if (u.opening < 0) fail('state opening balance is negative');
@@ -434,7 +442,6 @@ function buildImportedState(doc) {
     if (BigInt(u.opening) + net !== BigInt(u.balance)) fail('state opening and payments do not match the balance');
     if (!ledger.historyIsSound(s, u, null, now)) fail('state history has a negative balance');
   }
-  return s;
 }
 
 // ---- stage-3 history ---------------------------------------------------------------
@@ -478,7 +485,9 @@ function deriveHistory(s, extras) {
       continue;
     }
     // Seeded closed holds have no lifecycle (stage 3); seeded open ones do.
-    const noHistory = extras.seeded === true && !extras.seededOpen.has(a.authorization_id);
+    // An open seed already past its deadline when created (created_at omitted =
+    // reset time) never held anything observable either.
+    const noHistory = extras.seeded === true && (!extras.seededOpen.has(a.authorization_id) || expMs <= createdMs);
     const capturedKnown = captures.reduce((n, c) => n + c.amount, 0);
     s.authEvents.set(a.authorization_id, {
       createdMs,
@@ -546,12 +555,14 @@ function importHistory(st, s) {
         prevMs = c.ms;
         capturedSum += c.amount;
       }
-      if (e.initialHold < 0 || e.initialHold > a.amount || capturedSum > e.initialHold || e.expMs < e.createdMs
-        || !kinds.includes(e.closedKind) || (e.closedMs === null) !== (e.closedKind === null)
-        || (e.closedMs !== null && e.closedMs < e.createdMs)
-        || (a.status === 'open' ? e.closedKind !== null : !e.noHistory && e.closedKind !== a.status)
-        || (!e.noHistory && (e.captures.length !== capturePayments.length
-          || e.captures.some((c, i) => capturePayments[i].amount !== c.amount || Date.parse(capturePayments[i].created_at) !== c.ms)))) {
+      // Seeded holds without a lifecycle (noHistory) contribute nothing to history,
+      // so only their shape is checked.
+      const timeline = !e.noHistory && (e.expMs < e.createdMs || (e.closedMs !== null && e.closedMs < e.createdMs)
+        || (a.status === 'open' ? e.closedKind !== null : e.closedKind !== a.status)
+        || e.captures.length !== capturePayments.length
+        || e.captures.some((c, i) => capturePayments[i].amount !== c.amount || Date.parse(capturePayments[i].created_at) !== c.ms));
+      if (e.initialHold < 0 || e.initialHold > a.amount || capturedSum > e.initialHold
+        || !kinds.includes(e.closedKind) || (e.closedMs === null) !== (e.closedKind === null) || timeline) {
         fail('state authorization history is invalid');
       }
       extras.authEvents.set(e.authorization_id, {
