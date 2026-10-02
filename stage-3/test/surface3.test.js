@@ -126,3 +126,32 @@ test('SnapshotStore export/restore carries tokens across import (ruling S3-3)', 
   a.strictEqual(dst.page('u1', t, 50, 0).error.status, 404);
   a.deepStrictEqual(dst.export(), []);
 });
+
+test('SnapshotStore parameter refs: createRef/resolve and export/restore', () => {
+  const src = new SnapshotStore();
+  const params = { from: null, to: '2026-09-24T12:00:00+00:00', known_at: null, cutoff: 41 };
+  const t = src.createRef('u1', params);
+  params.cutoff = 99;
+  a.deepStrictEqual(src.resolve('u1', t).value, { from: null, to: '2026-09-24T12:00:00+00:00', known_at: null, cutoff: 41 });
+  a.ok(Object.isFrozen(src.resolve('u1', t).value));
+  a.strictEqual(src.resolve('u2', t).error.status, 404);
+  a.strictEqual(src.resolve('u1', '').error.status, 404);
+  a.strictEqual(src.resolve('u1', 'x').error.code, 'not_found');
+  a.strictEqual(src.page('u1', t, 10, 0).error.status, 404);
+  const full = src.create('u1', { opening_balance: 1, entries: [], closing_balance: 1 });
+  a.strictEqual(src.resolve('u1', full).error.status, 404);
+  const list = JSON.parse(JSON.stringify(src.exportAll()));
+  a.deepStrictEqual(list.map((e) => [e.token, e.user_id, 'params' in e, 'result' in e]), [[t, 'u1', true, false], [full, 'u1', false, true]]);
+  const dst = new SnapshotStore();
+  const stale = dst.createRef('u1', { cutoff: 1 });
+  a.strictEqual(dst.restore(list), true);
+  a.strictEqual(dst.resolve('u1', stale).error.status, 404);
+  a.strictEqual(dst.resolve('u1', t).value.cutoff, 41);
+  a.strictEqual(dst.page('u1', full, 5, 0).value.opening_balance, 1);
+  a.strictEqual(dst.restore([{ token: 'a', user_id: 'u', params: {}, result: { entries: [] } }]), false);
+  a.strictEqual(dst.restore([{ token: 'a', user_id: 'u' }]), false);
+  a.strictEqual(dst.restore([{ token: 'a', user_id: 'u', params: [] }]), false);
+  a.strictEqual(dst.resolve('u1', t).ok, true);
+  dst.clear();
+  a.strictEqual(dst.resolve('u1', t).error.status, 404);
+});
