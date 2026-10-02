@@ -3,6 +3,7 @@
 import argparse
 from copy import deepcopy
 from datetime import datetime, timezone, timedelta
+from decimal import Decimal
 import json
 from pathlib import Path
 import random
@@ -67,7 +68,7 @@ class Runner:
         if kind in ('revisions','correction'):path='/payments/'+op['id']+('/revisions' if kind=='revisions' else '/corrections')
         if kind in ('capture','void'):path='/authorizations/'+op['id']+'/'+kind
         method='GET' if kind in ('me','statement','revisions') else 'POST'
-        if q:path+='?'+urllib.parse.urlencode(q)
+        if q:path+='?'+op.get('raw_query',urllib.parse.urlencode(q))
         started=now()
         status,actual=http(self.base,method,path,op.get('body',{}) if method=='POST' else None,
                            token=self.tokens.get(user),key=op.get('key'))
@@ -80,6 +81,11 @@ class Runner:
             previous=self.state['revisions'].get(op['id'],[{'recorded_at':T0}])[-1]['recorded_at']
             fallback=(datetime.fromisoformat(previous)+timedelta(seconds=1)).isoformat()
             op['recorded_at']=actual.get('recorded_at',max(now(),fallback))
+            if status==201:
+                recorded=model.instant(op['recorded_at'])
+                require(recorded>=model.instant(started)-Decimal('.001') and
+                        recorded<=max(model.instant(op['now']),model.instant(previous)+Decimal('.001'))+Decimal('.001'),
+                        'R3 server-assigned recorded time near request')
         if kind in ('payment','authorize','capture'):
             op['receipt']=actual if status==201 else {'payment_id':'@failed','created_at':started,'authorization_id':'@failed','expires_at':FUTURE}
         if kind in ('capture','void'):
@@ -129,7 +135,8 @@ def sequence(seed=42,steps=30):
         op=correction(key='invalid');del op['body'][field];operations.append(op)
     operations += [correction(effective=T3,key='historical'),correction(amount=0,key='short'),correction(),
                    correction(),correction(revision=1,amount=350,key='stale'),
-                   correction(revision=2,amount=320,effective=T0,key='second'),correction()]
+                   correction(revision=2,amount=320,effective=T0,key='second'),correction(),
+                   correction(revision=3,amount=300,effective=T1,key='historical')]
     changed=correction();changed['body']['amount']=None;operations.append(changed)
     # Random proposed amounts/times/revisions; model derives funds/history failures.
     rng=random.Random(seed)
@@ -178,16 +185,22 @@ def temporal_queries(r):
     for q in [{'limit':'0'},{'limit':'201'},{'offset':'-1'},{'offset':'1e2'},{'limit':'1.0'}]:
         r.run({'kind':'statement','user':'ada','query':q})
     r.run({'kind':'me','user':'ada','query':{'as_of':'2020-01-02T02:30:00.000+02:30','known_at':FUTURE}})
+    for field in ['as_of','known_at']:
+        r.run({'kind':'me','user':'ada','query':{field:T2},'raw_query':field+'='+T2})
+    for field in ['from','to','known_at']:
+        r.run({'kind':'statement','user':'ada','query':{field:T2},'raw_query':field+'='+T2})
 
 
 def snapshots(base):
     r=Runner(base)
     original=r.run({'kind':'statement','user':'ada','query':{'from':T0,'to':T3,'limit':'1'}})
     token=original['snapshot']
+    default_token=r.run({'kind':'statement','user':'ada','query':{'limit':'1'}})['snapshot']
     r.run(correction(amount=300,effective=T0),observe=True)
     r.run({'kind':'payment','user':'ada','key':'new-payment','body':{'to_handle':'bob','amount':1}})
     for offset in ['0','1','2','999']:
         r.run({'kind':'statement','user':'ada','query':{'snapshot':token,'limit':'1','offset':offset,'unknown':'ignored'}})
+        r.run({'kind':'statement','user':'ada','query':{'snapshot':default_token,'limit':'1','offset':offset}})
     for field in ['from','to','known_at']:
         r.run({'kind':'statement','user':'ada','query':{'snapshot':token,field:''}})
     r.run({'kind':'statement','user':'dee','query':{'snapshot':token}})
@@ -209,6 +222,36 @@ def historical_holds(base):
             r.run({'kind':'me','user':'ada','query':{'as_of':t,'known_at':k}})
     r.run(correction('p_out','ada',1,200,T2,'hold-overdraft'),observe=True)
     r.run(correction('p_out','ada',1,200,T3,'after-release'),observe=True)
+
+
+def tied_boundaries(base):
+    f=fixture();f['payments']=[
+        {'id':'a_debit','from_user_id':'u_bob','to_user_id':'u_cy','amount':100,'created_at':T2},
+        {'id':'z_credit','from_user_id':'u_ada','to_user_id':'u_bob','amount':100,'created_at':T1}]
+    for u in f['users']:u['balance']={'ada':200,'bob':0,'cy':100,'dee':0}[u['handle']]
+    r=Runner(base,f)
+    r.run(correction('z_credit','ada',1,100,T2,'same-boundary'),observe=True)
+    # Sorting a_debit before z_credit gives a negative intermediate statement entry,
+    # but the combined effective-time boundary is0 and must be accepted.
+    r.run({'kind':'statement','user':'bob','query':{'from':T0,'to':T3}})
+
+
+def snapshot_roundtrip(base,second=None):
+    r=Runner(base)
+    token=r.run({'kind':'statement','user':'ada','query':{'from':T0,'to':T3,'limit':'1'}})['snapshot']
+    r.run(correction(amount=300,effective=T0))
+    status,export=http(base,'GET','/_test/export');require(status==200,'R3 snapshot export')
+    exported_state=deepcopy(r.state)
+    r.run(correction(revision=2,amount=350,effective=T1,key='post-export'))
+    destination=second or base
+    other=Runner(destination)
+    stale=other.run({'kind':'statement','user':'ada','query':{'to':FUTURE}})['snapshot']
+    require(http(destination,'POST','/_test/import',export)[0]==204,'R3 snapshot import')
+    r.base=destination;r.state=exported_state
+    for offset in ['0','1','999']:
+        r.run({'kind':'statement','user':'ada','query':{'snapshot':token,'limit':'1','offset':offset}})
+    r.run({'kind':'statement','user':'ada','query':{'snapshot':stale}})
+    r.observe()
 
 
 def lifecycle(base):
@@ -233,6 +276,38 @@ def reset_error(base):
     status,body=http(base,'POST','/_test/reset',f)
     require(status==422 and body['error']['code']=='validation_failed','R3 future seeded reset')
     r.run({'kind':'statement','user':'ada','query':{'snapshot':before['snapshot']}})
+    r.observe()
+
+
+def settlement_history(base):
+    r=Runner(base)
+    body={'transfers':[{'from_handle':'ada','to_handle':'bob','amount':1},
+                       {'from_handle':'bob','to_handle':'cy','amount':1,'visibility':'private'}]}
+    status,receipt=http(base,'POST','/settlements',body,token=r.tokens['ada'],key='linked-settlement')
+    require(status==201,'R3 settlement setup')
+    for supplied,p in zip(body['transfers'],receipt['payments']):
+        expected={'payment_id':p['payment_id'],'from_handle':supplied['from_handle'],
+            'to_handle':supplied['to_handle'],'from_user_id':'u_'+supplied['from_handle'],
+            'to_user_id':'u_'+supplied['to_handle'],'amount':1,'note':'','visibility':supplied.get('visibility','public'),
+            'currency':'EUR','created_at':receipt['committed_at'],'settlement_id':receipt['settlement_id'],
+            'authorization_id':None,'request_id':None}
+        matches(expected,p,'R3 settlement receipt')
+        model.add_payment(r.state,expected)
+        r.run({'kind':'revisions','user':supplied['from_handle'],'id':p['payment_id']})
+        r.run(correction(p['payment_id'],supplied['from_handle'],1,0,T1,'linked'))
+    r.observe()
+
+
+def original_receipt(base):
+    r=Runner(base);body={'to_handle':'bob','amount':10,'note':'immutable original','visibility':'private'}
+    p=r.run({'kind':'payment','user':'ada','key':'original','body':body})
+    r.run(correction(p['payment_id'],'ada',1,20,p['created_at'],'amend'),observe=True)
+    status,replayed=http(base,'POST','/payments',body,token=r.tokens['ada'],key='original')
+    require(status==200 and replayed==p,'R3 original payment replay immutable')
+    status,feed=http(base,'GET','/activity',token=r.tokens['ada'])
+    require(status==200,'R3 activity after correction')
+    rows=[x for x in feed['payments'] if x['payment_id']==p['payment_id']]
+    require(len(rows)==1 and rows[0]==p,'R3 original feed immutable')
     r.observe()
 
 
@@ -289,7 +364,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--base-url');p.add_argument('--self-test',action='store_true')
     p.add_argument('--seed',type=int,default=42);p.add_argument('--steps',type=int,default=30)
     p.add_argument('--no-shrink',action='store_true');p.add_argument('--replay',type=Path)
-    p.add_argument('--stage1-url');p.add_argument('--stage2-url')
+    p.add_argument('--stage1-url');p.add_argument('--stage2-url');p.add_argument('--second-url')
     a=p.parse_args()
     if a.self_test:self_test();return
     if not a.base_url:p.error('--base-url required')
@@ -303,7 +378,8 @@ def main():
         print('REPRO operations='+str(len(reduced))+' attempts='+str(attempts)+' file='+str(path));raise SystemExit(1)
     if not a.replay:
         try:
-            temporal_queries(r);snapshots(a.base_url);historical_holds(a.base_url);lifecycle(a.base_url);reset_error(a.base_url)
+            temporal_queries(r);snapshots(a.base_url);tied_boundaries(a.base_url);snapshot_roundtrip(a.base_url,a.second_url)
+            historical_holds(a.base_url);lifecycle(a.base_url);reset_error(a.base_url);settlement_history(a.base_url);original_receipt(a.base_url)
             if a.stage1_url:upgrade(a.stage1_url,a.base_url,False)
             if a.stage2_url:upgrade(a.stage2_url,a.base_url,True)
         except Mismatch as e:print('TEMPORAL CONTRACT FAIL '+str(e));raise SystemExit(1)

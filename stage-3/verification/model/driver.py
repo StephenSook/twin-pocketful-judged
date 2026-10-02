@@ -615,6 +615,9 @@ def auth_and_controls(base):
 def boundary_case():
     fixture = deepcopy(FIXTURE)
     fixture['users'][0]['balance'] = 2 ** 53
+    # Stage3 reconstructs opening balances; do not invent an opening above2^53
+    # by combining this maximum ending balance with a seeded outgoing payment.
+    fixture['payments'] = []
     operations = [
         op('ada', '/payments', {'to_handle': 'bob', 'amount': 1}, 'boundary-out'),
         op('bob', '/payments', {'to_handle': 'ada', 'amount': 1}, 'boundary-back'),

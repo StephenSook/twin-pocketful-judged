@@ -473,7 +473,7 @@ Initial live run of driver5dfddf3 against product95f41e2 exited1 on a random req
 
 - S3-A1: statement ordering uses selected effective_at then payment ID, superseding original created_at rule after correction; activity continues original created_at order.
 - S3-A2: historical affordability is evaluated after aggregating all events at an instant, not after each same-time statement entry. A statement intermediate balance_after may therefore be negative at a tied entry without violating the combined-boundary invariant.
-- S3-A3: omitted known_at means all committed knowledge at read start; explicit known_at compares visible recorded instants. Strictly increasing second-precision recorded times versus wall time sent to coordinator for ruling.
+- S3-A3: omitted known_at means all committed knowledge at read start; explicit known_at compares visible recorded instants. Coordinator S3-1 (also recorded in gatekeeper revision382da78) permits millisecond precision and a1ms monotonic bump; explicit known_at compares visible instants, omitted known_at includes every committed revision. Original receipts retain their timestamps.
 - S3-A4: snapshot conflict rules name from/to/known_at; unrelated unknown query fields remain ignored.
 - S3-A5: correction sender authorization is required even for publicly visible payment; revisions are visible only to the two parties.
 - S3-A6: seeded closed holds do not reconstruct unspecified historical lifecycle. API-created holds do, including import from stage2.
@@ -484,111 +484,140 @@ Every row is initially unchecked; quoted fragments preserve normative meaning. H
 
 | ID | Quoted requirement | Reading / refuting check | Coverage |
 |---|---|---|---|
-| R3-001 | “requirements from stages1 and2 continue” | Run inherited API/model checks and independent browser regression. | unchecked |
-| R3-002 | “Every payment created_at ... RFC3339 instant with offset” | Check all payment-returning paths, revision1 times and seeded timestamps. | unchecked |
+| R3-001 | “requirements from stages1 and2 continue” | Run inherited API/model checks and independent browser regression. | own model/HTTP check (partial; see limits) |
+| R3-002 | “Every payment created_at ... RFC3339 instant with offset” | Check all payment-returning paths, revision1 times and seeded timestamps. | own model/HTTP check (partial; see limits) |
 | R3-003 | “Every endpoint returning a payment includes it” | Direct, request, capture,settlement,replay,activity,statement retain created_at. | unchecked |
-| R3-004 | “activity retains existing ordering by this field” | Corrections never reorder original feed by effective/recorded time. | unchecked |
-| R3-005 | “Seeded payments may supply created_at” | Seed distinct historical instants and verify unchanged timestamps. | unchecked |
+| R3-004 | “activity retains existing ordering by this field” | Corrections never reorder original feed by effective/recorded time. | own model/HTTP check |
+| R3-005 | “Seeded payments may supply created_at” | Seed distinct historical instants and verify unchanged timestamps. | own model/HTTP check |
 | R3-006 | “omission uses reset time, before subsequent API-created payments” | Reset omitted timestamp then create payment; compare ordering and temporal queries. | unchecked |
-| R3-007 | “seeded created_at in future ...422 ... no state change” | Attempt future fixture; tokens, balances, history and snapshots unaffected. | unchecked |
-| R3-008 | “balance ... after all seeded payments ... must not change” | Infer opening from original movements without replaying against seeded balances. | unchecked |
-| R3-009 | “as_of optional ... RFC3339 ... offset” | Accept offsets/fractional instants; reject naive,date-only,empty,impossible dates422. | unchecked |
-| R3-010 | “Without temporal ... current corrected values” | Correction changes current total/balance/available, original receipt unchanged. | unchecked |
-| R3-011 | “balance ... every payment ... at or before as_of” | Inclusive equality witness; later movements excluded using selected revisions. | unchecked |
-| R3-012 | “as_of at/after latest ... current balance” | With no corrections/holds, latest/equal/future reflects current total. | unchecked |
-| R3-013 | “before earliest ... opening balance” | Query before all history; compare fixture ending minus original net movements. | unchecked |
-| R3-014 | “response carries as_of ... exactly as given” | Preserve alternative offset and fractional spelling in echo. | unchecked |
-| R3-015 | “statement from/to optional ... opening ... now” | Omit both; full history with frozen default read-time upper bound. | unchecked |
-| R3-016 | “limit and offset ... GET/requests” | Plain digits,default50/0,limit1..200,offset>=0; invalid422. | unchecked |
-| R3-017 | “statement half-open [from,to)” | Boundary payments at from included,at to excluded; test empty/same bounds. | unchecked |
-| R3-018 | “oldest first ... caller balance immediately after” | Full selected effective ordering, cumulative balance per entry. | unchecked |
-| R3-019 | “created_at ascending then payment id ... ties” | Uncorrected equal-time seeded IDs sorted lexically ascending. | unchecked |
-| R3-020 | “opening ... immediately before from ... closing ... before to” | Strict boundary balance computations independent of pagination. | unchecked |
-| R3-021 | “opening plus all delta ... closing” | Sum full-window deltas exactly, including zero corrections. | unchecked |
-| R3-022 | “sent negative delta ... received positive” | Check direction for same payment in both users' statements. | unchecked |
-| R3-023 | “Pagination must not change balance_after ... opening/closing” | Compare pages to full result and offsets beyond end. | unchecked |
-| R3-024 | “Only payments sent/received ... public others excluded” | Outsider public activity item absent from statement. | unchecked |
-| R3-025 | “distinguish ... effective ... learned” | Independent effective and recorded clocks drive selection and ordering. | unchecked |
-| R3-026 | “Every payment revision history” | All seeded/direct/request/capture/settlement payments have revision1. | unchecked |
-| R3-027 | “Revision1 original amount ... effective=recorded=created” | Assert revision1 receipt and empty reason. | unchecked |
-| R3-028 | “seeded supplied created_at ... original recorded/effective” | known_at before/equal seeded time selects none/original. | unchecked |
-| R3-029 | “Opening balances ending minus net original seeded” | Compute once; corrections never redefine opening. | unchecked |
-| R3-030 | “Corrections must not change opening” | Query before all effective times before/after amount/time corrections. | unchecked |
+| R3-007 | “seeded created_at in future ...422 ... no state change” | Attempt future fixture; tokens, balances, history and snapshots unaffected. | own model/HTTP check (partial; see limits) |
+| R3-008 | “balance ... after all seeded payments ... must not change” | Infer opening from original movements without replaying against seeded balances. | own model/HTTP check |
+| R3-009 | “as_of optional ... RFC3339 ... offset” | Accept offsets/fractional instants; reject naive,date-only,empty,impossible dates422. | own model/HTTP check (partial; see limits) |
+| R3-010 | “Without temporal ... current corrected values” | Correction changes current total/balance/available, original receipt unchanged. | own model/HTTP check |
+| R3-011 | “balance ... every payment ... at or before as_of” | Inclusive equality witness; later movements excluded using selected revisions. | own model/HTTP check |
+| R3-012 | “as_of at/after latest ... current balance” | With no corrections/holds, latest/equal/future reflects current total. | own model/HTTP check |
+| R3-013 | “before earliest ... opening balance” | Query before all history; compare fixture ending minus original net movements. | own model/HTTP check |
+| R3-014 | “response carries as_of ... exactly as given” | Preserve alternative offset and fractional spelling in echo. | own model/HTTP check |
+| R3-015 | “statement from/to optional ... opening ... now” | Omit both; full history with frozen default read-time upper bound. | own model/HTTP check |
+| R3-016 | “limit and offset ... GET/requests” | Plain digits,default50/0,limit1..200,offset>=0; invalid422. | own model/HTTP check (partial; see limits) |
+| R3-017 | “statement half-open [from,to)” | Boundary payments at from included,at to excluded; test empty/same bounds. | own model/HTTP check |
+| R3-018 | “oldest first ... caller balance immediately after” | Full selected effective ordering, cumulative balance per entry. | own model/HTTP check |
+| R3-019 | “Statement ordering is now by selected effective_at, then payment id” | Uncorrected equal-time seeded IDs sorted lexically ascending. | own model/HTTP check (partial; see limits) |
+| R3-020 | “opening ... immediately before from ... closing ... before to” | Strict boundary balance computations independent of pagination. | own model/HTTP check |
+| R3-021 | “opening plus all delta ... closing” | Sum full-window deltas exactly, including zero corrections. | own model/HTTP check |
+| R3-022 | “sent negative delta ... received positive” | Check direction for same payment in both users' statements. | own model/HTTP check |
+| R3-023 | “Pagination must not change balance_after ... opening/closing” | Compare pages to full result and offsets beyond end. | own model/HTTP check |
+| R3-024 | “Only payments sent/received ... public others excluded” | Outsider public activity item absent from statement. | own model/HTTP check |
+| R3-025 | “distinguish ... effective ... learned” | Independent effective and recorded clocks drive selection and ordering. | own model/HTTP check |
+| R3-026 | “Every payment revision history” | All seeded/direct/request/capture/settlement payments have revision1. | own model/HTTP check (partial; see limits) |
+| R3-027 | “Revision1 original amount ... effective=recorded=created” | Assert revision1 receipt and empty reason. | own model/HTTP check |
+| R3-028 | “seeded supplied created_at ... original recorded/effective” | known_at before/equal seeded time selects none/original. | own model/HTTP check (partial; see limits) |
+| R3-029 | “Opening balances ending minus net original seeded” | Compute once; corrections never redefine opening. | own model/HTTP check |
+| R3-030 | “Corrections must not change opening” | Query before all effective times before/after amount/time corrections. | own model/HTTP check |
 | R3-031 | “New accounts open at zero” | Signup and historical query before first receipt shows0. | unchecked |
 | R3-032 | “Seeded history consistent nonnegative” | Generate only valid original historical fixtures; no invented negative fixtures. | unchecked |
-| R3-033 | “corrections requires idempotency key” | Missing/empty400,long422; failed key reusable. | unchecked |
-| R3-034 | “requires original sender ... non-sender403 ... unknown404” | Receiver/outsider403 even public; missing ID404; no token401. | unchecked |
-| R3-035 | “All fields required ... invalid422” | Missing expected_revision/amount/effective_at/reason individually422. | unchecked |
-| R3-036 | “Revision positive integer” | Invalid0,-1,fraction,bool,string,null422. | unchecked |
-| R3-037 | “amount integer0..1e9 ... zero reverses” | 0 and1e9 boundaries; negative/overflow/fraction/bool/string/null422. | unchecked |
-| R3-038 | “reason string1..200” | Empty/nonstring/null/>200 invalid; Unicode codepoint bounds. | unchecked |
-| R3-039 | “effective RFC3339 not later than now” | Invalid/no offset/future422; past and now accepted; exact parsed equality. | unchecked |
-| R3-040 | “Correction changes neither parties nor visibility” | Unknown overrides ignored; both counterparties fixed and original privacy preserved. | unchecked |
-| R3-041 | “appends immutable revision ...201 fields” | payment_id,revision,amount,effective_at,recorded_at,reason exactly correct. | unchecked |
-| R3-042 | “Recorded times per payment strictly increase” | Rapid corrections; compare parsed recorded_at sequence strictly ascending. | unchecked |
-| R3-043 | “stale expected revision ...409 stale_revision” | Old revision and concurrently reused expectation cannot both commit. | unchecked |
-| R3-044 | “Successful replay ... original revision200 after newer” | Compare full original response JSON after later corrections. | unchecked |
-| R3-045 | “Different body same key ...409” | Invalid changed body resolved as key reuse before current revision checks. | unchecked |
-| R3-046 | “difference previous amount ... same wallets atomically” | Increase/decrease/zero updates current totals by amount difference once. | unchecked |
-| R3-047 | “increase debits sender ... decrease debits receiver” | Check both funds directions, conserving sum. | unchecked |
-| R3-048 | “currently unaffordable debit ...409 insufficient_funds” | Current available shortfall wins over historical overdraft. | unchecked |
-| R3-049 | “otherwise any corrected balance negative ... historical_overdraft” | Affordable-now correction moving funds earlier/later creates negative historic boundary and rejects. | unchecked |
-| R3-050 | “boundary combined effect all movements same instant” | Offset-equivalent times grouped; temporary sorted-entry negative does not reject if aggregate nonnegative. | unchecked |
-| R3-051 | “Either failure preserves balances/history/statements/idempotency” | Compare all observations and retry failed key after valid repair. | unchecked |
-| R3-052 | “sum equals seeded total every historical view” | Sample all event/effective/known boundaries across wallets. | unchecked |
-| R3-053 | “original payment and original idempotent response unchanged” | Activity/original write replay retain original amount,timestamp,privacy after correction. | unchecked |
-| R3-054 | “correction records not new feed payments” | Feed ID/count unchanged, no revision masquerading as payment. | unchecked |
-| R3-055 | “GET revisions in revision order including1 reason empty” | Assert complete immutable list and consecutive revision numbers. | unchecked |
-| R3-056 | “Only two parties revisions ... thirdparty404 even public” | Sender/receiver200,thirdparty404,missing404,unauthenticated401. | unchecked |
-| R3-057 | “known_at optional RFC3339 offset” | Both /me and /statement validate and accept future offset instants. | unchecked |
-| R3-058 | “latest revision recorded at/before known_at” | Before first none, equality includes, between revisions selects older latest. | unchecked |
-| R3-059 | “none yet recorded contributes nothing” | Opening remains, payment absent from statement until recorded knowledge. | unchecked |
-| R3-060 | “omission everything known when read begins” | Newly committed corrections reflected immediately even with logical timestamp advancement. | unchecked |
-| R3-061 | “Then apply selected revisions by effective times” | Correction can move historical balance/window entry earlier or later. | unchecked |
-| R3-062 | “as_of inclusive ... statement half-open” | Same selected revision tested at equality in both endpoint semantics. | unchecked |
-| R3-063 | “Both query instants may be future” | Future as_of/known_at accepted and future hold deadlines reflected. | unchecked |
-| R3-064 | “Invalid/empty instants422” | Malformed as_of,known_at,from,to individually reject. | unchecked |
-| R3-065 | “Echo known_at exactly” | Preserve caller spelling and offset, including equivalent instants. | unchecked |
-| R3-066 | “statement ordering selected effective then id” | Time correction reorders statement only; lexical ID resolves ties. | unchecked |
-| R3-067 | “entry payment,delta,balance_after plus revision,effective,recorded” | Assert every required field against model-selected revision. | unchecked |
-| R3-068 | “payment.amount selected for statement” | Different from original receipt after correction; only statement copy changes. | unchecked |
-| R3-069 | “zero revisions entries delta0” | Reversal appears, not omitted; total count and paging include it. | unchecked |
-| R3-070 | “No correction counted alongside replaced revision” | At most one selected entry per payment. | unchecked |
-| R3-071 | “no corrections/known_at previous behavior unchanged” | Inherited statement arithmetic and legacy API behavior regression. | unchecked |
-| R3-072 | “Every first statement returns opaque snapshot” | Nonempty string token returned on every fresh query, treat opaque. | unchecked |
-| R3-073 | “freezes selected revisions,window,balances,entries,default to” | Save result; writes/corrections/holds do not mutate frozen pages. | unchecked |
-| R3-074 | “snapshot pages exact result after payments/corrections” | Compare full snapshot pages to initial frozen whole-window values. | unchecked |
-| R3-075 | “Only limit/offset accompany snapshot ... from/to/known422” | Each conflict rejected even empty; unknown query fields ignored. | unchecked |
-| R3-076 | “Unknown token/otheruser/pre-reset404” | Scope token to caller and epoch; reset invalidates prior token with new valid credentials. | unchecked |
-| R3-077 | “Tokens last until reset” | Repeated page retrieval valid across ordinary actions; import epoch per ownership contract. | unchecked |
+| R3-033 | “corrections requires idempotency key” | Missing/empty400,long422; failed key reusable. | own model/HTTP check |
+| R3-034 | “requires original sender ... non-sender403 ... unknown404” | Receiver/outsider403 even public; missing ID404; no token401. | own model/HTTP check |
+| R3-035 | “All fields required ... invalid422” | Missing expected_revision/amount/effective_at/reason individually422. | own model/HTTP check |
+| R3-036 | “Revision positive integer” | Invalid0,-1,fraction,bool,string,null422. | own model/HTTP check (partial; see limits) |
+| R3-037 | “amount integer0..1e9 ... zero reverses” | 0 and1e9 boundaries; negative/overflow/fraction/bool/string/null422. | own model/HTTP check (partial; see limits) |
+| R3-038 | “reason string1..200” | Empty/nonstring/null/>200 invalid; Unicode codepoint bounds. | own model/HTTP check (partial; see limits) |
+| R3-039 | “effective RFC3339 not later than now” | Invalid/no offset/future422; past and now accepted; exact parsed equality. | own model/HTTP check (partial; see limits) |
+| R3-040 | “Correction changes neither parties nor visibility” | Unknown overrides ignored; both counterparties fixed and original privacy preserved. | own model/HTTP check (partial; see limits) |
+| R3-041 | “appends immutable revision ...201 fields” | payment_id,revision,amount,effective_at,recorded_at,reason exactly correct. | own model/HTTP check |
+| R3-042 | “Recorded times per payment strictly increase” | Rapid corrections; compare parsed recorded_at sequence strictly ascending. | own model/HTTP check (partial; see limits) |
+| R3-043 | “stale expected revision ...409 stale_revision” | Old revision and concurrently reused expectation cannot both commit. | own model/HTTP check |
+| R3-044 | “Successful replay ... original revision200 after newer” | Compare full original response JSON after later corrections. | own model/HTTP check |
+| R3-045 | “Different body same key ...409” | Invalid changed body resolved as key reuse before current revision checks. | own model/HTTP check |
+| R3-046 | “difference previous amount ... same wallets atomically” | Increase/decrease/zero updates current totals by amount difference once. | own model/HTTP check |
+| R3-047 | “increase debits sender ... decrease debits receiver” | Check both funds directions, conserving sum. | own model/HTTP check |
+| R3-048 | “currently unaffordable debit ...409 insufficient_funds” | Current available shortfall wins over historical overdraft. | own model/HTTP check |
+| R3-049 | “otherwise any corrected balance negative ... historical_overdraft” | Affordable-now correction moving funds earlier/later creates negative historic boundary and rejects. | own model/HTTP check |
+| R3-050 | “boundary combined effect all movements same instant” | Offset-equivalent times grouped; temporary sorted-entry negative does not reject if aggregate nonnegative. | own model/HTTP check |
+| R3-051 | “Either failure preserves balances/history/statements/idempotency” | Compare all observations and retry failed key after valid repair. | own model/HTTP check (partial; see limits) |
+| R3-052 | “sum equals seeded total every historical view” | Sample all event/effective/known boundaries across wallets. | own model/HTTP check (partial; see limits) |
+| R3-053 | “original payment and original idempotent response unchanged” | Activity/original write replay retain original amount,timestamp,privacy after correction. | own model/HTTP check |
+| R3-054 | “correction records not new feed payments” | Feed ID/count unchanged, no revision masquerading as payment. | own model/HTTP check |
+| R3-055 | “GET revisions in revision order including1 reason empty” | Assert complete immutable list and consecutive revision numbers. | own model/HTTP check |
+| R3-056 | “Only two parties revisions ... thirdparty404 even public” | Sender/receiver200,thirdparty404,missing404,unauthenticated401. | own model/HTTP check (partial; see limits) |
+| R3-057 | “known_at optional RFC3339 offset” | Both /me and /statement validate and accept future offset instants. | own model/HTTP check |
+| R3-058 | “latest revision recorded at/before known_at” | Before first none, equality includes, between revisions selects older latest. | own model/HTTP check |
+| R3-059 | “none yet recorded contributes nothing” | Opening remains, payment absent from statement until recorded knowledge. | own model/HTTP check |
+| R3-060 | “omission everything known when read begins” | Newly committed corrections reflected immediately even with logical timestamp advancement. | own model/HTTP check |
+| R3-061 | “Then apply selected revisions by effective times” | Correction can move historical balance/window entry earlier or later. | own model/HTTP check |
+| R3-062 | “as_of inclusive ... statement half-open” | Same selected revision tested at equality in both endpoint semantics. | own model/HTTP check |
+| R3-063 | “Both query instants may be future” | Future as_of/known_at accepted and future hold deadlines reflected. | own model/HTTP check (partial; see limits) |
+| R3-064 | “Invalid/empty instants422” | Malformed as_of,known_at,from,to individually reject. | own model/HTTP check (partial; see limits) |
+| R3-065 | “Echo known_at exactly” | Preserve caller spelling and offset, including equivalent instants. | own model/HTTP check (partial; see limits) |
+| R3-066 | “statement ordering selected effective then id” | Time correction reorders statement only; lexical ID resolves ties. | own model/HTTP check |
+| R3-067 | “entry payment,delta,balance_after plus revision,effective,recorded” | Assert every required field against model-selected revision. | own model/HTTP check |
+| R3-068 | “payment.amount selected for statement” | Different from original receipt after correction; only statement copy changes. | own model/HTTP check |
+| R3-069 | “zero revisions entries delta0” | Reversal appears, not omitted; total count and paging include it. | own model/HTTP check |
+| R3-070 | “No correction counted alongside replaced revision” | At most one selected entry per payment. | own model/HTTP check |
+| R3-071 | “no corrections/known_at previous behavior unchanged” | Inherited statement arithmetic and legacy API behavior regression. | own model/HTTP check (partial; see limits) |
+| R3-072 | “Every first statement returns opaque snapshot” | Nonempty string token returned on every fresh query, treat opaque. | own model/HTTP check (partial; see limits) |
+| R3-073 | “freezes selected revisions,window,balances,entries,default to” | Save result; writes/corrections/holds do not mutate frozen pages. | own model/HTTP check |
+| R3-074 | “snapshot pages exact result after payments/corrections” | Compare full snapshot pages to initial frozen whole-window values. | own model/HTTP check |
+| R3-075 | “Only limit/offset accompany snapshot ... from/to/known422” | Each conflict rejected even empty; unknown query fields ignored. | own model/HTTP check (partial; see limits) |
+| R3-076 | “Unknown token/otheruser/pre-reset404” | Scope token to caller and epoch; reset invalidates prior token with new valid credentials. | own model/HTTP check (partial; see limits) |
+| R3-077 | “Tokens last until reset” | Repeated retrieval valid across actions; S3-3 overrides initial import-epoch wording: source snapshot tokens and frozen data survive export/import, destination-only tokens disappear, reset clears all. | own model/HTTP check (partial; see limits) |
 | R3-078 | “no restart storage survival required” | Do not require token restoration after container restart. | unchecked |
-| R3-079 | “Paging changes neither balances nor entries” | Window totals and existing entries unchanged on every page. | unchecked |
-| R3-080 | “final partial page/beyond end has_more correct” | Sizes1/2/full; final partial false, beyond empty false. | unchecked |
-| R3-081 | “Unrecognized query parameters ignored” | Unknown params on fresh and snapshot requests do not reject/alter result. | unchecked |
-| R3-082 | “correction moves into/out window ... old snapshots unchanged” | Compare new query versus original token after changing effective time. | unchecked |
+| R3-079 | “Paging changes neither balances nor entries” | Window totals and existing entries unchanged on every page. | own model/HTTP check |
+| R3-080 | “final partial page/beyond end has_more correct” | Sizes1/2/full; final partial false, beyond empty false. | own model/HTTP check |
+| R3-081 | “Unrecognized query parameters ignored” | Unknown params on fresh and snapshot requests do not reject/alter result. | own model/HTTP check (partial; see limits) |
+| R3-082 | “correction moves into/out window ... old snapshots unchanged” | Compare new query versus original token after changing effective time. | own model/HTTP check |
 | R3-083 | “snapshots unchanged concurrent payments/corrections” | Independent gatekeeper concurrency writer/read histories. | unchecked |
 | R3-084 | “concurrent same expected revision cannot both succeed” | Race corrections; one201,others stale409 except same-key replay200. | unchecked |
-| R3-085 | “settlements retain original receipts/privacy” | Inherited settlement behavior and snapshot correction immunity. | unchecked |
-| R3-086 | “member original revision shared committed_at” | Equal-time batch revision effective/recorded equal receipt commit time. | unchecked |
-| R3-087 | “settlement member correction422 linked_payment_immutable” | Sender cannot correct member, failed key no claim. | unchecked |
-| R3-088 | “accept stage1 or stage2 exports” | Run both prior services and import unmodified opaque objects. | unchecked |
-| R3-089 | “import account authorizations/captures” | Preserve balances,held,open/partial lifecycle,capture links,retries. | unchecked |
-| R3-090 | “capture correction422 linked_payment_immutable” | Original sender capture correction rejected with linked code. | unchecked |
-| R3-091 | “all four fields same view ... balance=total available=total-held” | Compare historical total,held,available at identical T/K. | unchecked |
-| R3-092 | “hold starts at creation” | Before/equal creation query excludes/includes hold when known. | unchecked |
-| R3-093 | “nonfinal capture reduces at capture time” | Partial lifecycle before/equal capture with old/new knowledge. | unchecked |
-| R3-094 | “final capture/void/expiry release remainder event time” | Before/equal release boundaries, preserving partial history. | unchecked |
-| R3-095 | “expiry at expires_at” | Deadline equality releases funds even if physical read occurred later. | unchecked |
-| R3-096 | “events except expiry known at event time” | known_at earlier than lifecycle event must preserve pre-event hold. | unchecked |
-| R3-097 | “once creation known expiry deadline known” | Future as_of with known_at after create but before expiry still releases at deadline. | unchecked |
-| R3-098 | “queries beyond now open expires deadline” | Future query held0 after expiry without advancing service wall clock. | unchecked |
-| R3-099 | “without as_of use request began instant” | known_at-only query applies selected history at read-time effective boundary. | unchecked |
-| R3-100 | “authorizations closed_at null/open eventtime/closed” | Check capture,void,expiry closed_at and unchanged historical timestamps. | unchecked |
-| R3-101 | “historical total effective/recorded rules” | Holds never alter total; captures counted once as payment revisions. | unchecked |
-| R3-102 | “historical_overdraft if total or available negative past boundary” | Corrections crossing active historical holds reject even when historical total>=0. | unchecked |
-| R3-103 | “Current unaffordable ... precedence insufficient_funds” | Construct correction violating both and assert current error. | unchecked |
+| R3-085 | “settlements retain original receipts/privacy” | Inherited settlement behavior and snapshot correction immunity. | own model/HTTP check |
+| R3-086 | “member original revision shared committed_at” | Equal-time batch revision effective/recorded equal receipt commit time. | own model/HTTP check |
+| R3-087 | “settlement member correction422 linked_payment_immutable” | Sender cannot correct member, failed key no claim. | own model/HTTP check |
+| R3-088 | “accept stage1 or stage2 exports” | Run both prior services and import unmodified opaque objects. | own model/HTTP check (partial; see limits) |
+| R3-089 | “import account authorizations/captures” | Preserve balances,held,open/partial lifecycle,capture links,retries. | own model/HTTP check (partial; see limits) |
+| R3-090 | “capture correction422 linked_payment_immutable” | Original sender capture correction rejected with linked code. | own model/HTTP check |
+| R3-091 | “all four fields same view ... balance=total available=total-held” | Compare historical total,held,available at identical T/K. | own model/HTTP check |
+| R3-092 | “hold starts at creation” | Before/equal creation query excludes/includes hold when known. | own model/HTTP check |
+| R3-093 | “nonfinal capture reduces at capture time” | Partial lifecycle before/equal capture with old/new knowledge. | own model/HTTP check |
+| R3-094 | “final capture/void/expiry release remainder event time” | Before/equal release boundaries, preserving partial history. | own model/HTTP check |
+| R3-095 | “expiry at expires_at” | Deadline equality releases funds even if physical read occurred later. | own model/HTTP check |
+| R3-096 | “events except expiry known at event time” | known_at earlier than lifecycle event must preserve pre-event hold. | own model/HTTP check |
+| R3-097 | “once creation known expiry deadline known” | Future as_of with known_at after create but before expiry still releases at deadline. | own model/HTTP check |
+| R3-098 | “queries beyond now open expires deadline” | Future query held0 after expiry without advancing service wall clock. | own model/HTTP check |
+| R3-099 | “without as_of use request began instant” | known_at-only query applies selected history at read-time effective boundary. | own model/HTTP check (partial; see limits) |
+| R3-100 | “authorizations closed_at null/open eventtime/closed” | Check capture,void,expiry closed_at and unchanged historical timestamps. | own model/HTTP check (partial; see limits) |
+| R3-101 | “historical total effective/recorded rules” | Holds never alter total; captures counted once as payment revisions. | own model/HTTP check |
+| R3-102 | “historical_overdraft if total or available negative past boundary” | Corrections crossing active historical holds reject even when historical total>=0. | own model/HTTP check |
+| R3-103 | “Current unaffordable ... precedence insufficient_funds” | Construct correction violating both and assert current error. | own model/HTTP check |
 | R3-104 | “seeded open created reset unless supplied” | Model supplied creation time, infer reset-time lower bound for omitted. | unchecked |
 | R3-105 | “seeded closed need not reconstruct prior lifecycle” | Do not invent prior hold events absent fixture history. | unchecked |
-| R3-106 | “statement money movements only” | Authorize/void/expiry do not add entries; capture adds one linked payment. | unchecked |
-| R3-107 | “Captures exactly once with links” | statement payment authorization_id and null request_id correct. | unchecked |
-| R3-108 | “Old snapshots unchanged lifecycle or correction” | Snapshot before partial/final/void/expiry stable afterwards. | unchecked |
+| R3-106 | “statement money movements only” | Authorize/void/expiry do not add entries; capture adds one linked payment. | own model/HTTP check |
+| R3-107 | “Captures exactly once with links” | statement payment authorization_id and null request_id correct. | own model/HTTP check |
+| R3-108 | “Old snapshots unchanged lifecycle or correction” | Snapshot before partial/final/void/expiry stable afterwards. | own model/HTTP check (partial; see limits) |
+
+## Additional coordinator rulings
+
+| ID | Quoted requirement | Reading / refuting check | Coverage |
+|---|---|---|---|
+| R3-109 | Coordinator S3-2: “a decoded space in the offset-sign position of a query instant is read as '+'” | Send raw + in as_of,known_at,from,to; decode offset-sign space as+, preserve normalized+ in echo, reject other malformed spaces. | own model/HTTP check (partial; see limits) |
+| R3-110 | Coordinator S3-3: snapshot tokens are exported state | Export source snapshot, reset destination with different token, import source: original frozen pages survive; destination-only token404; later reset invalidates source token. | own model/HTTP check |
+
+Stage3 inherited boundary fixture now has no seeded payments at ending balance2^53: retaining a seeded outgoing500 would imply opening2^53+500, outside the stated balance range. Exact2^53 arithmetic and import remain checked with a valid reconstructed history.
+
+## Stage 3 coverage limits
+
+- R3-001: inherited HTTP behavior is exercised; browser and visual regression remain independent gatekeeper work. Historical R1/R2 evidence is preserved, not relabeled as new UI evidence.
+- R3-003/006/031: exhaustive payment-returning endpoint timestamp presence, reset-time omission ordering and new-signup historical opening remain unchecked by the temporal driver (ordinary seeded/current behavior has inherited coverage).
+- R3-032: fixtures are constructed with valid original history; no claim of exhaustive reset rejection for inconsistent historical fixtures.
+- R3-042: observed revision times strictly increase and lie within the request interval or permitted1ms bump. This assumes the test host/container clocks share UTC; no separate clock-skew fault injection.
+- R3-051/052: failure atomicity and conservation are checked at exposed sequential boundaries; internal transient values remain unobservable.
+- R3-063/064/109: representative offsets, invalid instants, literal-plus queries and echoes checked; leap-second and arbitrary submillisecond parsing edge coverage remains unchecked. Coordinator S3-1 permits millisecond precision.
+- R3-075/077/088/089/110: snapshot preservation/replacement is tested with exported state, including cross-process restoration; both legacy imports preserve original timestamps, holds and capture history. Independent process-shutdown portability and every possible legacy state combination are not exhaustive.
+- R3-078: no restart-survival requirement; not tested.
+- R3-083/084: concurrent corrections/snapshot writers require independent gatekeeper histories. Inherited50-flight payment replay race is not claimed as correction concurrency coverage.
+- R3-104/105: supplied creation time for seeded open holds is checked. Omitted creation reset-time bounds and arbitrary omitted closed lifecycle reconstructions remain unasserted.
+- Remaining marked partial rows are representative error/value/format matrices, not exhaustive combinations. The oracle avoids inventing generic precedence among unrelated validation errors.
+
+## Stage 3 observed failures and corrections
+
+Productfa54326 failed R3-092/104: seeded status=open with supplied past created_at/expires_at yielded historical held0 at creation; expected250. Minimal reproduction function `historical_holds` in verifier538be58 resets a synthetic four-user fixture then checks one /me as_of/known_at boundary. Builder fix8548455 preserves that historical lifecycle. No product source was read.
+
+The inherited maximum-balance fixture initially failed import because original outgoing500 plus ending2^53 implied opening2^53+500. Stage3 verifier now uses no seeded movement for this boundary case; all reconstructed values stay within the balance range. This was a verifier-fixture adaptation, not an additional product rejection.
