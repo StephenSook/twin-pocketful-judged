@@ -4,17 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - "README.md"
-      - "FACTORY.md"
-      - "JUDGE-GUIDE.md"
-      - "deploy/README.md"
-      - "floor/**"
-      - "evidence/floor.json"
-      - "room.json"
-      - "tools/check_public_copy.py"
-      - "tools/check_public_claims.py"
-      - ".github/workflows/pages.yml"
 permissions:
   contents: read
   pages: write
