@@ -15,6 +15,13 @@ Source: supplied Pocketful Stage 1 §§1–11. IDs are permanent; later stages c
 - A9 (coordinator ruling, R1-041): “outside ±2⁵³” excludes neither endpoint. Reset/import accept nonnegative balances through 9007199254740992 inclusive. Aggregate wallet totals remain exact even above 2^53. Boundary checks debit one unit, restore it, execute a net-zero settlement at the upper boundary, and export/import that state.
 - A10 (coordinator final revised ruling, R1-033/049/050/093/095/096): endpoint-specific “Not the payer is 403 forbidden” and “Not the requester is 403 forbidden” take precedence over the generic visibility error rule. Any wrong-role caller, including an unrelated third party, gets 403 on pay/decline/cancel of an existing request; unknown IDs get 404. Listings still exclude unrelated requests. This withdraws the earlier third-party-404 ruling and confirms the existing model and driver behavior.
 
+### Coordinator rulings on ledger audit f0a9650
+
+- R1-024, null amount: “invalid amount values (including strings and booleans) ... are 422 validation_failed”. Coordinator: “Including” is not exhaustive; null is not a valid amount. The “Other wrong JSON types” sentence covers fields other than amount, note and visibility. Null amount therefore returns 422 validation_failed; existing reading retained.
+- A1, split denominator: “The caller may be included in participant_handles or omitted. Shares follow the equal-split rule in §9, in the order the handles are given” and “A request is created for every participant except the caller”. Coordinator: participants are exactly the handles given; “including the caller” applies when the caller is listed. Existing reading retained.
+- A2, zero shares: “A share of 0 is legal and still produces a request for that participant.” Coordinator: the 1..1000000000 amount rule applies to POST /payments, /requests, /splits and settlement bodies; the pay endpoint has no amount rule, so a zero request is payable. Existing reading retained.
+- A4, code points: “Unicode and emoji survive a round trip”. Coordinator: counting code points matches this requirement and does not count one emoji as two characters. Existing reading retained.
+
 ## Entries
 
 Each row is `ID | quoted requirement | tested reading / falsifying check`. Coverage is **unchecked** unless explicitly listed below.
