@@ -232,7 +232,7 @@ All entries start **unchecked**. Each row specifies an intended falsifier, not o
 
 | ID | Quoted text / excerpt | Reading and refuting check | Coverage |
 |---|---|---|---|
-| R2-001 | “The stage-1 requirements continue to apply” | Run inherited differential suite and migration; R1 IDs retained. | unchecked |
+| R2-001 | “The stage-1 requirements continue to apply” | Run inherited differential suite and migration; R1 IDs retained. | own HTTP/model check (partial; see limits) |
 | R2-002 | “screens must be reachable by URL” | Browser direct visits /, /requests, /split, /signup, /login, /authorizations at both widths. | unchecked |
 | R2-003 | “Other screens must be reachable through the UI” | Follow navigation without address-bar edits. | unchecked |
 | R2-004 | “Return the UI for Accept: text/html” | GET shared routes with HTML accept receives usable HTML; absent accept receives JSON. | unchecked |
@@ -296,74 +296,74 @@ All entries start **unchecked**. Each row specifies an intended falsifier, not o
 | R2-062 | “Latest refresh wins” | Delay earlier GET responses past later ones; newer view must remain. | unchecked |
 | R2-063 | “refused payment ... refreshes balance/feed ... preserves inputs” | Spend remotely then submit stale form; assert refusal and fresh values. | unchecked |
 | R2-064 | “request cancelled elsewhere ... request-error ... stale pay button disappears” | Cancel in other client, click stale pay, check refreshed terminal row. | unchecked |
-| R2-065 | “payment response lost ... pay-uncertain ... not pay-error” | Abort committed response; uncertainty nonempty, rejection absent. | unchecked |
+| R2-065 | “payment response lost ... pay-uncertain ... not pay-error” | Abort committed response; require a visible element with data-testid="pay-uncertain" and nonempty text, and no element with data-testid="pay-error". | unchecked |
 | R2-066 | “unchanged form retryable ... same key and body” | Intercept retry after response loss and compare parsed body/header. | unchecked |
 | R2-067 | “Successful retry removes both ... moves money exactly once” | Recover receipt and compare one debit/feed row plus no error/uncertainty. | unchecked |
 | R2-068 | “No ... recovery across page reloads required” | Restrict uncertain/migration tests to same document session. | unchecked |
 | R2-069 | “same balance refresh rules ... available and held” | Out-of-order reads with created/voided holds cannot roll values back. | unchecked |
-| R2-070 | “accept export ... stage-1 service” | Import unmodified opaque export from frozen stage1 process into stage2. | unchecked |
-| R2-071 | “browser signed in ... remain signed in afterwards” | Existing bearer token used after import without login/reload. | unchecked |
-| R2-072 | “Existing pending requests remain payable” | Imported request pay via retained browser session succeeds. | unchecked |
-| R2-073 | “lost before export ... same body and key ... original payment” | Commit stage1 payment/drop response, import, retry and compare exact original receipt. | unchecked |
+| R2-070 | “accept export ... stage-1 service” | Import unmodified opaque export from frozen stage1 process into stage2. | own HTTP/model check |
+| R2-071 | “browser signed in ... remain signed in afterwards” | Existing bearer token used after import without login/reload. | own HTTP/model check (partial; see limits) |
+| R2-072 | “Existing pending requests remain payable” | Imported request pay via retained browser session succeeds. | own HTTP/model check (partial; see limits) |
+| R2-073 | “lost before export ... same body and key ... original payment” | Commit stage1 payment/drop response, import, retry and compare exact original receipt. | own HTTP/model check (partial; see limits) |
 | R2-074 | “form and pending retry identity must survive upgrade” | Preserve input values/key/body through import between requests. | unchecked |
-| R2-075 | “sum ... total ... seeded” | Sum exact integer totals after every model operation, including captures. | unchecked |
-| R2-076 | “hold moves no money” | Authorization changes held/available only; totals/feed unchanged. | unchecked |
-| R2-077 | “available = total − held ... never negative” | Assert each wallet identity and nonnegativity after every operation/read. | unchecked |
-| R2-078 | “Held funds cannot fund ... payments, authorizations or settlement net debits” | Reserve funds then exercise each debit and request payment against available. | unchecked |
-| R2-079 | “Captures may spend ... reserved” | Fully hold payer, capture succeeds despite zero available. | unchecked |
-| R2-080 | “Cumulative captures must not exceed authorized amount” | Random partial captures and remaining+1 rejection; failed capture no change. | unchecked |
-| R2-081 | “Each idempotent capture moves money once” | Concurrent/sequential replay returns original receipt, one debit. | unchecked |
-| R2-082 | “closed hold cannot be captured again” | Capture/void/expire then fresh capture key rejected. | unchecked |
-| R2-083 | “balance equals total ... available ... held” | GET/me required fields exact; no-hold agreement and held0. | unchecked |
-| R2-084 | “payments ... immediate ... no intermediate hold” | Payment response and subsequent authorization listing show no implicit hold. | unchecked |
-| R2-085 | “request ... immediate ... authorizing ... out of scope” | Request pay produces ordinary payment, no authorization. | unchecked |
-| R2-086 | “POST /splits unchanged” | Run inherited rounding,zero-share and no-balance checks with holds present. | unchecked |
-| R2-087 | “seven idempotent write paths ... independently” | Reuse key across paths and users; per-path identical200/different409/failure reusable. | unchecked |
-| R2-088 | “authorization_ttl_seconds ... defaults600 ... positive integer” | Omitted defaults600; invalid0,-1,fraction,bool,string rejects reset without mutation. | unchecked |
-| R2-089 | “Seeded authorisations ... own absolute expires_at” | Fixture expiry unaffected by default TTL. | unchecked |
-| R2-090 | “available derived, never seeded” | Supply misleading available in fixture; compute from total/open holds. | unchecked |
-| R2-091 | “seeded unexpired open holds larger ...422 ... changing nothing” | Overheld reset rejection preserves prior tokens, balances,records,keys. | unchecked |
-| R2-092 | “Seeded status ... open,captured,voided,expired ... Only open holds” | Seed each status and check held/open remainder. | unchecked |
-| R2-093 | “omit authorizations ... empty list” | Earlier fixture accepted, list empty and held0. | unchecked |
-| R2-094 | “expires_at at or before now ... expired ... no funds” | Pure clock equality test and live past/future seeds. | unchecked |
-| R2-095 | “Reads and writes must reflect expiry ... no request at deadline” | Sleep past short TTL then read/list/debit, released remainder visible. | unchecked |
-| R2-096 | “GET/authorizations ... expired ... GET/me ... released remainder” | Compare status filters and exact available after clock passage. | unchecked |
-| R2-097 | “POST/authorizations ... key required ... caller payer” | Missing/empty/long key; assert sender identity cannot be overridden. | unchecked |
-| R2-098 | “note and visibility ... same defaults” | Omitted empty note/public; explicit null rejected422. | unchecked |
-| R2-099 | “expires_at is created_at plus ttl” | Compare parsed timestamps and configured/default TTL exactly. | unchecked |
-| R2-100 | “available below amount ...409 insufficient_funds” | Reserve greater than available; failed key reusable after release. | unchecked |
-| R2-101 | “amount below1 above1e9 not integer ...422” | Numeric integral acceptance and invalid type/value edge matrix. | unchecked |
-| R2-102 | “own handle ...422 self_payment” | Self-authorization rejected and no hold/key claim. | unchecked |
-| R2-103 | “note over200 ... visibility neither ...422” | Unicode code point length and all invalid visibility types. | unchecked |
-| R2-104 | “No user has handle ...404” | Unknown recipient creates no hold and key reusable. | unchecked |
-| R2-105 | “open authorisation ... not feed item” | Feed unchanged on reserve,void,expiry; capture alone adds payment. | unchecked |
-| R2-106 | “Only receiver ... capture” | Payer/third-party403; unknown404; no monetary change. | unchecked |
-| R2-107 | “capture amount optional ... remaining” | Omitted amount captures current remainder, not original authorization amount. | unchecked |
-| R2-108 | “{} and explicit amount ... different ...409” | Same key semantic-equivalent different body rejected before current state checks. | unchecked |
-| R2-109 | “capture201 ... payment ... authorization_id ... request_id null” | Compare full ordinary receipt plus linkage/null request. | unchecked |
-| R2-110 | “payment note and visibility copied” | Capture request unknown overrides ignored; original note/privacy in payment/feed. | unchecked |
-| R2-111 | “without authorization ... authorization_id null” | Seed/direct/request/settlement payments expose null. | unchecked |
-| R2-112 | “default captured ... releases remainder immediately” | Partial final capture closes, remaining0, available rises by uncaptured share. | unchecked |
-| R2-113 | “second capture after final ...409 authorization_not_open” | Fresh key after final must fail; original key still replay200. | unchecked |
-| R2-114 | “final boolean default true” | Omitted true; false retains; nonboolean malformed400 under generic type rule. | unchecked |
-| R2-115 | “final:false and remainder ... stays open” | Multiple partial captures update cumulative and latest payment_id. | unchecked |
-| R2-116 | “entire remainder closes ... final:false” | Exact remaining closes captured and remaining0. | unchecked |
-| R2-117 | “capture_exceeds ... remaining” | After partial capture, amount between remaining+1 and original rejected422. | unchecked |
-| R2-118 | “captured_amount cumulative” | Sum capture receipts equals captured_amount across all statuses. | unchecked |
-| R2-119 | “payment_id latest ... payment_ids every capture in order” | Compare ordered receipt IDs and latest/null on creation. | unchecked |
-| R2-120 | “remaining_amount ... held ... zero closed” | Open amount-captured; captured/voided/expired0. | unchecked |
-| R2-121 | “Void and expiry ... partially captured ... preserve records” | Close partial holds, retain captured_amount/payment_ids and payments. | unchecked |
-| R2-122 | “not open ...409 authorization_not_open” | Captured/voided terminal states reject new capture. | unchecked |
-| R2-123 | “expires_at at/before now ...409 authorization_expired” | Expired capture rejected consistently before/after read; pending ruling precedence. | unchecked |
-| R2-124 | “capture amount below1/not integer ...422” | Explicit0,negative,fraction,string,bool,null reject. | unchecked |
-| R2-125 | “Only payer may void ... no key” | Receiver/outsider403; payer200 without key. | unchecked |
-| R2-126 | “void ... already-voided200 current state” | Repeat void changes nothing and returns same current authorization. | unchecked |
-| R2-127 | “captured or expired void ...409 authorization_not_open” | Terminal void rejected; records/balances unchanged. | unchecked |
-| R2-128 | “GET authorizations only involving caller” | Public visibility never reveals authorization to outsider. | unchecked |
-| R2-129 | “authorizations newest first created_at” | Seed distinct times and paginate; equal-time tie unconstrained. | unchecked |
-| R2-130 | “direction outgoing payer incoming receiver absent both” | Test role filters and unknown direction422. | unchecked |
-| R2-131 | “status four statuses ... expired never open” | Test each filter and unknown422 after clock passage. | unchecked |
-| R2-132 | “limit offset has_more ... requests” | Defaults50/0; limits1..200; plain digits; pagination completeness. | unchecked |
+| R2-075 | “sum ... total ... seeded” | Sum exact integer totals after every model operation, including captures. | own HTTP/model check (partial; see limits) |
+| R2-076 | “hold moves no money” | Authorization changes held/available only; totals/feed unchanged. | own HTTP/model check |
+| R2-077 | “available = total − held ... never negative” | Assert each wallet identity and nonnegativity after every operation/read. | own HTTP/model check (partial; see limits) |
+| R2-078 | “Held funds cannot fund ... payments, authorizations or settlement net debits” | Reserve funds then exercise each debit and request payment against available. | own HTTP/model check |
+| R2-079 | “Captures may spend ... reserved” | Fully hold payer, capture succeeds despite zero available. | own HTTP/model check |
+| R2-080 | “Cumulative captures must not exceed authorized amount” | Random partial captures and remaining+1 rejection; failed capture no change. | own HTTP/model check |
+| R2-081 | “Each idempotent capture moves money once” | Concurrent/sequential replay returns original receipt, one debit. | own HTTP/model check (partial; see limits) |
+| R2-082 | “closed hold cannot be captured again” | Capture/void/expire then fresh capture key rejected. | own HTTP/model check |
+| R2-083 | “balance equals total ... available ... held” | GET/me required fields exact; no-hold agreement and held0. | own HTTP/model check |
+| R2-084 | “payments ... immediate ... no intermediate hold” | Payment response and subsequent authorization listing show no implicit hold. | own HTTP/model check |
+| R2-085 | “request ... immediate ... authorizing ... out of scope” | Request pay produces ordinary payment, no authorization. | own HTTP/model check |
+| R2-086 | “POST /splits unchanged” | Run inherited rounding,zero-share and no-balance checks with holds present. | own HTTP/model check |
+| R2-087 | “seven idempotent write paths ... independently” | Reuse key across paths and users; per-path identical200/different409/failure reusable. | own HTTP/model check (partial; see limits) |
+| R2-088 | “authorization_ttl_seconds ... defaults600 ... positive integer” | Omitted defaults600; invalid0,-1,fraction,bool,string rejects reset without mutation. | own HTTP/model check |
+| R2-089 | “Seeded authorisations ... own absolute expires_at” | Fixture expiry unaffected by default TTL. | own HTTP/model check |
+| R2-090 | “available derived, never seeded” | Supply misleading available in fixture; compute from total/open holds. | own HTTP/model check |
+| R2-091 | “seeded unexpired open holds larger ...422 ... changing nothing” | Overheld reset rejection preserves prior tokens, balances,records,keys. | own HTTP/model check |
+| R2-092 | “Seeded status ... open,captured,voided,expired ... Only open holds” | Seed each status and check held/open remainder. | own HTTP/model check |
+| R2-093 | “omit authorizations ... empty list” | Earlier fixture accepted, list empty and held0. | own HTTP/model check |
+| R2-094 | “expires_at at or before now ... expired ... no funds” | Pure clock equality test and live past/future seeds. | own HTTP/model check |
+| R2-095 | “Reads and writes must reflect expiry ... no request at deadline” | Sleep past short TTL then read/list/debit, released remainder visible. | own HTTP/model check |
+| R2-096 | “GET/authorizations ... expired ... GET/me ... released remainder” | Compare status filters and exact available after clock passage. | own HTTP/model check |
+| R2-097 | “POST/authorizations ... key required ... caller payer” | Missing/empty/long key; assert sender identity cannot be overridden. | own HTTP/model check |
+| R2-098 | “note and visibility ... same defaults” | Omitted empty note/public; explicit null rejected422. | own HTTP/model check |
+| R2-099 | “expires_at is created_at plus ttl” | Compare parsed timestamps and configured/default TTL exactly. | own HTTP/model check |
+| R2-100 | “available below amount ...409 insufficient_funds” | Reserve greater than available; failed key reusable after release. | own HTTP/model check (partial; see limits) |
+| R2-101 | “amount below1 above1e9 not integer ...422” | Numeric integral acceptance and invalid type/value edge matrix. | own HTTP/model check (partial; see limits) |
+| R2-102 | “own handle ...422 self_payment” | Self-authorization rejected and no hold/key claim. | own HTTP/model check |
+| R2-103 | “note over200 ... visibility neither ...422” | Unicode code point length and all invalid visibility types. | own HTTP/model check (partial; see limits) |
+| R2-104 | “No user has handle ...404” | Unknown recipient creates no hold and key reusable. | own HTTP/model check |
+| R2-105 | “open authorisation ... not feed item” | Feed unchanged on reserve,void,expiry; capture alone adds payment. | own HTTP/model check |
+| R2-106 | “Only receiver ... capture” | Payer/third-party403; unknown404; no monetary change. | own HTTP/model check |
+| R2-107 | “capture amount optional ... remaining” | Omitted amount captures current remainder, not original authorization amount. | own HTTP/model check |
+| R2-108 | “{} and explicit amount ... different ...409” | Same key semantic-equivalent different body rejected before current state checks. | own HTTP/model check (partial; see limits) |
+| R2-109 | “capture201 ... payment ... authorization_id ... request_id null” | Compare full ordinary receipt plus linkage/null request. | own HTTP/model check |
+| R2-110 | “payment note and visibility copied” | Capture request unknown overrides ignored; original note/privacy in payment/feed. | own HTTP/model check |
+| R2-111 | “without authorization ... authorization_id null” | Seed/direct/request/settlement payments expose null. | own HTTP/model check |
+| R2-112 | “default captured ... releases remainder immediately” | Partial final capture closes, remaining0, available rises by uncaptured share. | own HTTP/model check |
+| R2-113 | “second capture after final ...409 authorization_not_open” | Fresh key after final must fail; original key still replay200. | own HTTP/model check |
+| R2-114 | “final boolean default true” | Omitted true; false retains; nonboolean malformed400 under generic type rule. | own HTTP/model check |
+| R2-115 | “final:false and remainder ... stays open” | Multiple partial captures update cumulative and latest payment_id. | own HTTP/model check |
+| R2-116 | “entire remainder closes ... final:false” | Exact remaining closes captured and remaining0. | own HTTP/model check |
+| R2-117 | “capture_exceeds ... remaining” | After partial capture, amount between remaining+1 and original rejected422. | own HTTP/model check |
+| R2-118 | “captured_amount cumulative” | Sum capture receipts equals captured_amount across all statuses. | own HTTP/model check |
+| R2-119 | “payment_id latest ... payment_ids every capture in order” | Compare ordered receipt IDs and latest/null on creation. | own HTTP/model check |
+| R2-120 | “remaining_amount ... held ... zero closed” | Open amount-captured; captured/voided/expired0. | own HTTP/model check |
+| R2-121 | “Void and expiry ... partially captured ... preserve records” | Close partial holds, retain captured_amount/payment_ids and payments. | own HTTP/model check |
+| R2-122 | “not open ...409 authorization_not_open” | Captured/voided terminal states reject new capture. | own HTTP/model check |
+| R2-123 | “expires_at at/before now ...409 authorization_expired” | Expired capture rejected consistently before/after read; pending ruling precedence. | own HTTP/model check |
+| R2-124 | “capture amount below1/not integer ...422” | Explicit0,negative,fraction,string,bool,null reject. | own HTTP/model check |
+| R2-125 | “Only payer may void ... no key” | Receiver/outsider403; payer200 without key. | own HTTP/model check |
+| R2-126 | “void ... already-voided200 current state” | Repeat void changes nothing and returns same current authorization. | own HTTP/model check |
+| R2-127 | “captured or expired void ...409 authorization_not_open” | Terminal void rejected; records/balances unchanged. | own HTTP/model check |
+| R2-128 | “GET authorizations only involving caller” | Public visibility never reveals authorization to outsider. | own HTTP/model check |
+| R2-129 | “authorizations newest first created_at” | Seed distinct times and paginate; equal-time tie unconstrained. | own HTTP/model check (partial; see limits) |
+| R2-130 | “direction outgoing payer incoming receiver absent both” | Test role filters and unknown direction422. | own HTTP/model check |
+| R2-131 | “status four statuses ... expired never open” | Test each filter and unknown422 after clock passage. | own HTTP/model check |
+| R2-132 | “limit offset has_more ... requests” | Defaults50/0; limits1..200; plain digits; pagination completeness. | own HTTP/model check (partial; see limits) |
 | R2-133 | “wallet-available ... data-amount ... headline” | Exact available formatted and attribute; visually largest number. | unchecked |
 | R2-134 | “wallet-held ... data-amount ... absent when zero” | Assert conditional node and exact nonzero held amount. | unchecked |
 | R2-135 | “authorize-handle,amount,note,visibility,submit ... same rules” | Decimal conversion/defaults/privacy and submission error/no-network parsing. | unchecked |
@@ -438,3 +438,19 @@ All entries start **unchecked**. Each row specifies an intended falsifier, not o
 | R2-199 | “7. The interface behaves the same for every visitor. Never detect automation, test tools or particular clients to change behaviour; make every effect safe for everyone instead.” | Browser motion plan steps8–10: inspect timing, computed styles, reduced-motion and pointer/network traces against every clause quoted; any violated clause refutes entry. | unchecked |
 | R2-200 | “8. No native alert, confirm or prompt dialogs, no loops that keep running while nothing is visible, and no effect that moves a control while the pointer is over it.” | Browser motion plan steps8–10: inspect timing, computed styles, reduced-motion and pointer/network traces against every clause quoted; any violated clause refutes entry. | unchecked |
 | R2-201 | “Before handing off, capture every required screen in a real browser at 375 px and at 1440 px, in its empty, filled, loading, refused and uncertain states where they exist, and save the images in the verification area. Check contrast and keyboard focus on each.” | Capture all six screens at375/1440 in applicable states; fail if evidence or contrast/focus inspection missing. | unchecked |
+
+## Stage 2 coverage limits and evidence
+
+- All browser and visual/motion entries remain unchecked by modeler. `browser-plan.md` gives executable scenarios for gatekeeper; no browser or screenshot pass is implied. R2-071–074 browser continuity still needs browser execution; the HTTP migration check covers original token, pending request and exact old receipt semantics only.
+- R2-075/077/081/148: sequential invariants plus inherited payment retry race are covered. Transient internal state and full concurrency linearizability across holds/captures/void/expiry remain independent gatekeeper work.
+- R2-087: all seven paths have sequential replay witnesses; exhaustive cross-product of concurrent key claims and every field validation is not covered.
+- R2-100/101/103/108: representative funds, amount/type, Unicode and changed-body cases are covered; not every combination of invalid fields is generated. The generator avoids unspecified precedence between invalid capture amount and terminal status/wrong role.
+- R2-129/132: full observed collection membership/order (conservative to seconds) and pagination counts/has_more are covered. Dense same-second page selection is not overconstrained.
+- Seeded closed authorizations lacking captured_amount/payment_ids are checked for status, hold release and common fields without inventing omitted history; API-generated partial history is checked exactly after void/expiry/import.
+- Logical time at exact equality is checked in the pure model; live tests wait just beyond expiry to avoid a transport-boundary race.
+- Provided-check coverage remains unknown; no provided checks or product source were read.
+- Auditor revision582aa3c requested explicit data-testid binding for pay-uncertain; R2-065 now names the exact attribute and requires nonempty visible text with pay-error absent.
+
+Initial live run of driver5dfddf3 against product95f41e2 exited1 on a random request combining closed status with explicit amount0: model409 vs product422. This was an oracle overconstraint, not a product rejection. The generator was corrected to isolate independently specified error rules.
+
+**Observed stage2 evidence:** clean product95f41e2 was built and run as two isolated containers with 2CPU/2GiB; frozen stage1 product in that clean clone supplied migration exports. Build/start script exited0, log `/tmp/modeler-s2-d635l8bj/build.log`. Final command: `PYTHONDONTWRITEBYTECODE=1 python3 -u stage-2/verification/model/driver.py --base-url http://127.0.0.1:18321 --second-url http://127.0.0.1:18322 --stage1-url http://127.0.0.1:18323 --steps 100 --no-shrink`. Exit0: `DIFFERENTIAL PASS operations=532 seed=20261001 persistence=pass concurrency=50 auth-controls=pass boundary=pass holds-expiry=pass migration=pass`. Model self-test command: `PYTHONDONTWRITEBYTECODE=1 python3 stage-2/verification/model/driver.py --self-test`; exit0: `MODEL SELF-TEST PASS operations=663 boundary=pass authorization_operations=736 expiry=pass`. No browser or independent gatekeeper acceptance is claimed.

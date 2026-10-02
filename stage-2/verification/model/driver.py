@@ -19,7 +19,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from model import initial, transition, expire
+from model import initial, transition, expire, held
 
 
 FIXTURE = {'currency': 'EUR', 'minor_units': 2, 'settlement_operator_ids': ['u_ada'],
@@ -399,6 +399,8 @@ def authorization_ops(state):
     a = add(op('ada', '/authorizations', body, 'hold'))
     aid = a['authorization_id']
     capture, void = '/authorizations/' + aid + '/capture', '/authorizations/' + aid + '/void'
+    for key in [None, '', 'x'*256]:
+        add(op('bob', capture, {}, key))
     add(op('ada', '/authorizations', body, 'hold'))
     add(op('ada', '/authorizations', {'amount': None}, 'hold'))
     for user in ['ada', 'cy']:
@@ -413,8 +415,9 @@ def authorization_ops(state):
     req = add(op('cy', '/requests', {'payer_handle': 'ada', 'amount': 8001}, 'held-request'))
     add(op('ada', '/requests/' + req['request_id'] + '/pay', {}, 'available'))
     add(op('ada', '/settlements', {'transfers': [{'from_handle': 'ada', 'to_handle': 'cy', 'amount': 8001}]}, 'available'))
-    add(op('bob', capture, {'amount': 700, 'final': False}, 'partial'))
-    add(op('bob', capture, {'amount': 700, 'final': False}, 'partial'))
+    partial_body = {'amount': 700, 'final': False, 'note': 'ignored', 'visibility': 'public'}
+    add(op('bob', capture, partial_body, 'partial'))
+    add(op('bob', capture, partial_body, 'partial'))
     add(op('bob', capture, {'amount': 1301}, 'invalid'))
     add(op('bob', capture, {'amount': 300}, 'final'))
     add(op('bob', capture, {}, 'closed'))
@@ -450,6 +453,11 @@ def authorization_ops(state):
         add(op('ada', '/authorizations', body, 'invalid-create'))
     add(op('bob', '/authorizations/missing/capture', {}, 'missing'))
     add(op('ada', '/authorizations/missing/void'))
+    available = state['users']['ada']['balance'] - held(state, 'ada')
+    a = add(op('ada', '/authorizations', {'to_handle':'bob','amount':available}, 'all-available'))
+    path = '/authorizations/' + a['authorization_id']
+    add(op('bob', path + '/capture', {'amount':1,'final':False}, 'reserved'))
+    add(op('ada', path + '/void'))
     return xs
 
 
@@ -466,6 +474,9 @@ def authorization_random(state, seed, steps):
             a = rng.choice(state['authorizations'])
             user = a['to_handle'] if rng.randrange(4) else user
             body = {} if rng.randrange(4) == 0 else {'amount': rng.choice([1, a['remaining_amount'], a['remaining_amount']+1]), 'final': bool(rng.randrange(2))}
+            if a['status'] != 'open' or user != a['to_handle']:
+                # Avoid asserting unspecified precedence between invalid input and role/status.
+                body = {}
             operation = op(user, '/authorizations/' + a['authorization_id'] + '/capture', body, 'random-capture-' + str(i))
         elif choice == 3:
             a = rng.choice(state['authorizations'])
@@ -653,6 +664,8 @@ def seeded_and_expiry(base):
     deadline = datetime.fromisoformat(created['expires_at']).timestamp()
     time.sleep(max(0, deadline - time.time() + 0.15))
     r.observe()
+    for user in ['ada', 'bob', 'cy']:
+        r.run(op(user, '/authorizations', method='GET', query={'status':'expired'}))
     r.run(op('bob', path, {}, 'expired'))
     r.run(op('ada', '/authorizations/' + a['authorization_id'] + '/void'))
     r.run(op('bob', path, {'amount':700,'final':False}, 'partial'))

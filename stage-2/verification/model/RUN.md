@@ -1,4 +1,4 @@
-# Independent stage 1 model checks
+# Independent stage 2 model checks
 
 From the result repository, with an isolated running service:
 
