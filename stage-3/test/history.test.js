@@ -476,3 +476,15 @@ test('stage-2 exports with seeded past-expiry holds import, and the stage-3 expo
     assert.deepStrictEqual([m.total, m.held, m.available], [100, 0, 100], status);
   }
 });
+
+test('import refuses an open hold marked without history or with a mismatched initial hold', async () => {
+  const t = await reset();
+  const id = (await call('POST', '/authorizations', { token: t.ada, key: 'nh', body: { to_handle: 'bob', amount: 20 } })).body.authorization_id;
+  const exp = (await call('GET', '/_test/export')).body;
+  const tamper = (fn) => { const d = JSON.parse(JSON.stringify(exp)); fn(d.state.auth_events.find((e) => e.authorization_id === id)); return d; };
+  assert.strictEqual((await call('POST', '/_test/import', { body: tamper((e) => { e.noHistory = true; }) })).status, 422);
+  assert.strictEqual((await call('POST', '/_test/import', { body: tamper((e) => { e.initialHold = 10; }) })).status, 422);
+  assert.strictEqual((await call('POST', '/_test/import', { body: tamper((e) => { e.createdMs -= 5000; }) })).status, 422);
+  assert.strictEqual((await call('POST', '/_test/import', { body: exp })).status, 204);
+  assert.strictEqual((await me(t.ada)).held, 20);
+});

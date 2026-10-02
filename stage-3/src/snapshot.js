@@ -559,7 +559,15 @@ function importHistory(st, s) {
       }
       // Seeded holds without a lifecycle (noHistory) contribute nothing to history,
       // so only their shape is checked.
-      const timeline = !e.noHistory && (e.expMs < e.createdMs || (e.closedMs !== null && e.closedMs < e.createdMs)
+      // noHistory is only possible for a closed hold or one whose deadline is not
+      // after its creation; a lifecycle must agree with the authorization record.
+      const createdMs = Date.parse(a.created_at);
+      const expMs = Date.parse(a.expires_at);
+      if (e.noHistory && a.status === 'open' && expMs > createdMs) fail('state authorization history is invalid');
+      const timeline = !e.noHistory && (e.createdMs !== createdMs || e.expMs !== expMs
+        || a.amount - e.initialHold !== a.captured_amount - capturedSum
+        || (a.status === 'open' && a.remaining_amount !== e.initialHold - capturedSum)
+        || e.expMs < e.createdMs || (e.closedMs !== null && e.closedMs < e.createdMs)
         || (a.status === 'open' ? e.closedKind !== null : e.closedKind !== a.status)
         || e.captures.length !== capturePayments.length
         || e.captures.some((c, i) => capturePayments[i].amount !== c.amount || Date.parse(capturePayments[i].created_at) !== c.ms));
