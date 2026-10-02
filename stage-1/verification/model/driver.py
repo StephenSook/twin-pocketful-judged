@@ -474,7 +474,7 @@ def auth_and_controls(base):
     status, signup = http(base, 'POST', '/auth/signup', body)
     require(status == 201 and signup.get('display_name') == 'New' and isinstance(signup.get('token'), str), 'R1-058 signup')
     status, me = http(base, 'GET', '/me', token=signup['token'])
-    require(status == 200 and me['balance'] == 0 and me['handle'] == 'mix_ed_longlocalpartm' and me['user_id'] == signup['user_id'], 'R1-027/029 derived handle and zero balance')
+    require(status == 200 and me['balance'] == 0 and me['handle'] == 'mix_ed_longlocalpart' and me['user_id'] == signup['user_id'], 'R1-027/029 derived handle and zero balance')
     status, logged = http(base, 'POST', '/auth/login', {'email': body['email'], 'password': body['password']})
     require(status == 200, 'R1-066 second session')
     require(http(base, 'GET', '/me', token=signup['token'])[0] == 200 and http(base, 'GET', '/me', token=logged['token'])[0] == 200, 'R1-066 both sessions valid')
