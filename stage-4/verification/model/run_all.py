@@ -15,7 +15,7 @@ commands=[
     [sys.executable,'-u',str(root/'temporal_driver.py'),'--base-url',a.base_url,
      '--second-url',a.second_url,'--stage1-url',a.stage1_url,'--stage2-url',a.stage2_url,'--steps','30'],
     [sys.executable,'-u',str(root/'refund_batch_driver.py'),'--base-url',a.base_url,
-     '--stage1-url',a.stage1_url,'--stage2-url',a.stage2_url,'--stage3-url',a.stage3_url,'--steps','40']]
+     '--second-url',a.second_url,'--stage1-url',a.stage1_url,'--stage2-url',a.stage2_url,'--stage3-url',a.stage3_url,'--steps','40']]
 for command in commands:
     if a.no_shrink:command.append('--no-shrink')
     result=subprocess.run(command)

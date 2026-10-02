@@ -675,56 +675,88 @@ S3-6 also changes only the stage3 maximum-wallet settlement fixture to outgoing-
 
 | ID | Quoted requirement | Reading / refuting check | Coverage |
 |---|---|---|---|
-| R4-001 | “All stages1–3 requirements continue” | Run inherited financial and temporal suites; independent UI regression. | unchecked |
-| R4-002 | “ten idempotent write paths” | Refund and batch keys obey user/path/body identity; inherited eight retain behavior. | unchecked |
-| R4-003 | “existing receipts/saved statements original form” | Refund/correction-batch leaves original payment/settlement receipts and snapshots unchanged. | unchecked |
-| R4-004 | “refund requires idempotency key” | Missing/empty400,long422; identical200/different409, failed key reusable. | unchecked |
-| R4-005 | “Only original receiver may refund else403” | Sender/thirdparty forbidden; no token401; no change. | unchecked |
-| R4-006 | “unknown payment404” | Unknown refund target returnsnot_found. | unchecked |
-| R4-007 | “target direct/request/capture never refund” | Refund each allowed kind and reject refund-of-refund. | unchecked |
-| R4-008 | “Invalid amount422 validation_failed” | Zero/negative/fraction/string/bool/null/missing/over1e9 invalid; integral numeric accepted. | unchecked |
-| R4-009 | “cumulative not exceed current corrected amount” | Multiple partials reach exact cap; cap+1 rejects422 refund_exceeds_payment; correction changes cap. | unchecked |
-| R4-010 | “refund of refund422 invalid_refund_target” | Original refund receiver cannot refund it again, no key claim. | unchecked |
-| R4-011 | “refund new payment opposite direction” | Verify sender/receiver reversal and new opaque payment ID. | unchecked |
-| R4-012 | “refund_of names target” | Exact target link on receipt, activity and statement. | unchecked |
-| R4-013 | “request_id null authorization_id null” | Refund of request/capture never retains source request/authorization links. | unchecked |
-| R4-014 | “original note/visibility” | Unknown refund overrides ignored; original verbatim note/privacy copied. | unchecked |
-| R4-015 | “201 payment replay200 original body” | Exact JSON receipt identity across later correction/refund/lifecycle changes. | unchecked |
-| R4-016 | “receiver available funds or409 insufficient_funds” | Hold receiver funds then refund rejects although total sufficient; failed key reusable after release. | unchecked |
-| R4-017 | “atomically moves existing money” | One debit/credit, conservation, no trace on failure. | unchecked |
-| R4-018 | “never reopen request/authorization/restore hold” | Refund paid request and captured/closed authorization; terminal state/held remain. | unchecked |
-| R4-019 | “other payments refund_of null” | Seed/direct/request/capture/settlement returnnull in fresh reads; migrated replay remainsoriginal. | unchecked |
-| R4-020 | “ordinary direct/request corrections remain” | Correct eligible payments with existing sender/revision rules. | unchecked |
-| R4-021 | “captures/refunds correction422 linked_payment_immutable” | Single and batch both reject immutable targets. | unchecked |
-| R4-022 | “cannot reduce below already refunded422” | Compare proposed amount to cumulative refunds before affordability; exact refunded amount allowed. | unchecked |
-| R4-023 | “Correction debits against available” | Ordinary decrease debits receiver available; increase sender available; held money unavailable. | unchecked |
-| R4-024 | “batch operator/key same401/403 settlements” | No token401, authenticated nonoperator403, required key validation/replay. | unchecked |
-| R4-025 | “corrections1..32 objects” | Empty,too long,nonarray,nonobject entries422. | unchecked |
-| R4-026 | “distinct payment_ids else422” | Duplicate target IDs reject entire batch; distinct resources required. | unchecked |
-| R4-027 | “every item ordinary fields/validation” | Required positive expected revision,amount0..1e9,reason1..200,effectiveRFC3339<=now; all invalid422. | unchecked |
-| R4-028 | “unknown404 stale409” | Missing target and stale expectations leave batch untouched. | unchecked |
-| R4-029 | “operator ordinary/request/settlement permitted” | Operator need not be original sender; no added access to private history outside batch response. | unchecked |
-| R4-030 | “captures/refunds remain immutable” | Existing linked targets reject with linked_payment_immutable. | unchecked |
-| R4-031 | “any settlement member requires every member” | Subset rejects422 incomplete_settlement; include complete membership even already corrected/refunded. | unchecked |
-| R4-032 | “settlement members identical effective instants” | Equal offset spellings accepted; different instants422; unrelated ordinary items may have different times. | unchecked |
-| R4-033 | “single corrections remain for nonmembers” | Ordinary single path still works; settlement single remains immutable. | unchecked |
-| R4-034 | “unknown fields ignored” | Extra batch/item fields do not alter operation; remain part of idempotency body equality. | unchecked |
-| R4-035 | “item errors input order” | First item's unknown/stale/immutable/refund-cap error wins over later field errors. | unchecked |
-| R4-036 | “then settlement completeness” | Incomplete batch with item error returns item error; otherwise completeness precedes funds. | unchecked |
-| R4-037 | “then resulting current available” | Combined net debits compare available after all proposed revisions, before history. | unchecked |
-| R4-038 | “then historical total/available at every boundary” | Current-affordable batch can reject historical_overdraft at effective or hold-event boundary. | unchecked |
-| R4-039 | “existing error codes apply” | Assert linked_payment_immutable,refund_exceeds_payment,insufficient_funds,historical_overdraft envelopes/statuses. | unchecked |
-| R4-040 | “combined effect all proposed revisions” | Mutually funding revisions succeed although individual application would be unaffordable. | unchecked |
-| R4-041 | “rejected history/balances/idempotency unchanged” | Observe full histories/statements/wallets before/after; retry failed key with valid batch. | unchecked |
-| R4-042 | “201 correction_batch_id recorded_at revisions inputorder” | Compare required fields and order independent of payment ID ordering. | unchecked |
-| R4-043 | “all revisions shared recorded strictly later everyprevious” | Use mixed previous-revision times; common timestamp exceeds maximum. | unchecked |
-| R4-044 | “each revision correction_batch_id” | Exact linkage in returned revision and GET/revisions. | unchecked |
-| R4-045 | “effective times cannot be later now” | Future item fails422; recorded monotonic bump does not authorize future-effective input. | unchecked |
-| R4-046 | “Original payments/receipts never change” | Activity and old original JSON receipts retain original amounts/privacy/times. | unchecked |
-| R4-047 | “Original payment/settlement retries originalbody” | Replay prior idempotency after batch and compare exact original response. | unchecked |
-| R4-048 | “new statements new revisions earlier snapshots frozen” | Compare latest effective ordering/amount/delta versus snapshot saved before batch. | unchecked |
-| R4-049 | “batch replay original200” | Replay after later single/batch revisions and compare complete response JSON. | unchecked |
-| R4-050 | “settlement refundable membership unchanged” | Refund a member then require all original members for later batch. | unchecked |
+| R4-001 | “All stages1–3 requirements continue” | Run inherited financial and temporal suites; independent UI regression. | own model/HTTP check (partial; see limits) |
+| R4-002 | “ten idempotent write paths” | Refund and batch keys obey user/path/body identity; inherited eight retain behavior. | own model/HTTP check (partial; see limits) |
+| R4-003 | “existing receipts/saved statements original form” | Refund/correction-batch leaves original payment/settlement receipts and snapshots unchanged. | own model/HTTP check |
+| R4-004 | “refund requires idempotency key” | Missing/empty400,long422; identical200/different409, failed key reusable. | own model/HTTP check |
+| R4-005 | “Only original receiver may refund else403” | Sender/thirdparty forbidden; no token401; no change. | own model/HTTP check |
+| R4-006 | “unknown payment404” | Unknown refund target returnsnot_found. | own model/HTTP check |
+| R4-007 | “target direct/request/capture never refund” | Refund each allowed kind and reject refund-of-refund. | own model/HTTP check (partial; see limits) |
+| R4-008 | “Invalid amount422 validation_failed” | Zero/negative/fraction/string/bool/null/missing/over1e9 invalid; integral numeric accepted. | own model/HTTP check (partial; see limits) |
+| R4-009 | “cumulative not exceed current corrected amount” | Multiple partials reach exact cap; cap+1 rejects422 refund_exceeds_payment; correction changes cap. | own model/HTTP check |
+| R4-010 | “refund of refund422 invalid_refund_target” | Original refund receiver cannot refund it again, no key claim. | own model/HTTP check |
+| R4-011 | “refund new payment opposite direction” | Verify sender/receiver reversal and new opaque payment ID. | own model/HTTP check |
+| R4-012 | “refund_of names target” | Exact target link on receipt, activity and statement. | own model/HTTP check |
+| R4-013 | “request_id null authorization_id null” | Refund of request/capture never retains source request/authorization links. | own model/HTTP check |
+| R4-014 | “original note/visibility” | Unknown refund overrides ignored; original verbatim note/privacy copied. | own model/HTTP check |
+| R4-015 | “201 payment replay200 original body” | Exact JSON receipt identity across later correction/refund/lifecycle changes. | own model/HTTP check |
+| R4-016 | “receiver available funds or409 insufficient_funds” | Hold receiver funds then refund rejects although total sufficient; failed key reusable after release. | own model/HTTP check |
+| R4-017 | “atomically moves existing money” | One debit/credit, conservation, no trace on failure. | own model/HTTP check (partial; see limits) |
+| R4-018 | “never reopen request/authorization/restore hold” | Refund paid request and captured/closed authorization; terminal state/held remain. | own model/HTTP check |
+| R4-019 | “other payments refund_of null” | Seed/direct/request/capture/settlement returnnull in fresh reads; migrated replay remainsoriginal. | own model/HTTP check (partial; see limits) |
+| R4-020 | “ordinary direct/request corrections remain” | Correct eligible payments with existing sender/revision rules. | own model/HTTP check |
+| R4-021 | “captures/refunds correction422 linked_payment_immutable” | Single and batch both reject immutable targets. | own model/HTTP check |
+| R4-022 | “cannot reduce below already refunded422” | Compare proposed amount to cumulative refunds before affordability; exact refunded amount allowed. | own model/HTTP check |
+| R4-023 | “Correction debits against available” | Ordinary decrease debits receiver available; increase sender available; held money unavailable. | own model/HTTP check (partial; see limits) |
+| R4-024 | “batch operator/key same401/403 settlements” | No token401, authenticated nonoperator403, required key validation/replay. | own model/HTTP check |
+| R4-025 | “corrections1..32 objects” | Empty,too long,nonarray,nonobject entries422. | own model/HTTP check (partial; see limits) |
+| R4-026 | “distinct payment_ids else422” | Duplicate target IDs reject entire batch; distinct resources required. | own model/HTTP check (partial; see limits) |
+| R4-027 | “every item ordinary fields/validation” | Required positive expected revision,amount0..1e9,reason1..200,effectiveRFC3339<=now; all invalid422. | own model/HTTP check (partial; see limits) |
+| R4-028 | “unknown404 stale409” | Missing target and stale expectations leave batch untouched. | own model/HTTP check |
+| R4-029 | “operator ordinary/request/settlement permitted” | Operator need not be original sender; no added access to private history outside batch response. | own model/HTTP check |
+| R4-030 | “captures/refunds remain immutable” | Existing linked targets reject with linked_payment_immutable. | own model/HTTP check |
+| R4-031 | “any settlement member requires every member” | Subset rejects422 incomplete_settlement; include complete membership even already corrected/refunded. | own model/HTTP check |
+| R4-032 | “settlement members identical effective instants” | Equal offset spellings accepted; different instants422; unrelated ordinary items may have different times. | own model/HTTP check |
+| R4-033 | “single corrections remain for nonmembers” | Ordinary single path still works; settlement single remains immutable. | own model/HTTP check |
+| R4-034 | “unknown fields ignored” | Extra batch/item fields do not alter operation; remain part of idempotency body equality. | own model/HTTP check (partial; see limits) |
+| R4-035 | “item errors input order” | First item's unknown/stale/immutable/refund-cap error wins over later field errors. | own model/HTTP check (partial; see limits) |
+| R4-036 | “then settlement completeness” | Incomplete batch with item error returns item error; otherwise completeness precedes funds. | own model/HTTP check |
+| R4-037 | “then resulting current available” | Combined net debits compare available after all proposed revisions, before history. | own model/HTTP check |
+| R4-038 | “then historical total/available at every boundary” | Current-affordable batch can reject historical_overdraft at effective or hold-event boundary. | own model/HTTP check |
+| R4-039 | “existing error codes apply” | Assert linked_payment_immutable,refund_exceeds_payment,insufficient_funds,historical_overdraft envelopes/statuses. | own model/HTTP check (partial; see limits) |
+| R4-040 | “combined effect all proposed revisions” | Mutually funding revisions succeed although individual application would be unaffordable. | own model/HTTP check |
+| R4-041 | “rejected history/balances/idempotency unchanged” | Observe full histories/statements/wallets before/after; retry failed key with valid batch. | own model/HTTP check |
+| R4-042 | “201 correction_batch_id recorded_at revisions inputorder” | Compare required fields and order independent of payment ID ordering. | own model/HTTP check |
+| R4-043 | “all revisions shared recorded strictly later everyprevious” | Use mixed previous-revision times; common timestamp exceeds maximum. | own model/HTTP check |
+| R4-044 | “each revision correction_batch_id” | Exact linkage in returned revision and GET/revisions. | own model/HTTP check |
+| R4-045 | “effective times cannot be later now” | Future item fails422; recorded monotonic bump does not authorize future-effective input. | own model/HTTP check (partial; see limits) |
+| R4-046 | “Original payments/receipts never change” | Activity and old original JSON receipts retain original amounts/privacy/times. | own model/HTTP check |
+| R4-047 | “Original payment/settlement retries originalbody” | Replay prior idempotency after batch and compare exact original response. | own model/HTTP check (partial; see limits) |
+| R4-048 | “new statements new revisions earlier snapshots frozen” | Compare latest effective ordering/amount/delta versus snapshot saved before batch. | own model/HTTP check |
+| R4-049 | “batch replay original200” | Replay after later single/batch revisions and compare complete response JSON. | own model/HTTP check |
+| R4-050 | “settlement refundable membership unchanged” | Refund a member then require all original members for later batch. | own model/HTTP check (partial; see limits) |
 | R4-051 | “concurrent shared expected revision cannot both succeed” | Independent gatekeeper batch/single and overlapping-batch races; same-key replay once. | unchecked |
-| R4-052 | “accept exports stages1–3” | Import untouched exports from each frozen service and exercise tokens/receipts/new endpoints. | unchecked |
-| R4-053 | “retain settlement membership corrections snapshots” | Imported settlement needs full batch; imported revisions preserved; old source snapshot keeps frozen entries. | unchecked |
+| R4-052 | “accept exports stages1–3” | Import untouched exports from each frozen service and exercise tokens/receipts/new endpoints. | own model/HTTP check (partial; see limits) |
+| R4-053 | “retain settlement membership corrections snapshots” | Imported settlement needs full batch; imported revisions preserved; old source snapshot keeps frozen entries. | own model/HTTP check (partial; see limits) |
+
+## Stage4 coverage limits and verifier corrections
+
+- R4-001: inherited API and temporal suites run; browser/visual regression remains independent gatekeeper work.
+- R4-002/017/051: sequential idempotency and failure atomicity covered on both new paths. Concurrent refunds against cap and overlapping batch/single expected-revision races are unchecked by modeler and delegated to independent gatekeeper. Inherited50-flight same-key payment test is not new-path concurrency evidence.
+- R4-008/025–027/034–035: representative ranges, malformed shapes, duplicate IDs, unknown fields and input-order precedence are covered. Not every32-item successful combination or multi-fault within-item precedence is inferred.
+- R4-019: fresh payment/activity/statement reads require refund_of:null; imported cached bodies intentionally remain unchanged.
+- R4-023/038: held-funds refunds, ordinary correction availability and historical-held batch rejection covered; exhaustive timing races remain unchecked.
+- R4-047: original payment retries are compared exactly after refunds/batches; all three legacy-source settlement retries are also compared exactly after batch correction; not every same-version cross-product is exhaustive.
+- R4-052/053: actual stage1/2/3 HTTP exports imported; stage3 corrected revision and frozen snapshot retained; settlement membership survives and permits complete batches. Arbitrary malformed export tampering is independent gatekeeper work.
+- Initial stage3-import check incorrectly required exact JSON equality on a fresh revision-history read. Product added correction_batch_id and changed no existing field. This was a verifier overconstraint, not a product defect: fresh reads now compare original fields, while a separate replay requires exact original correction-response equality.
+- All product source and provided check sources remain unread. Exports are opaque in-memory test artifacts; no credential/token contents are published.
+
+## Stage4 observed evidence
+
+Clean producte0a4e34 was built and run in two2CPU/2GiB containers, alongside frozen stage1/2/3 sources. Build/start exit0; log `/tmp/modeler-s4-xu75dmwq/build.log`. Verifier39a7c60 ran:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -u stage-4/verification/model/run_all.py --base-url http://127.0.0.1:18641 --second-url http://127.0.0.1:18642 --stage1-url http://127.0.0.1:18643 --stage2-url http://127.0.0.1:18644 --stage3-url http://127.0.0.1:18645 --no-shrink
+```
+
+Exit0: inherited532 operations; temporal75 operations; refund/batch40 random operations with deterministic witnesses; imports3/3; `STAGE4 MODEL SUITE PASS inherited=pass temporal=pass refunds-batches=pass three-legacy-imports=pass`.
+
+The subsequent same-version refund/batch export-import extension and post-batch legacy settlement replay assertions were checked with:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -u stage-4/verification/model/refund_batch_driver.py --base-url http://127.0.0.1:18641 --second-url http://127.0.0.1:18642 --stage1-url http://127.0.0.1:18643 --stage2-url http://127.0.0.1:18644 --stage3-url http://127.0.0.1:18645 --steps 40 --no-shrink
+```
+
+Exit0: `REFUND BATCH PASS random_operations=40 refunds=pass batches=pass precedence=pass state-import=pass imports=3/3`. The wrapper now includes that extended phase. The two earlier phases were unchanged, so they were not repeated after this isolated extension.
+
+All three `--self-test` commands exited0: inherited `MODEL SELF-TEST PASS operations=663 boundary=pass authorization_operations=736 expiry=pass`, `TEMPORAL MODEL SELF-TEST PASS`, and `REFUND BATCH MODEL SELF-TEST PASS`. These are modeler observations, not independent acceptance. Auditorba4aa55 found no ledger gaps or misreadings in02cefe5.

@@ -17,3 +17,5 @@ Sequential generated failures are deletion-reduced, bounded to60 temporal/stage4
 Maximum-balance fixtures stay within S3-6 per-entry bounds. Fresh reads allow optional response fields; cached idempotent bodies and imported snapshots must remain exactly equal to their original JSON.
 
 Independent gatekeeper owns concurrent refund-cap and overlapping-correction races, import corruption attacks, transient internal invariants and UI/visual regression. No modeler pass is an independent acceptance verdict.
+
+The final phase additionally exports a state containing both refunds and batches to the second stage4 process, restores its snapshot and original successful retries, and verifies that destination credentials were replaced. All three legacy-source settlement receipts are retried unchanged after batch correction.

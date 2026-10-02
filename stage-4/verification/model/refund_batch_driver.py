@@ -176,6 +176,23 @@ def random_sequence(base,seed,steps,no_shrink=False):
     return r
 
 
+def own_roundtrip(r,second=None):
+    require({'refund','batch'}.issubset({k[1] for k in r.replays}), 'R4 roundtrip contains refunds and batches')
+    token=r.run({'kind':'statement','user':'ada','query':{'to':FUTURE}})['snapshot']
+    status,export=http(r.base,'GET','/_test/export');require(status==200,'R4 state export')
+    target=second or r.base
+    destination=Runner(target)
+    require(http(target,'POST','/_test/import',export)[0]==204,'R4 refunds/batches state import')
+    require(http(target,'GET','/me',token=destination.tokens['ada'])[0]==401,'R4 import replaces credentials')
+    r.base=target
+    r.observe()
+    r.run({'kind':'statement','user':'ada','query':{'snapshot':token}})
+    for operation in list(r.ops):
+        if operation['kind'] not in ('refund','batch'):continue
+        ck=(operation['user'],operation['kind'],operation.get('id'),operation.get('key'))
+        if ck in r.replays:r.run(operation)
+
+
 def migration(source,base,stage):
     # Sources are real frozen services; no product source or opaque state inspection.
     f=fixture();f['payments']=[]
@@ -185,8 +202,9 @@ def migration(source,base,stage):
     for u in f['users']:
         status,x=http(source,'POST','/auth/login',{'email':u['email'],'password':u['password']})
         require(status==200,'R4 legacy login');tokens[u['handle']]=x['token']
-    status,settlement=http(source,'POST','/settlements',{'transfers':[{'from_handle':'ada','to_handle':'bob','amount':100},
-        {'from_handle':'bob','to_handle':'cy','amount':50}]},token=tokens['ada'],key='legacy-settlement')
+    settlement_body={'transfers':[{'from_handle':'ada','to_handle':'bob','amount':100},
+        {'from_handle':'bob','to_handle':'cy','amount':50}]}
+    status,settlement=http(source,'POST','/settlements',settlement_body,token=tokens['ada'],key='legacy-settlement')
     require(status==201,'R4 legacy settlement')
     status,p=http(source,'POST','/payments',{'to_handle':'bob','amount':100},token=tokens['ada'],key='legacy-payment')
     require(status==201,'R4 legacy payment');old_snapshot=None;old_revision=None
@@ -215,6 +233,8 @@ def migration(source,base,stage):
     require(status==201 and refunded['refund_of']==p['payment_id'],'R4 legacy refundable')
     status,replay=http(base,'POST','/payments',{'to_handle':'bob','amount':100},token=tokens['ada'],key='legacy-payment')
     require(status==200 and replay==p,'R4 legacy original retry')
+    status,replay=http(base,'POST','/settlements',settlement_body,token=tokens['ada'],key='legacy-settlement')
+    require(status==200 and replay==settlement,'R4 legacy settlement retry after batch')
 
 
 def urllib_quote(value):
@@ -235,18 +255,20 @@ def main():
     for stage in (1,2,3):p.add_argument('--stage'+str(stage)+'-url')
     p.add_argument('--seed',type=int,default=2026);p.add_argument('--steps',type=int,default=40)
     p.add_argument('--no-shrink',action='store_true');p.add_argument('--replay',type=Path)
+    p.add_argument('--second-url')
     a=p.parse_args()
     if a.self_test:self_test();return
     if not a.base_url:p.error('--base-url required')
     if a.replay:
         replay_sequence(a.base_url,json.loads(a.replay.read_text()));print('REFUND BATCH REPLAY PASS');return
     try:
-        refund_cases(a.base_url);batch_cases(a.base_url);request_capture_targets(a.base_url);random_sequence(a.base_url,a.seed,a.steps,a.no_shrink)
+        refund_cases(a.base_url);batch_cases(a.base_url);request_capture_targets(a.base_url)
+        r=random_sequence(a.base_url,a.seed,a.steps,a.no_shrink);own_roundtrip(r,a.second_url)
         for stage in (1,2,3):
             source=getattr(a,'stage'+str(stage)+'_url')
             if source:migration(source,a.base_url,stage)
     except Mismatch as e:print('REFUND BATCH FAIL '+str(e));raise SystemExit(1)
-    print('REFUND BATCH PASS random_operations='+str(a.steps)+' refunds=pass batches=pass precedence=pass imports='+str(sum(bool(getattr(a,'stage'+str(x)+'_url')) for x in (1,2,3)))+'/3')
+    print('REFUND BATCH PASS random_operations='+str(a.steps)+' refunds=pass batches=pass precedence=pass state-import=pass imports='+str(sum(bool(getattr(a,'stage'+str(x)+'_url')) for x in (1,2,3)))+'/3')
 
 
 if __name__=='__main__':main()
