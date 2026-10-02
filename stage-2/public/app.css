@@ -20,8 +20,11 @@
   font-display: swap;
 }
 
-@view-transition { navigation: auto; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+/* Cross-document cross-fade; off under reduced motion (ruling S2-5). */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+}
 
 :root {
   --ink: #2B2270;
