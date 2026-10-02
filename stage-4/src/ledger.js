@@ -18,12 +18,13 @@ function stamp(ms) {
   return new Date(ms).toISOString().replace(/Z$/, '+00:00');
 }
 
-// Latest revision recorded at or before K, or null. `override` replaces the
-// revision list of one payment (used to test a correction before applying it).
+// Latest revision recorded at or before K, or null. `override` (a Map
+// payment_id -> revision list) replaces revision lists while a correction or
+// correction batch is tested before it is applied.
 // `cutoff` (statement snapshots) excludes revisions committed after a read:
 // every revision carries a global commit sequence number `seq`.
 function selectRevision(s, paymentId, K, override, cutoff = INF) {
-  const revs = override && override.paymentId === paymentId ? override.revs : s.revisions.get(paymentId);
+  const revs = override && override.has(paymentId) ? override.get(paymentId) : s.revisions.get(paymentId);
   for (let i = revs.length - 1; i >= 0; i--) if (revs[i].recMs <= K && revs[i].seq <= cutoff) return revs[i];
   return null;
 }
@@ -146,6 +147,7 @@ function revisionView(paymentId, r) {
     effective_at: r.effective_at,
     recorded_at: r.recorded_at,
     reason: r.reason,
+    correction_batch_id: r.correction_batch_id === undefined ? null : r.correction_batch_id,
   };
 }
 

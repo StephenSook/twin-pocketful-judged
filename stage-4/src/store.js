@@ -71,6 +71,10 @@ function emptyState() {
     authorizationsByPayer: new Map(), // user id -> [authorization objects the user authorized]
     authEvents: new Map(), // authorization_id -> {createdMs, initialHold, expMs, captures:[{ms, amount}], closedMs, closedKind, noHistory}
     revSeq: 0, // global commit sequence of revisions (statement snapshots freeze a cutoff)
+    // stage 4
+    settlementMembers: new Map(), // settlement_id -> [payment_id] in commit order
+    refundedTotal: new Map(), // payment_id -> sum of refunds of it
+    correctionBatches: new Set(), // correction_batch_id values (id uniqueness)
   };
 }
 
@@ -91,6 +95,9 @@ function indexPayment(s, p, revs) {
   }]);
   pushTo(s.paymentsByUser, p.from_user_id, p);
   if (p.to_user_id !== p.from_user_id) pushTo(s.paymentsByUser, p.to_user_id, p);
+  // stage 4: settlement membership and cumulative refunds per target
+  if (p.settlement_id) pushTo(s.settlementMembers, p.settlement_id, p.payment_id);
+  if (p.refund_of) s.refundedTotal.set(p.refund_of, (s.refundedTotal.get(p.refund_of) || 0) + p.amount);
 }
 
 // Authorization expiry instant in ms (expires_at has second precision).
@@ -192,54 +199,133 @@ class Store {
 
   // ---- stage 3: corrections, revisions, statements --------------------------------
 
-  // POST /payments/{id}/corrections, after body validation. Appends one
-  // revision and moves the difference between the same two wallets in one step.
-  correctPayment(caller, id, { expected_revision, amount, effective_at, reason }) {
-    this.expireDue();
+  // Item checks shared by single corrections and batches (stage 4 order):
+  // unknown 404, immutable 422, stale 409, below already-refunded 422.
+  correctionPlan(id, { expected_revision, amount, effective_at, reason }, { allowSettlement, caller }) {
     const p = this.s.paymentById.get(id);
     if (!p) throw notFound();
-    if (p.from_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the original sender may correct this payment');
-    if (p.settlement_id !== null || p.authorization_id !== null) {
-      throw new ApiError(422, 'linked_payment_immutable', 'settlement members and captures cannot be corrected');
+    if (caller && p.from_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the original sender may correct this payment');
+    if (p.authorization_id !== null || p.refund_of || (!allowSettlement && p.settlement_id !== null)) {
+      throw new ApiError(422, 'linked_payment_immutable', 'this payment cannot be corrected here');
     }
     const revs = this.s.revisions.get(id);
     const last = revs[revs.length - 1];
     if (expected_revision !== last.revision) throw new ApiError(409, 'stale_revision', 'expected_revision is not the latest revision');
-    const sender = this.s.users.get(p.from_user_id);
-    const receiver = this.s.users.get(p.to_user_id);
-    const diff = amount - last.amount;
-    const debited = diff > 0 ? sender : receiver;
-    const credited = diff > 0 ? receiver : sender;
-    const move = Math.abs(diff);
-    if (move > 0 && debited.balance - this.held(debited) < move) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
-    if (BigInt(credited.balance) + BigInt(move) > BigInt(MAX_BALANCE)) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
+    if (amount < (this.s.refundedTotal.get(id) || 0)) throw new ApiError(422, 'refund_exceeds_payment', 'amount is below the already refunded amount');
+    return { p, revs, last, amount, effective_at, reason };
+  }
+
+  // Applies corrections as one atomic step: combined current affordability
+  // (available funds), then historical total/available at every boundary, then
+  // one shared recorded_at strictly after every member's previous revision.
+  applyCorrections(plans, batchId) {
+    this.expireDue();
+    const delta = new Map();
+    for (const c of plans) {
+      const diff = BigInt(c.amount - c.last.amount);
+      const sender = this.s.users.get(c.p.from_user_id);
+      const receiver = this.s.users.get(c.p.to_user_id);
+      delta.set(sender, (delta.get(sender) || 0n) - diff);
+      delta.set(receiver, (delta.get(receiver) || 0n) + diff);
+    }
+    const next = new Map();
+    for (const [u, d] of delta) {
+      const b = BigInt(u.balance) + d;
+      if (d < 0n && b - BigInt(this.held(u)) < 0n) throw new ApiError(409, 'insufficient_funds', 'insufficient funds');
+      next.set(u, b);
+    }
+    for (const b of next.values()) {
+      if (b > BigInt(MAX_BALANCE)) throw new ApiError(422, 'validation_failed', 'resulting balance out of range');
+    }
     const now = this.tick();
-    const recMs = Math.max(now, last.recMs + 1); // recorded times strictly increase (ruling S3-1)
-    this.s.lastMs = recMs;
-    const rev = {
-      revision: last.revision + 1,
-      amount,
-      effMs: effective_at.ms,
-      recMs,
-      effective_at: effective_at.raw, // echoed as given (validated strict RFC 3339)
-      recorded_at: ledger.stamp(recMs),
-      reason,
-      seq: this.s.revSeq + 1,
-    };
-    const override = { paymentId: id, revs: [...revs, rev] };
-    // Balances move only after both wallets' histories are proven sound.
-    const balances = new Map([[sender, sender.balance], [receiver, receiver.balance]]);
-    balances.set(debited, debited.balance - move);
-    balances.set(credited, credited.balance + move);
-    for (const u of [sender, receiver]) {
+    let recMs = now;
+    for (const c of plans) recMs = Math.max(recMs, c.last.recMs + 1); // recorded times strictly increase
+    const recordedAt = ledger.stamp(recMs);
+    const override = new Map();
+    plans.forEach((c, i) => {
+      c.rev = {
+        revision: c.last.revision + 1,
+        amount: c.amount,
+        effMs: c.effective_at.ms,
+        recMs,
+        effective_at: c.effective_at.raw, // echoed as given (validated strict RFC 3339)
+        recorded_at: recordedAt,
+        reason: c.reason,
+        seq: this.s.revSeq + 1 + i,
+        correction_batch_id: batchId,
+      };
+      override.set(c.p.payment_id, [...c.revs, c.rev]);
+    });
+    for (const u of delta.keys()) {
       if (!ledger.historyIsSound(this.s, u, override, Math.max(now, recMs))) {
         throw new ApiError(409, 'historical_overdraft', 'the correction would make a past balance negative');
       }
     }
-    revs.push(rev);
-    this.s.revSeq = rev.seq;
-    for (const [u, b] of balances) u.balance = b;
-    return ledger.revisionView(id, rev);
+    // Commit: nothing below can fail.
+    this.s.lastMs = Math.max(this.s.lastMs, recMs);
+    for (const c of plans) c.revs.push(c.rev);
+    this.s.revSeq += plans.length;
+    for (const [u, b] of next) u.balance = Number(b);
+    return { recordedAt, revisions: plans.map((c) => ledger.revisionView(c.p.payment_id, c.rev)) };
+  }
+
+  // POST /payments/{id}/corrections, after body validation (stage 3 + stage 4 rules).
+  correctPayment(caller, id, body) {
+    this.expireDue();
+    const plan = this.correctionPlan(id, body, { allowSettlement: false, caller });
+    return this.applyCorrections([plan], null).revisions[0];
+  }
+
+  // POST /correction-batches (operator), items already shape-checked. Item
+  // errors in input order (field validation, then lookup rules), then settlement
+  // completeness and equal effective instants, then funds.
+  correctBatch(items, validateItem) {
+    this.expireDue();
+    const plans = items.map((item) => this.correctionPlan(item.payment_id, validateItem(item), { allowSettlement: true, caller: null }));
+    const included = new Set(plans.map((c) => c.p.payment_id));
+    const settlements = new Map();
+    for (const c of plans) {
+      if (c.p.settlement_id === null) continue;
+      if (!settlements.has(c.p.settlement_id)) settlements.set(c.p.settlement_id, []);
+      settlements.get(c.p.settlement_id).push(c);
+    }
+    for (const id of settlements.keys()) {
+      if (!this.s.settlementMembers.get(id).every((m) => included.has(m))) {
+        throw new ApiError(422, 'incomplete_settlement', 'every member of the settlement must be corrected together');
+      }
+    }
+    for (const members of settlements.values()) {
+      const same = (a, b) => a.ms === b.ms && (a.sub || '') === (b.sub || ''); // offset spellings may differ
+      if (!members.every((c) => same(c.effective_at, members[0].effective_at))) {
+        throw new ApiError(422, 'validation_failed', 'members of one settlement need identical effective instants');
+      }
+    }
+    const batchId = this.newId('cb', (x) => this.s.correctionBatches.has(x));
+    const { recordedAt, revisions } = this.applyCorrections(plans, batchId);
+    this.s.correctionBatches.add(batchId);
+    return { correction_batch_id: batchId, recorded_at: recordedAt, revisions };
+  }
+
+  // POST /payments/{id}/refunds: the original receiver returns part or all of
+  // the payment's current corrected amount from available funds (stage 4).
+  refundPayment(caller, id, amount) {
+    this.expireDue();
+    const target = this.s.paymentById.get(id);
+    if (!target) throw notFound();
+    if (target.to_user_id !== caller.id) throw new ApiError(403, 'forbidden', 'only the receiver may refund this payment');
+    if (target.refund_of) throw new ApiError(422, 'invalid_refund_target', 'a refund cannot be refunded');
+    const revs = this.s.revisions.get(id);
+    const current = revs[revs.length - 1].amount;
+    if ((this.s.refundedTotal.get(id) || 0) + amount > current) {
+      throw new ApiError(422, 'refund_exceeds_payment', 'refunds would exceed the payment amount');
+    }
+    const receiver = this.s.users.get(target.to_user_id);
+    const sender = this.s.users.get(target.from_user_id);
+    const { payments } = this.commitTransfers(
+      [{ from: receiver, to: sender, amount, note: target.note, visibility: target.visibility }],
+      { refundOf: id },
+    );
+    return { ...payments[0] };
   }
 
   // GET /payments/{id}/revisions: only the two parties; anyone else gets 404.
@@ -341,7 +427,7 @@ class Store {
   // every touched wallet, then creates all payments and applies all changes.
   // `release` (stage 2 captures) lowers the payer's held amount in the same
   // step: the capture spends the money reserved for it.
-  commitTransfers(entries, { requestId = null, settlementId = null, authorizationId = null, release = null } = {}) {
+  commitTransfers(entries, { requestId = null, settlementId = null, authorizationId = null, release = null, refundOf = null } = {}) {
     this.expireDue();
     const delta = new Map();
     for (const e of entries) {
@@ -379,6 +465,7 @@ class Store {
         request_id: requestId,
         settlement_id: settlementId,
         authorization_id: authorizationId,
+        refund_of: refundOf,
         created_at: createdAt,
       };
       this.s.payments.push({ ms, p });
@@ -696,11 +783,14 @@ class Store {
         last_ms: s.lastMs,
         authorization_ttl_seconds: s.authorizationTtlSeconds,
         authorizations: s.authorizations.map(({ ms, a }) => ({ ms, authorization: authorizationView(a) })),
+        // stage 4: payments carry refund_of (statement snapshots made before an
+        // upgrade from an older export keep the older payment shape)
+        payment_shape: 'stage4',
         // stage 3 history
         openings: [...s.users.values()].map((u) => ({ user_id: u.id, opening: u.opening })),
         revisions: [...s.revisions].map(([paymentId, revs]) => ({
           payment_id: paymentId,
-          revisions: revs.map((r) => ({ revision: r.revision, amount: r.amount, effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason, seq: r.seq })),
+          revisions: revs.map((r) => ({ revision: r.revision, amount: r.amount, effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason, seq: r.seq, correction_batch_id: r.correction_batch_id === undefined ? null : r.correction_batch_id })),
         })),
         auth_events: [...s.authEvents].map(([id, e]) => ({ authorization_id: id, ...e, captures: e.captures.map((c) => ({ ...c })) })),
       },

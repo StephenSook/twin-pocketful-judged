@@ -131,6 +131,9 @@ function getStatement(req, res, url) {
     token = snapshots.createRef(user.id, ref);
   }
   const full = store.statementFor(user, ref);
+  if (ref.legacy_payment_shape) {
+    for (const e of full.entries) delete e.payment.refund_of;
+  }
   const body = { opening_balance: full.opening_balance, entries: full.entries.slice(q.offset, q.offset + q.limit), closing_balance: full.closing_balance };
   if (ref.known_at_raw !== undefined) body.known_at = ref.known_at_raw;
   body.has_more = q.offset + q.limit < full.entries.length;
@@ -142,6 +145,26 @@ function correctPayment(req, res, id, path) {
   return idempotentWrite(req, res, path, {}, (caller, body) => {
     const c = take(v.validateCorrection(body, Date.now()));
     return store.correctPayment(caller, id, c);
+  });
+}
+
+// ---- stage 4: refunds and correction batches ----------------------------------------
+
+function refundPayment(req, res, id, path) {
+  return idempotentWrite(req, res, path, {}, (caller, body) => {
+    const { amount } = take(v.validateRefund(body));
+    return store.refundPayment(caller, id, amount);
+  });
+}
+
+function createCorrectionBatch(req, res) {
+  const authorize = (user) => {
+    if (!store.isOperator(user.id)) throw new ApiError(403, 'forbidden', 'settlement operator required');
+  };
+  return idempotentWrite(req, res, '/correction-batches', { authorize }, (caller, body) => {
+    const { items } = take(v.validateBatchShape(body));
+    const now = Date.now();
+    return store.correctBatch(items, (item) => take(v.validateCorrectionItem(item, now)));
   });
 }
 
@@ -264,6 +287,11 @@ function importedSnapshots(doc, state) {
       || !(p.from === null || isInt(p.from)) || !isInt(p.to) || !(p.known_at === null || isInt(p.known_at)) || !isInt(p.cutoff)
       || !(p.known_at_raw === undefined || typeof p.known_at_raw === 'string')) throw bad();
   }
+  // Snapshots from an export made before stage 4 froze payments without
+  // refund_of; they keep that shape when paged after the upgrade.
+  if (doc.state.payment_shape !== 'stage4') {
+    return list.map((e) => (e && e.params ? { ...e, params: { ...e.params, legacy_payment_shape: true } } : e));
+  }
   return list;
 }
 
@@ -326,7 +354,7 @@ function listAuthorizations(req, res, url) {
 // ---- routing ------------------------------------------------------------------------
 
 const REQUEST_ACTION = /^\/requests\/([^/]+)\/(pay|decline|cancel)$/;
-const PAYMENT_HISTORY = /^\/payments\/([^/]+)\/(corrections|revisions)$/;
+const PAYMENT_HISTORY = /^\/payments\/([^/]+)\/(corrections|revisions|refunds)$/;
 const AUTHORIZATION_ACTION = /^\/authorizations\/([^/]+)\/(capture|void)$/;
 
 async function route(req, res) {
@@ -361,6 +389,7 @@ async function route(req, res) {
     '/splits': { POST: () => createSplit(req, res) },
     '/activity': { GET: () => listActivity(req, res, url) },
     '/settlements': { POST: () => createSettlement(req, res) },
+    '/correction-batches': { POST: () => createCorrectionBatch(req, res) },
     '/authorizations': { POST: () => createAuthorization(req, res), GET: () => listAuthorizations(req, res, url) },
   };
   let handlers = routes[path];
@@ -423,7 +452,9 @@ async function route(req, res) {
       };
       handlers = a[2] === 'corrections'
         ? { POST: () => (id === null ? unknown() : correctPayment(req, res, id, path)) }
-        : { GET: () => (id === null ? unknown() : paymentRevisions(req, res, id)) };
+        : a[2] === 'refunds'
+          ? { POST: () => (id === null ? unknown() : refundPayment(req, res, id, path)) }
+          : { GET: () => (id === null ? unknown() : paymentRevisions(req, res, id)) };
     }
   }
   if (!handlers) throw new ApiError(404, 'not_found', 'not found');

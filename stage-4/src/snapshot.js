@@ -181,6 +181,7 @@ function buildFixtureState(plan, hashes) {
         request_id: typeof p.request_id === 'string' ? p.request_id : requestByPayment.get(p.id) || null,
         settlement_id: typeof p.settlement_id === 'string' ? p.settlement_id : null,
         authorization_id: typeof p.authorization_id === 'string' ? p.authorization_id : null,
+        refund_of: typeof p.refund_of === 'string' ? p.refund_of : null,
         created_at: typeof p.created_at === 'string' ? p.created_at : rfc3339(ms), // seeded values kept as given (S3-5)
       },
     };
@@ -260,9 +261,11 @@ function buildFixtureState(plan, hashes) {
 // ---- import (§10) -------------------------------------------------------------------
 
 const PAYMENT_KEYS = ['payment_id', 'from_user_id', 'from_handle', 'to_user_id', 'to_handle', 'amount',
-  'currency', 'note', 'visibility', 'request_id', 'settlement_id', 'authorization_id', 'created_at'];
-// A stage-1 export has payments without authorization_id (§10 upgrade: accepted, filled with null).
-const STAGE1_PAYMENT_KEYS = PAYMENT_KEYS.filter((k) => k !== 'authorization_id');
+  'currency', 'note', 'visibility', 'request_id', 'settlement_id', 'authorization_id', 'refund_of', 'created_at'];
+// Earlier exports lack the later fields (accepted and filled with null):
+// stage 1 has neither authorization_id nor refund_of, stages 2-3 lack refund_of.
+const STAGE3_PAYMENT_KEYS = PAYMENT_KEYS.filter((k) => k !== 'refund_of');
+const STAGE1_PAYMENT_KEYS = STAGE3_PAYMENT_KEYS.filter((k) => k !== 'authorization_id');
 const AUTH_KEYS = ['authorization_id', 'from_user_id', 'from_handle', 'to_user_id', 'to_handle', 'amount',
   'captured_amount', 'remaining_amount', 'currency', 'note', 'visibility', 'status', 'expires_at', 'payment_id',
   'payment_ids', 'created_at'];
@@ -323,10 +326,12 @@ function buildImportedState(doc) {
   for (const item of st.payments) {
     if (!isObj(item) || !isMs(item.ms) || item.ms < prevMs || !isObj(item.payment)) fail('state payment is invalid');
     const p = item.payment;
-    const keys = 'authorization_id' in p ? PAYMENT_KEYS : STAGE1_PAYMENT_KEYS;
+    const keys = 'refund_of' in p ? PAYMENT_KEYS : 'authorization_id' in p ? STAGE3_PAYMENT_KEYS : STAGE1_PAYMENT_KEYS;
     if (Object.keys(p).length !== keys.length || !keys.every((k) => k in p)) fail('state payment fields are invalid');
     if (p.authorization_id === undefined) p.authorization_id = null;
     if (p.authorization_id !== null && !isId(p.authorization_id)) fail('state payment authorization_id is invalid');
+    if (p.refund_of === undefined) p.refund_of = null;
+    if (p.refund_of !== null && !isId(p.refund_of)) fail('state payment refund_of is invalid');
     if (!isId(p.payment_id) || s.paymentById.has(p.payment_id)) fail('state payment id is invalid');
     if (!userMatches(p.from_user_id, p.from_handle) || !userMatches(p.to_user_id, p.to_handle)) fail('state payment user is invalid');
     if (!isShare(p.amount) || p.currency !== s.currency || !isNote(p.note) || !VISIBILITIES.has(p.visibility)) fail('state payment is invalid');
@@ -442,6 +447,20 @@ function validateHistory(s) {
     if (BigInt(u.opening) + net !== BigInt(u.balance)) fail('state opening and payments do not match the balance');
     if (!ledger.historyIsSound(s, u, null, now)) fail('state history has a negative balance');
   }
+  // stage 4: every refund names an existing non-refund payment, runs in the
+  // opposite direction, carries no request/authorization/settlement link, and
+  // refunds of one payment never exceed its current amount.
+  for (const { p } of s.payments) {
+    if (p.refund_of === null) continue;
+    const target = s.paymentById.get(p.refund_of);
+    if (!target || target.refund_of !== null || p.from_user_id !== target.to_user_id || p.to_user_id !== target.from_user_id
+      || p.request_id !== null || p.authorization_id !== null || p.settlement_id !== null || p.amount < 1) fail('state refund is invalid');
+    if (s.revisions.get(p.payment_id).length !== 1) fail('state refund has corrections');
+  }
+  for (const [targetId, total] of s.refundedTotal) {
+    const revs = s.revisions.get(targetId);
+    if (!revs || total > revs[revs.length - 1].amount) fail('state refunds exceed the payment');
+  }
 }
 
 // ---- stage-3 history ---------------------------------------------------------------
@@ -517,7 +536,8 @@ function importHistory(st, s) {
         if (!isObj(r) || r.revision !== i + 1 || !isShare(r.amount) || r.amount > 1000000000 && i > 0 || typeof r.reason !== 'string') fail('state revision is invalid');
         for (const k of ['effective_at', 'recorded_at']) if (typeof r[k] !== 'string' || !Number.isFinite(Date.parse(r[k]))) fail('state revision time is invalid');
         if (!Number.isSafeInteger(r.seq) || r.seq < 1) fail('state revision seq is invalid');
-        const rev = { revision: r.revision, amount: r.amount, effMs: Date.parse(r.effective_at), recMs: Date.parse(r.recorded_at), effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason, seq: r.seq };
+        if (!(r.correction_batch_id === undefined || r.correction_batch_id === null || (isId(r.correction_batch_id) && i > 0))) fail('state revision correction_batch_id is invalid');
+        const rev = { revision: r.revision, amount: r.amount, effMs: Date.parse(r.effective_at), recMs: Date.parse(r.recorded_at), effective_at: r.effective_at, recorded_at: r.recorded_at, reason: r.reason, seq: r.seq, correction_batch_id: r.correction_batch_id === undefined ? null : r.correction_batch_id };
         if (prev && rev.recMs <= prev.recMs) fail('state revision recorded times must increase');
         prev = rev;
         return rev;
@@ -526,6 +546,7 @@ function importHistory(st, s) {
         fail('state revision 1 must match the payment');
       }
       extras.revisions.set(item.payment_id, revs);
+      for (const r of revs) if (r.correction_batch_id) s.correctionBatches.add(r.correction_batch_id);
     }
   }
   if (st.openings !== undefined) {
