@@ -167,4 +167,32 @@ Each row is `ID | quoted requirement | tested reading / falsifying check`. Cover
 
 ## Coverage and evidence
 
-All entries currently **unchecked**. This first revision establishes the complete work queue; forthcoming executable coverage will distinguish implemented checks from observed live passes. Environment/source/deployment requirements R1-006–014, hashing R1-067 and internal transient-state proof require gatekeeper/auditor evidence outside the pure differential model.
+The executable check is `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/model/driver.py --base-url URL`. Coverage means an executable refutation exists, **not** that the product passed it. A failing early check stops the run, so later checks remain not verified on that run. No provided-check coverage has been established.
+
+**Covered by own checks:**
+
+- `model.transition` plus `Runner.run/observe`: R1-001, R1-004, R1-005, R1-018–024, R1-026, R1-030–041, R1-043, R1-045–057, R1-068–074, R1-076–111, R1-113–115, R1-130–144. Some properties in these entries have the limits below.
+- `auth_and_controls`: R1-015–017, R1-027, R1-042, R1-044, R1-058–063, R1-078, R1-129–130.
+- `persistence`: R1-116–118, R1-120–128, R1-145. Cross-process R1-119 is covered only when `--second-url` is supplied; without it R1-119 is unchecked.
+- `concurrency`: R1-075 for the direct payment path; other four paths remain unchecked concurrently.
+- `self_test`: R1-112 supplied zero-share example plus random rounding. A pure-model self-test does not test the product; live split checks cover the model-derived share values.
+
+**Partial or unchecked work queue:**
+
+- R1-002: observed balances checked after each operation; transient internal nonnegativity is unchecked.
+- R1-003: sequential retries/new-key terminal payments checked; concurrent pay/decline/cancel race is unchecked by this driver.
+- R1-006–014: deployment/resource/readiness/load requirements require gatekeeper evidence. Driver enforces individual call deadlines (R1-012); own live container uses 2 CPUs/2 GiB and 50 identical payments but does not exhaust the load contract.
+- R1-025/028/064: successful derived handle and collision code checked; proof of immutable handle and no account after failed collision is incomplete.
+- R1-029: initial zero balance checked; immediate incoming payment/request for newly signed-up user remains unchecked.
+- R1-041: high balances and 1e9 edge checked; arbitrary decimal lexical precision beyond Python float precision is unchecked.
+- R1-065: unauthenticated reads and ordinary modeled user checks covered; full unauthenticated write matrix remains unchecked.
+- R1-066: two active sessions checked; unbounded token lifetime is not empirically established.
+- R1-067: password storage intentionally unchecked by modeler, who cannot read product source.
+- R1-069–074: deterministic witnesses plus replay of all successful paths; exhaustive cross-product of every key rule and write path remains unchecked.
+- R1-097/110: list time order checked to seconds; subsecond request ordering is conservatively unchecked. Complete list membership/values are checked exactly; arbitrary page membership among timestamp ties is not overconstrained.
+- R1-101: page length and has_more checked; full pagination membership is checked during collection enumeration with no concurrent writes.
+- R1-112: split examples/random sequences check rounding, not exhaustive all participant counts and amount combinations.
+- R1-123: read-only snapshot restoration checked; concurrent export snapshot atomicity remains unchecked.
+- R1-139: balances, receipts and failed-key reuse checked; internal revision changes are not observable in this stage.
+
+**Observed evidence:** at verification revision e8dfb7d, `PYTHONDONTWRITEBYTECODE=1 python3 stage-1/verification/model/driver.py --self-test` exited 0 with `MODEL SELF-TEST PASS operations=663`. Against product b5fac7f, the live command above with URL `http://127.0.0.1:18081 --steps 100` exited 1: `operation status /requests/rq_seed/decline: expected 403, observed 404 not_found`. Deletion shrinking found one operation after 14 attempts. This refutes R1-033/R1-095 on that revision; remaining later checks were not verified. The builder subsequently committed 2299fe8 to correct request-action authorization; recheck pending.
