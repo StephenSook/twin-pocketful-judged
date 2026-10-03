@@ -300,7 +300,9 @@ def main():
                        ("seat_paths", "Writers and checkers never cross."),
                        ("live_provenance", "The live demo is the graded folder."),
                        ("provided_checks", "Provided checks, every stage folder."),
-                       ("standalone", "Runs without the factory.")):
+                       ("standalone", "Runs without the factory."),
+                       ("shipped_share", "What the provided checks leave out."),
+                       ("ledger_size", "The spec, read twice.")):
         if isinstance(facts.get(key), str) and facts[key].strip():
             results.append(f"- **{label}** {facts[key]}")
     limits_list = need(facts, "limits", a.draft) or []

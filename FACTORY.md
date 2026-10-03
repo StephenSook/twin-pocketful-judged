@@ -159,6 +159,8 @@ Wall time from dispatch: stage 1 accepted at 1h 03m, stage 2 accepted at 1h 49m,
 - **The live demo is the graded folder.** The live demo runs `ghcr.io/stephensook/twin-pocketful-judged-demo:4c19fe0dab10` (digest `sha256:321d4b48dafc`), built by this repository's demo-image workflow from `stage-4/` at `4c19fe0`; that stage-4 tree (`b88381c62bdf`) is the same tree as at HEAD, so the app you click is the graded folder.
 - **Provided checks, every stage folder.** The organizers' harness, run in isolated mode on a fresh clone at `76795d4`, passes every provided check in every stage folder: 147 of 147 (stage 1), 182 of 182 (stage 2), 188 of 188 (stage 3), 193 of 193 (stage 4). The organizers say these are a portion of the tests applied in judging. Evidence: `evidence/provided-checks.json`.
 - **Runs without the factory.** The app runs on its own: every stage folder is plain Node.js with no npm dependencies, and no stage source file names an outside host, so it never calls BAND, an agent or a model API. The six seats built it; none of them is needed to run it.
+- **What the provided checks leave out.** The organizers ship only part of each Pocketful stage's graded checks: 79% of stage 1, 35% of stage 2, 9% of stage 3, 16% of stage 4 (participant guide at kickoff commit `803560d`); the rest runs only in judging. That gap is what the sealed holdout and the gatekeeper's own probes are for.
+- **The spec, read twice.** The modeler's ledger quotes 513 requirement sentences from the spec (145 from stage 1, 202 stage 2, 112 stage 3, 54 stage 4), each beside the check that would falsify it; the modeler's mandate forbids reading product code. Evidence: `stage-4/verification/ledger.md`.
 
 ## Check it yourself
 
