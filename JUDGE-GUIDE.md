@@ -33,4 +33,6 @@ python -m harness run --track pocketful --repo . --all --mode isolated
 ```
 **2:40 Evidence the band never saw.** The sealed holdout digest was committed before dispatch (`379f28f6c49b9b99`); after the event the suite is published and anyone can run `python tools/seal_holdout.py verify <suite folder> <digest>`.
 
+**Try it.** https://twin-pocketful-judged-demo.onrender.com/ (demo logins in `deploy/README.md`).
+
 The coordinator's final report: `18094c39-884d-472d-9b46-c18003280f66`.

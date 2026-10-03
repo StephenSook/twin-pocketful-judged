@@ -4,7 +4,8 @@ Runs the band's own start command as a child process on an internal port and ser
 port in front of it. It forwards every request unchanged except:
   - /_test/* (unauthenticated reset, export and import in the spec) answers 404, so nobody on the
     internet can wipe or read the whole store;
-  - each client address is rate limited, and request bodies are capped;
+  - each connection address is rate limited, and request bodies are capped. Behind a host's edge
+    that address is shared by many visitors, so the limit is a flood cap, not a per-person quota;
   - any reply the proxy makes itself closes the connection, because it has not read the body: the
     host's edge reuses upstream connections, so unread body bytes would otherwise be parsed as the
     start of the next request on that connection (one visitor's body becoming another's request);
@@ -28,7 +29,8 @@ import time
 PUBLIC_PORT = int(os.environ.get("PORT", "10000"))
 UP_PORT = int(os.environ.get("DEMO_UPSTREAM_PORT", "8081"))
 RESET_SECONDS = int(os.environ.get("DEMO_RESET_SECONDS", "3600"))
-RATE = int(os.environ.get("DEMO_RATE_PER_10S", "120"))
+# A page load is about 25 requests, and one edge address can carry several visitors at once.
+RATE = int(os.environ.get("DEMO_RATE_PER_10S", "1200"))
 MAX_BODY = int(os.environ.get("DEMO_MAX_BODY", str(1 << 20)))
 SEED = pathlib.Path(__file__).with_name("seed.json").read_bytes()
 HOP = {"connection", "keep-alive", "proxy-authenticate", "proxy-authorization", "te",

@@ -11,7 +11,7 @@ Every number on this page is generated from files in this repository by
 - **Band.** 6 seats on 3 model families (Claude, DeepSeek, GPT): auditor (OpenCode), builder (Claude Code), coordinator (Claude Code), gatekeeper (Codex), modeler (Codex), surface (Claude Code).
 - **Key design decision.** A seat on a different model family writes an executable model of the written requirements without reading product code, and the gatekeeper accepts a revision only when product and model agree.
 - **Verified result.** stage 1 PASS, stage 2 PASS, stage 3 PASS, stage 4 PASS; 12 rejections and 4 acceptances over 331 handoffs. Sealed holdout: 73/73.
-- **Cost.** BAND attributes 314,436,644 tokens and $204.51 of list-price equivalent to this room (an estimate, not a bill); see Measured cost and time.
+- **Cost.** BAND attributes 314,436,644 tokens and $204.51 of list-price equivalent to this room (an estimate, not a bill); the auditor's Featherless calls cost $1.03 in Featherless's own billed-request log; see Measured cost and time.
 - **Limitation.** Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.
 
 ## Seats
@@ -152,8 +152,8 @@ Wall time from dispatch: stage 1 accepted at 1h 03m, stage 2 accepted at 1h 49m,
 - **Stage reached.** The organizers' checker in isolated mode on a fresh clone: stage 1 PASS, stage 2 PASS, stage 3 PASS, stage 4 PASS.
 - **Hands off.** 0 human messages after the dispatch; room.json sha256 `1d184d0574fccfada5561ec2fd8d89ed91ebc93a94b8e673bef37d00e8302eb8`.
 - **Evidence the band never saw.** Sealed holdout digest `379f28f6c49b9b99` committed before dispatch; score after the run: **73/73**.
-- **Generic.** Tablekeeper comparison was not run.
-- **One agent against the band.** Solo comparison was not run.
+- **Generic.** The same frozen mandates ran the Tablekeeper track twice in fresh rooms and repositories: both times the gatekeeper accepted all four stages, and both times the coordinator posted its stage-4 report after its FINAL REPORT (26 s, then 12 s), so both runs fail the factory's own completion check and are recorded as incomplete.
+- **One agent against the band.** One Claude Code agent working alone, dispatched for stage 1 only, passed stage 1: 147 of 147 shipped checks and 16 of 16 sealed attacks; the six-seat factory completed all four stages.
 
 ## Check it yourself
 
@@ -168,3 +168,4 @@ python3 -m harness run --track pocketful --repo . --all --mode isolated
 - Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.
 - Concurrency and history checks are sampled, not proofs.
 - Two untracked auditor placeholder files stayed in the build machine's working tree and are not part of this repository.
+- The coordinator can post its last stage report after its FINAL REPORT. Both Tablekeeper runs did (26 s, then 12 s), so both fail the factory's own completion check even though every stage was accepted.

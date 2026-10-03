@@ -18,7 +18,16 @@ def duration(seconds):
     return f"{hours}h {minutes:02d}m" if hours else f"{minutes}m"
 
 
-def build(floor, facts):
+def case_study_section(factory_md_text):
+    """The FACTORY.md case study, copied verbatim so the two pages cannot disagree."""
+    heading = "## Case study at a glance"
+    if heading not in factory_md_text:
+        raise SystemExit("FACTORY.md has no case study section")
+    body = factory_md_text.split(heading, 1)[1].split("\n## ", 1)[0].strip("\n")
+    return [heading, "", body, ""]
+
+
+def build(floor, facts, factory_md_text=None):
     needed = ("rejects_resolved_by_accepted_revision", "rejects_followed_by_seat_commit")
     if not isinstance(floor.get("rejections"), list) or any(key not in (floor.get("totals") or {}) for key in needed):
         sys.exit("floor.json predates rejection records; regenerate it with tools/floor_data.py")
@@ -32,6 +41,8 @@ def build(floor, facts):
         str(need(facts, "one_line")),
         "",
     ]
+    if factory_md_text is not None:
+        lines.extend(case_study_section(factory_md_text))
     try_it = []
     if facts.get("live_url"):
         try_it.append(f"- Live app: {facts['live_url']} (free hosting: the first visit after an idle spell "
@@ -97,11 +108,12 @@ def build(floor, facts):
 
 
 def main():
-    if len(sys.argv) != 3:
-        raise SystemExit("usage: result_readme.py <floor.json> <facts.json>")
+    if len(sys.argv) not in (3, 4):
+        raise SystemExit("usage: result_readme.py <floor.json> <facts.json> [FACTORY.md]")
     floor = json.loads(pathlib.Path(sys.argv[1]).read_text())
     facts = json.loads(pathlib.Path(sys.argv[2]).read_text())
-    print(build(floor, facts), end="")
+    factory_md_text = pathlib.Path(sys.argv[3]).read_text() if len(sys.argv) == 4 else None
+    print(build(floor, facts, factory_md_text), end="")
 
 
 if __name__ == "__main__":

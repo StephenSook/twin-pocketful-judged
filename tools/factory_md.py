@@ -193,7 +193,7 @@ def family(model):
     return model
 
 
-def case_study(repo, track, claims, holdout_line, sessions_path, room, limits, T):
+def case_study(repo, track, claims, holdout_line, sessions_path, room, limits, T, featherless_usd=None):
     """The judges' case-study outline, in their order, from the same inputs as the rest of the page."""
     seats = mandate_models(repo)
     families = sorted({family(model) for _, _, model in seats})
@@ -213,7 +213,10 @@ def case_study(repo, track, claims, holdout_line, sessions_path, room, limits, T
         f"- **Verified result.** {reached}; {T['rejects']} rejections and {T['accepts']} acceptances over "
         f"{T['handoffs']:,} handoffs." + (f" {holdout_line}" if holdout_line else ""),
         f"- **Cost.** BAND attributes {tok:,} tokens and ${usd:,.2f} of list-price equivalent to this room "
-        "(an estimate, not a bill); see Measured cost and time.",
+        "(an estimate, not a bill)"
+        + (f"; the auditor's Featherless calls cost ${featherless_usd:,.2f} in Featherless's own billed-request log"
+           if isinstance(featherless_usd, (int, float)) and not isinstance(featherless_usd, bool) else "")
+        + "; see Measured cost and time.",
         f"- **Limitation.** {limits[0]}" if limits else "- **Limitation.** NOT MEASURED YET",
     ]
     return "\n".join(lines)
@@ -294,7 +297,8 @@ def main():
     limits_list = need(facts, "limits", a.draft) or []
     holdout_line = (f"Sealed holdout: {holdout}." if holdout_applicable else "")
     fill = {
-        "{{CASE_STUDY}}": case_study(repo, track, claims, holdout_line, a.sessions, room, limits_list, T),
+        "{{CASE_STUDY}}": case_study(repo, track, claims, holdout_line, a.sessions, room, limits_list, T,
+                                     facts.get("featherless_usd")),
         "{{SEATS_TABLE}}": seats_table(repo),
         "{{MANDATE_HASHES}}": hashes(repo),
         "{{CATCH_STATS}}": catch_stats(T),

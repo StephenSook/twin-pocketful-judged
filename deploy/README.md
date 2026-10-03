@@ -5,7 +5,7 @@ a small front door (`proxy.py`, standard library only):
 
 - `/_test/*` answers 404. The spec leaves reset, export and import unauthenticated, which is right
   for a test harness and wrong for a public URL.
-- The connection address is rate limited (120 requests per 10 seconds) and bodies are capped at 1 MiB.
+- The connection address is rate limited (1,200 requests per 10 seconds; behind Render's edge many visitors share one address, so this is a flood cap) and bodies are capped at 1 MiB.
 - Every hour the front door reseeds the service from `seed.json` through the service's own reset
   endpoint, so the demo accounts always work. `/__demo/status` shows the last reseed.
 - Responses are passed through unchanged, including the service's own security headers.

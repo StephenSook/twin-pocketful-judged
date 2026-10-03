@@ -2,6 +2,21 @@
 
 Six seats on three model families built all four Pocketful stages in BAND from one dispatch, with no human message after it.
 
+## Case study at a glance
+
+- **Task.** The pocketful track: four cumulative stages from one dispatch in a fresh BAND room.
+- **Band.** 6 seats on 3 model families (Claude, DeepSeek, GPT): auditor (OpenCode), builder (Claude Code), coordinator (Claude Code), gatekeeper (Codex), modeler (Codex), surface (Claude Code).
+- **Key design decision.** A seat on a different model family writes an executable model of the written requirements without reading product code, and the gatekeeper accepts a revision only when product and model agree.
+- **Verified result.** stage 1 PASS, stage 2 PASS, stage 3 PASS, stage 4 PASS; 12 rejections and 4 acceptances over 331 handoffs. Sealed holdout: 73/73.
+- **Cost.** BAND attributes 314,436,644 tokens and $204.51 of list-price equivalent to this room (an estimate, not a bill); the auditor's Featherless calls cost $1.03 in Featherless's own billed-request log; see Measured cost and time.
+- **Limitation.** Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.
+
+## Try it
+
+- Live app: https://twin-pocketful-judged-demo.onrender.com/ (free hosting: the first visit after an idle spell can take about a minute while it starts)
+- Factory Floor, a replay of the whole room: https://stephensook.github.io/twin-pocketful-judged/
+- Demo logins: `ada@demo.example`, `bob@demo.example`, `cleo@demo.example`, `dev@demo.example`, password `pocketful demo`. The demo reseeds every hour.
+
 ## Measured run
 
 - Stages reached: 4 of 4
@@ -20,8 +35,8 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 
 The builder and surface write product code. The modeler builds a separate executable reading of the requirements without reading the product. The gatekeeper compares both and is the only seat that accepts a stage. The auditor supplies a third model family's reading.
 
-- Genericity: Tablekeeper comparison was not run.
-- Single-agent baseline: Solo comparison was not run.
+- Genericity: The same frozen mandates ran the Tablekeeper track twice in fresh rooms and repositories: both times the gatekeeper accepted all four stages, and both times the coordinator posted its stage-4 report after its FINAL REPORT (26 s, then 12 s), so both runs fail the factory's own completion check and are recorded as incomplete.
+- Single-agent baseline: One Claude Code agent working alone, dispatched for stage 1 only, passed stage 1: 147 of 147 shipped checks and 16 of 16 sealed attacks; the six-seat factory completed all four stages.
 
 ## Evidence
 
@@ -49,5 +64,6 @@ python3 -m harness run --track pocketful --repo . --all --mode isolated
 - Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.
 - Concurrency and history checks are sampled, not proofs.
 - Two untracked auditor placeholder files stayed in the build machine's working tree and are not part of this repository.
+- The coordinator can post its last stage report after its FINAL REPORT. Both Tablekeeper runs did (26 s, then 12 s), so both fail the factory's own completion check even though every stage was accepted.
 
 Factory source: https://github.com/StephenSook/twin-dark-factory

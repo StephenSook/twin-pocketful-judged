@@ -12,8 +12,8 @@
   "holdout_score": "73/73",
   "holdout_digest": "379f28f6c49b9b995f8d6a5fff58e6e8612377693104ccdf759c5f5f04abc9a9",
   "holdout_headline": "73 attacks the band never saw, sealed before the run, all pass.",
-  "genericity": "Tablekeeper comparison was not run.",
-  "baseline": "Solo comparison was not run.",
+  "genericity": "The same frozen mandates ran the Tablekeeper track twice in fresh rooms and repositories: both times the gatekeeper accepted all four stages, and both times the coordinator posted its stage-4 report after its FINAL REPORT (26 s, then 12 s), so both runs fail the factory's own completion check and are recorded as incomplete.",
+  "baseline": "One Claude Code agent working alone, dispatched for stage 1 only, passed stage 1: 147 of 147 shipped checks and 16 of 16 sealed attacks; the six-seat factory completed all four stages.",
   "featherless_usd": 1.026102,
   "check_commands": [
     "python3 tools/check_room.py room.json --expected-accepts 4",
@@ -23,11 +23,24 @@
   "limits": [
     "Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.",
     "Concurrency and history checks are sampled, not proofs.",
-    "Two untracked auditor placeholder files stayed in the build machine's working tree and are not part of this repository."
+    "Two untracked auditor placeholder files stayed in the build machine's working tree and are not part of this repository.",
+    "The coordinator can post its last stage report after its FINAL REPORT. Both Tablekeeper runs did (26 s, then 12 s), so both fail the factory's own completion check even though every stage was accepted."
   ],
   "measurements": [],
   "featured_reject_rev": "8548455",
   "outside_band_families": {
     "auditor": "DeepSeek"
-  }
+  },
+  "live_url": "https://twin-pocketful-judged-demo.onrender.com/",
+  "floor_url": "https://stephensook.github.io/twin-pocketful-judged/",
+  "repo_url": "https://github.com/StephenSook/twin-pocketful-judged",
+  "demo_logins": [
+    "ada@demo.example",
+    "bob@demo.example",
+    "cleo@demo.example",
+    "dev@demo.example"
+  ],
+  "demo_password": "pocketful demo",
+  "app_headline": "The accepted Pocketful runs live on the free demo.",
+  "app_caption": "Captured by the live check on the deployed service after a real 0.01 EUR payment and a reload."
 }
