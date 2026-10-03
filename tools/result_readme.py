@@ -92,7 +92,8 @@ def build(floor, facts, factory_md_text=None):
             ("provided_checks", "Provided checks, every stage folder"),
             ("standalone", "Runs without the factory"),
             ("shipped_share", "What the provided checks leave out"),
-            ("ledger_size", "The spec, read twice"))
+            ("ledger_size", "The spec, read twice"),
+            ("auth_security", "Accounts and passwords"))
           if isinstance(facts.get(key), str) and facts[key].strip()],
         "",
         "## Evidence",

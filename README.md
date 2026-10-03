@@ -45,6 +45,7 @@ The builder and surface write product code. The modeler builds a separate execut
 - Runs without the factory: The app runs on its own: every stage folder is plain Node.js with no npm dependencies, and no stage source file names an outside host, so it never calls BAND, an agent or a model API. The six seats built it; none of them is needed to run it.
 - What the provided checks leave out: The organizers ship only part of each Pocketful stage's graded checks: 79% of stage 1, 35% of stage 2, 9% of stage 3, 16% of stage 4 (participant guide at kickoff commit `803560d`); the rest runs only in judging. That gap is what the sealed holdout and the gatekeeper's own probes are for.
 - The spec, read twice: The modeler's ledger quotes 513 requirement sentences from the spec (145 from stage 1, 202 stage 2, 112 stage 3, 54 stage 4), each beside the check that would falsify it; the modeler's mandate forbids reading product code. Evidence: `stage-4/verification/ledger.md`.
+- Accounts and passwords: Passwords are hashed with Argon2id and compared in constant time; a login for an unknown email still hashes a dummy password, so response time does not reveal which accounts exist. Session tokens are 32 random bytes and the service stores only their SHA-256, so a leaked store holds no usable token. The band wrote all of it (`stage-4/src/passwords.js`, `stage-4/src/store.js`); the public demo's front door also refuses the spec's unauthenticated `/_test` reset and export routes.
 
 ## Evidence
 

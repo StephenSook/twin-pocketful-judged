@@ -90,6 +90,11 @@ def main():
       "fresh clone of this repository.\n")
     w(f"**0:00 What it is.** {facts.get('one_line', 'Twin: six agents, three model families; the builder never grades its own work.')} "
       "Read the seat table at the top of `FACTORY.md`, then the mandates in `mandates/`.\n")
+    if facts.get("live_url") and facts.get("demo_logins") and facts.get("demo_password"):
+        w(f"**Try it first, if you like.** Open {facts['live_url']} and log in as "
+          + ", ".join(f"`{e}`" for e in facts["demo_logins"])
+          + f" with the password `{facts['demo_password']}` (the demo reseeds every hour; the first visit after "
+          "an idle spell can take about a minute while free hosting starts). Signing up with any email also works.\n")
     tools = _floor_tools()
     featured = tools.featured_rejection(floor, facts)
     if featured:

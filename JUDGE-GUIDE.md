@@ -4,6 +4,8 @@ Every stop below is a real room message or commit. Paste the command to see it y
 
 **0:00 What it is.** Six seats on three model families built all four Pocketful stages in BAND from one dispatch, with no human message after it. Read the seat table at the top of `FACTORY.md`, then the mandates in `mandates/`.
 
+**Try it first, if you like.** Open https://twin-pocketful-judged-demo.onrender.com/ and log in as `ada@demo.example`, `bob@demo.example`, `cleo@demo.example`, `dev@demo.example` with the password `pocketful demo` (the demo reseeds every hour; the first visit after an idle spell can take about a minute while free hosting starts). Signing up with any email also works.
+
 **0:30 A bad result the factory caught.** At 2h 09m the gatekeeper rejected revision `8548455`: "expected historical balance 9007199254740992, observed 9007199254740991 after a valid correction."
 ```
 jq '.messages[] | select(.id=="837dd787-aef2-470d-aa36-19807164c107") | .content' room.json

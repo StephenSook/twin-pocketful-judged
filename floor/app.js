@@ -15,6 +15,26 @@
     .then(render)
     .catch((e) => { $("source").textContent = `Could not load the run data (${e.message}).`; });
 
+  // Optional "Try the live app" panel: try.json is written at deploy time from the result's facts file.
+  fetch("try.json").then((r) => (r.ok ? r.json() : null)).then((t) => {
+    if (!t || !t.live_url || !Array.isArray(t.demo_logins) || !t.demo_logins.length || !t.demo_password) return;
+    $("tryText").textContent = `Log in with any demo account below and the password "${t.demo_password}". `
+      + "The demo reseeds every hour; the first visit after an idle spell can take about a minute while free hosting starts.";
+    const list = $("tryLogins");
+    for (const email of t.demo_logins) {
+      const li = el("li"); li.append(el("code", {}, email));
+      const b = el("button", { type: "button", class: "pill", "aria-label": `Copy ${email}` }, "Copy");
+      b.addEventListener("click", () => {
+        (navigator.clipboard ? navigator.clipboard.writeText(email) : Promise.reject())
+          .then(() => { b.textContent = "Copied"; setTimeout(() => { b.textContent = "Copy"; }, 1500); })
+          .catch(() => { b.textContent = email; });
+      });
+      li.append(b); list.append(li);
+    }
+    const link = $("tryLink"); link.href = new URL("login", t.live_url).href;
+    $("try").hidden = false;
+  }).catch(() => {});
+
   function render(f) {
     const T = f.totals;
     if (!Array.isArray(f.rejections) || T.rejects_resolved_by_accepted_revision === undefined

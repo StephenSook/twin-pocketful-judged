@@ -38,6 +38,12 @@ jobs:
           if text.count(old) != 1:
               raise SystemExit("Factory Floor repository link marker changed")
           path.write_text(text.replace(old, new))
+          # Optional "Try the live app" panel: only the public demo fields, copied from the facts file.
+          import json
+          facts = json.loads(pathlib.Path("evidence/facts.json").read_text())
+          demo = {k: facts.get(k) for k in ("live_url", "demo_logins", "demo_password")}
+          if all(demo.values()):
+              pathlib.Path("_site/try.json").write_text(json.dumps(demo))
           PY
           touch _site/.nojekyll
       - name: Check the rendered public copy
