@@ -1,0 +1,142 @@
+{
+ "tool": "organizers' kickoff harness: python -m harness run --track pocketful --repo <fresh public clone> --all --mode isolated",
+ "stages": {
+  "1": {
+   "started_at": "2026-10-03T05:47:42.935917+00:00",
+   "finished_at": "2026-10-03T05:48:04.525370+00:00",
+   "stage_results": {
+    "1": "pass"
+   },
+   "passed": 147,
+   "collected": 147,
+   "failed": 0,
+   "errors": 0,
+   "per_suite": {
+    "1": [
+     147,
+     147
+    ]
+   }
+  },
+  "2": {
+   "started_at": "2026-10-03T05:48:04.920648+00:00",
+   "finished_at": "2026-10-03T05:48:36.870957+00:00",
+   "stage_results": {
+    "1": "pass",
+    "2": "pass"
+   },
+   "passed": 182,
+   "collected": 182,
+   "failed": 0,
+   "errors": 0,
+   "per_suite": {
+    "1": [
+     147,
+     147
+    ],
+    "2": [
+     35,
+     35
+    ]
+   }
+  },
+  "3": {
+   "started_at": "2026-10-03T05:48:37.624199+00:00",
+   "finished_at": "2026-10-03T05:49:11.473134+00:00",
+   "stage_results": {
+    "1": "pass",
+    "2": "pass",
+    "3": "pass"
+   },
+   "passed": 188,
+   "collected": 188,
+   "failed": 0,
+   "errors": 0,
+   "per_suite": {
+    "1": [
+     147,
+     147
+    ],
+    "2": [
+     35,
+     35
+    ],
+    "3": [
+     6,
+     6
+    ]
+   }
+  },
+  "4": {
+   "started_at": "2026-10-03T05:49:12.562825+00:00",
+   "finished_at": "2026-10-03T05:49:47.700876+00:00",
+   "stage_results": {
+    "1": "pass",
+    "2": "pass",
+    "3": "pass",
+    "4": "pass"
+   },
+   "passed": 193,
+   "collected": 193,
+   "failed": 0,
+   "errors": 0,
+   "per_suite": {
+    "1": [
+     147,
+     147
+    ],
+    "2": [
+     35,
+     35
+    ],
+    "3": [
+     6,
+     6
+    ],
+    "4": [
+     5,
+     5
+    ]
+   }
+  }
+ },
+ "revision": "76795d4212d8c220eaacb80a8eb907ac7d58395b",
+ "suite_digest": "3ae920dd1bf766dfe774befd681b55e101de1b54f687c6c95beb135de18aefd6",
+ "mode": "isolated",
+ "summary": {
+  "track": "pocketful",
+  "folders": {
+   "1": {
+    "claimed": true,
+    "share": 1.0,
+    "overshoot": null,
+    "highest_contiguous": 1,
+    "report": "stage-1/report.json"
+   },
+   "2": {
+    "claimed": true,
+    "share": 1.0,
+    "overshoot": null,
+    "highest_contiguous": 2,
+    "report": "stage-2/report.json"
+   },
+   "3": {
+    "claimed": true,
+    "share": 1.0,
+    "overshoot": null,
+    "highest_contiguous": 3,
+    "report": "stage-3/report.json"
+   },
+   "4": {
+    "claimed": true,
+    "share": 1.0,
+    "overshoot": null,
+    "highest_contiguous": 4,
+    "report": "stage-4/report.json"
+   }
+  },
+  "run_id": "out",
+  "mode": "isolated",
+  "preview": true
+ }
+}
