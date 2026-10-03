@@ -7,7 +7,7 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 - **Task.** The pocketful track: four cumulative stages from one dispatch in a fresh BAND room.
 - **Band.** 6 seats on 3 model families (Claude, DeepSeek, GPT): auditor (OpenCode), builder (Claude Code), coordinator (Claude Code), gatekeeper (Codex), modeler (Codex), surface (Claude Code).
 - **Key design decision.** A seat on a different model family writes an executable model of the written requirements without reading product code, and the gatekeeper accepts a revision only when product and model agree.
-- **Verified result.** stage 1 PASS, stage 2 PASS, stage 3 PASS, stage 4 PASS; 12 rejections and 4 acceptances over 331 handoffs. Sealed holdout: 73/73.
+- **Verified result.** stage 1 PASS, stage 2 PASS, stage 3 PASS, stage 4 PASS; 12 rejections and 4 acceptances over 331 handoffs. Sealed holdout: 73/73. One rejection came while the organizers' checker passed the same revision 147 of 147; the export it caught answered in 0.011 s after the fix, down from a 10 s timeout.
 - **Cost.** BAND attributes 314,436,644 tokens and $204.51 of list-price equivalent to this room (an estimate, not a bill); the auditor's Featherless calls cost $1.03 in Featherless's own billed-request log; see Measured cost and time.
 - **Limitation.** Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.
 
@@ -37,6 +37,9 @@ The builder and surface write product code. The modeler builds a separate execut
 
 - Genericity: The same frozen mandates ran the Tablekeeper track twice in fresh rooms and repositories: both times the gatekeeper accepted all four stages, and both times the coordinator posted its stage-4 report after its FINAL REPORT (26 s, then 12 s), so both runs fail the factory's own completion check and are recorded as incomplete.
 - Single-agent baseline: One Claude Code agent working alone, dispatched for stage 1 only, passed stage 1: 147 of 147 shipped checks and 16 of 16 sealed attacks; the six-seat factory completed all four stages.
+- Refused while the provided checks were green: At 0 h 47 m the gatekeeper rejected stage-1 revision `a7a67ec` while the organizers' checker passed it 147 of 147. Its own probe reset 1,000 accounts in 0.03 s, then the export right after it timed out at 10.01 s, past the spec's 10-second limit. The builder's fix `dadabac` landed 137 s later; at acceptance (`d1ebec2`) a 5,000-account reset took 1.90 s and the export answered in 0.011 s. Evidence: `stage-1/verification/gatekeeper/rejection-a7a67ec.md`.
+- Writers and checkers never cross: From git: the gatekeeper, modeler and auditor committed 470 file changes, every one under `stage-N/verification/`; the builder, surface and coordinator committed 207, none there. Check: `git log --author=gatekeeper --name-only --format= | grep -v /verification/` prints nothing.
+- The live demo is the graded folder: The live demo runs `ghcr.io/stephensook/twin-pocketful-judged-demo:4c19fe0dab10` (digest `sha256:321d4b48dafc`), built by this repository's demo-image workflow from `stage-4/` at `4c19fe0`; that stage-4 tree (`b88381c62bdf`) is the same tree as at HEAD, so the app you click is the graded folder.
 
 ## Evidence
 

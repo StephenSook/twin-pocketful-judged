@@ -83,6 +83,11 @@ def build(floor, facts, factory_md_text=None):
         "",
         f"- Genericity: {need(facts, 'genericity')}",
         f"- Single-agent baseline: {need(facts, 'baseline')}",
+        *[f"- {label}: {facts[key]}" for key, label in (
+            ("green_reject", "Refused while the provided checks were green"),
+            ("seat_paths", "Writers and checkers never cross"),
+            ("live_provenance", "The live demo is the graded folder"))
+          if isinstance(facts.get(key), str) and facts[key].strip()],
         "",
         "## Evidence",
         "",

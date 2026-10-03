@@ -193,7 +193,7 @@ def family(model):
     return model
 
 
-def case_study(repo, track, claims, holdout_line, sessions_path, room, limits, T, featherless_usd=None):
+def case_study(repo, track, claims, holdout_line, sessions_path, room, limits, T, featherless_usd=None, green_short=None):
     """The judges' case-study outline, in their order, from the same inputs as the rest of the page."""
     seats = mandate_models(repo)
     families = sorted({family(model) for _, _, model in seats})
@@ -211,7 +211,8 @@ def case_study(repo, track, claims, holdout_line, sessions_path, room, limits, T
         "written requirements without reading product code, and the gatekeeper accepts a revision only when "
         "product and model agree.",
         f"- **Verified result.** {reached}; {T['rejects']} rejections and {T['accepts']} acceptances over "
-        f"{T['handoffs']:,} handoffs." + (f" {holdout_line}" if holdout_line else ""),
+        f"{T['handoffs']:,} handoffs." + (f" {holdout_line}" if holdout_line else "")
+        + (f" {green_short}" if isinstance(green_short, str) and green_short.strip() else ""),
         f"- **Cost.** BAND attributes {tok:,} tokens and ${usd:,.2f} of list-price equivalent to this room "
         "(an estimate, not a bill)"
         + (f"; the auditor's Featherless calls cost ${featherless_usd:,.2f} in Featherless's own billed-request log"
@@ -294,11 +295,17 @@ def main():
         f"- **Generic.** {generic if isinstance(generic, str) else json.dumps(generic)}",
         f"- **One agent against the band.** {baseline if isinstance(baseline, str) else json.dumps(baseline)}",
     ]
+    # Optional derived facts (built from the room, git and the deploy receipt, never typed).
+    for key, label in (("green_reject", "Refused while the provided checks were green."),
+                       ("seat_paths", "Writers and checkers never cross."),
+                       ("live_provenance", "The live demo is the graded folder.")):
+        if isinstance(facts.get(key), str) and facts[key].strip():
+            results.append(f"- **{label}** {facts[key]}")
     limits_list = need(facts, "limits", a.draft) or []
     holdout_line = (f"Sealed holdout: {holdout}." if holdout_applicable else "")
     fill = {
         "{{CASE_STUDY}}": case_study(repo, track, claims, holdout_line, a.sessions, room, limits_list, T,
-                                     facts.get("featherless_usd")),
+                                     facts.get("featherless_usd"), facts.get("green_reject_short")),
         "{{SEATS_TABLE}}": seats_table(repo),
         "{{MANDATE_HASHES}}": hashes(repo),
         "{{CATCH_STATS}}": catch_stats(T),
