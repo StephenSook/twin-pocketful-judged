@@ -298,7 +298,9 @@ def main():
     # Optional derived facts (built from the room, git and the deploy receipt, never typed).
     for key, label in (("green_reject", "Refused while the provided checks were green."),
                        ("seat_paths", "Writers and checkers never cross."),
-                       ("live_provenance", "The live demo is the graded folder.")):
+                       ("live_provenance", "The live demo is the graded folder."),
+                       ("provided_checks", "Provided checks, every stage folder."),
+                       ("standalone", "Runs without the factory.")):
         if isinstance(facts.get(key), str) and facts[key].strip():
             results.append(f"- **{label}** {facts[key]}")
     limits_list = need(facts, "limits", a.draft) or []

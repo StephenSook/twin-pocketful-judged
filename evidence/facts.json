@@ -18,7 +18,7 @@
   "check_commands": [
     "python3 tools/check_room.py room.json --expected-accepts 4",
     "python3 tools/check_claim_evidence.py room.json evidence/claim-evidence.json",
-    "python3 -m harness run --track pocketful --repo . --all --mode isolated"
+    "git clone https://github.com/band-ai/dark-factory-wearedevs && cd dark-factory-wearedevs\npython3 -m venv .venv && . .venv/bin/activate && python -m pip install -r harness/requirements.txt\npython -m harness run --track pocketful --repo <path-to-this-repository> --all --mode isolated"
   ],
   "limits": [
     "Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.",
@@ -48,5 +48,6 @@
   "seat_paths": "From git: the gatekeeper, modeler and auditor committed 470 file changes, every one under `stage-N/verification/`; the builder, surface and coordinator committed 207, none there. Check: `git log --author=gatekeeper --name-only --format= | grep -v /verification/` prints nothing.",
   "live_provenance": "The live demo runs `ghcr.io/stephensook/twin-pocketful-judged-demo:4c19fe0dab10` (digest `sha256:321d4b48dafc`), built by this repository's demo-image workflow from `stage-4/` at `4c19fe0`; that stage-4 tree (`b88381c62bdf`) is the same tree as at HEAD, so the app you click is the graded folder.",
   "provided_checks": "The organizers' harness, run in isolated mode on a fresh clone at `76795d4`, passes every provided check in every stage folder: 147 of 147 (stage 1), 182 of 182 (stage 2), 188 of 188 (stage 3), 193 of 193 (stage 4). The organizers say these are a portion of the tests applied in judging. Evidence: `evidence/provided-checks.json`.",
-  "standalone": "The app runs on its own: every stage folder is plain Node.js with no npm dependencies, and no stage source file names an outside host, so it never calls BAND, an agent or a model API. The six seats built it; none of them is needed to run it."
+  "standalone": "The app runs on its own: every stage folder is plain Node.js with no npm dependencies, and no stage source file names an outside host, so it never calls BAND, an agent or a model API. The six seats built it; none of them is needed to run it.",
+  "video_url": "https://youtu.be/f4lin76MaG4"
 }

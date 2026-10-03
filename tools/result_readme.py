@@ -49,6 +49,8 @@ def build(floor, facts, factory_md_text=None):
                       "can take about a minute while it starts)")
     if facts.get("floor_url"):
         try_it.append(f"- Factory Floor, a replay of the whole room: {facts['floor_url']}")
+    if facts.get("video_url"):
+        try_it.append(f"- Demo film, with the Band Desktop room recording: {facts['video_url']}")
     if facts.get("demo_logins") and facts.get("demo_password"):
         try_it.append("- Demo logins: " + ", ".join(f"`{e}`" for e in facts["demo_logins"])
                       + f", password `{facts['demo_password']}`. The demo reseeds every hour.")

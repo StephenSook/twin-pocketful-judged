@@ -117,8 +117,11 @@ def main():
     w(f"{autonomy} room.json is the unchanged BAND export "
       f"(sha256 `{facts.get('room_sha256', 'see check_room.py')}`):")
     w("```\npython tools/check_room.py room.json\n```")
-    w(f"**2:15 The stage it reached.** The organizers' checker, isolated mode, every folder:\n"
-      f"```\npython -m harness run --track {track} --repo . --all --mode isolated\n```")
+    w(f"**2:15 The stage it reached.** The organizers' checker, isolated mode, every folder. "
+      "It lives in their kickoff repository, so run it there against a clone of this one:\n"
+      "```\ngit clone https://github.com/band-ai/dark-factory-wearedevs && cd dark-factory-wearedevs\n"
+      "python3 -m venv .venv && . .venv/bin/activate && python -m pip install -r harness/requirements.txt\n"
+      f"python -m harness run --track {track} --repo <path-to-this-repository> --all --mode isolated\n```")
     holdout_applicable = holdout_applies(facts, track)
     if holdout_applicable:
         holdout_digest = validate_holdout(facts)

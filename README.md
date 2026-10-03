@@ -15,6 +15,7 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 
 - Live app: https://twin-pocketful-judged-demo.onrender.com/ (free hosting: the first visit after an idle spell can take about a minute while it starts)
 - Factory Floor, a replay of the whole room: https://stephensook.github.io/twin-pocketful-judged/
+- Demo film, with the Band Desktop room recording: https://youtu.be/f4lin76MaG4
 - Demo logins: `ada@demo.example`, `bob@demo.example`, `cleo@demo.example`, `dev@demo.example`, password `pocketful demo`. The demo reseeds every hour.
 
 ## Measured run
@@ -61,7 +62,9 @@ python3 tools/check_room.py room.json --expected-accepts 4
 python3 tools/check_claim_evidence.py room.json evidence/claim-evidence.json
 ```
 ```sh
-python3 -m harness run --track pocketful --repo . --all --mode isolated
+git clone https://github.com/band-ai/dark-factory-wearedevs && cd dark-factory-wearedevs
+python3 -m venv .venv && . .venv/bin/activate && python -m pip install -r harness/requirements.txt
+python -m harness run --track pocketful --repo <path-to-this-repository> --all --mode isolated
 ```
 
 ## Limits

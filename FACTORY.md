@@ -157,13 +157,17 @@ Wall time from dispatch: stage 1 accepted at 1h 03m, stage 2 accepted at 1h 49m,
 - **Refused while the provided checks were green.** At 0 h 47 m the gatekeeper rejected stage-1 revision `a7a67ec` while the organizers' checker passed it 147 of 147. Its own probe reset 1,000 accounts in 0.03 s, then the export right after it timed out at 10.01 s, past the spec's 10-second limit. The builder's fix `dadabac` landed 137 s later; at acceptance (`d1ebec2`) a 5,000-account reset took 1.90 s and the export answered in 0.011 s. Evidence: `stage-1/verification/gatekeeper/rejection-a7a67ec.md`.
 - **Writers and checkers never cross.** From git: the gatekeeper, modeler and auditor committed 470 file changes, every one under `stage-N/verification/`; the builder, surface and coordinator committed 207, none there. Check: `git log --author=gatekeeper --name-only --format= | grep -v /verification/` prints nothing.
 - **The live demo is the graded folder.** The live demo runs `ghcr.io/stephensook/twin-pocketful-judged-demo:4c19fe0dab10` (digest `sha256:321d4b48dafc`), built by this repository's demo-image workflow from `stage-4/` at `4c19fe0`; that stage-4 tree (`b88381c62bdf`) is the same tree as at HEAD, so the app you click is the graded folder.
+- **Provided checks, every stage folder.** The organizers' harness, run in isolated mode on a fresh clone at `76795d4`, passes every provided check in every stage folder: 147 of 147 (stage 1), 182 of 182 (stage 2), 188 of 188 (stage 3), 193 of 193 (stage 4). The organizers say these are a portion of the tests applied in judging. Evidence: `evidence/provided-checks.json`.
+- **Runs without the factory.** The app runs on its own: every stage folder is plain Node.js with no npm dependencies, and no stage source file names an outside host, so it never calls BAND, an agent or a model API. The six seats built it; none of them is needed to run it.
 
 ## Check it yourself
 
 ```
 python3 tools/check_room.py room.json --expected-accepts 4
 python3 tools/check_claim_evidence.py room.json evidence/claim-evidence.json
-python3 -m harness run --track pocketful --repo . --all --mode isolated
+git clone https://github.com/band-ai/dark-factory-wearedevs && cd dark-factory-wearedevs
+python3 -m venv .venv && . .venv/bin/activate && python -m pip install -r harness/requirements.txt
+python -m harness run --track pocketful --repo <path-to-this-repository> --all --mode isolated
 ```
 
 ## Limitations

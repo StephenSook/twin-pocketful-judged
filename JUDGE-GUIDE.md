@@ -27,9 +27,11 @@ The run had 12 rejections; every one ended with a newer writer revision the gate
 ```
 python tools/check_room.py room.json
 ```
-**2:15 The stage it reached.** The organizers' checker, isolated mode, every folder:
+**2:15 The stage it reached.** The organizers' checker, isolated mode, every folder. It lives in their kickoff repository, so run it there against a clone of this one:
 ```
-python -m harness run --track pocketful --repo . --all --mode isolated
+git clone https://github.com/band-ai/dark-factory-wearedevs && cd dark-factory-wearedevs
+python3 -m venv .venv && . .venv/bin/activate && python -m pip install -r harness/requirements.txt
+python -m harness run --track pocketful --repo <path-to-this-repository> --all --mode isolated
 ```
 **2:40 Evidence the band never saw.** The sealed holdout digest was committed before dispatch (`379f28f6c49b9b99`); after the event the suite is published and anyone can run `python tools/seal_holdout.py verify <suite folder> <digest>`.
 
