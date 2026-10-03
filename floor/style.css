@@ -61,8 +61,8 @@ svg#floor { width: 100%; height: auto; background: var(--page); border-radius: 2
 .stages { margin-top: 22px; position: relative; height: 64px; border-top: 3px solid var(--ink); }
 .stage-mark { position: absolute; top: -10px; transform: translateX(-50%); text-align: center; font-weight: 700; color: var(--ink); white-space: nowrap; font-size: 14px; }
 .stage-mark::before { content: ""; display: block; width: 16px; height: 16px; margin: 0 auto 6px; border-radius: 50%; background: var(--hot); border: 2px solid var(--ink); }
-.verdicts { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-.verdicts li { border: 2px solid var(--ink); border-radius: 18px; padding: 14px 16px; background: var(--card); display: grid; gap: 4px; }
+.verdicts { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+.verdicts li { border: 2px solid var(--ink); border-radius: 18px; padding: 14px 16px; background: var(--card); display: grid; gap: 4px; grid-template-columns: minmax(0, 1fr); min-width: 0; overflow-wrap: anywhere; }
 .chip { display: inline-block; font-weight: 800; padding: 2px 10px; border-radius: 999px; margin-right: 8px; color: #fff; }
 .chip.ok { background: var(--ok); } .chip.bad { background: var(--bad); }
 .tablewrap { overflow-x: auto; }
