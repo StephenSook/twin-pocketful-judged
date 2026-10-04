@@ -303,7 +303,8 @@ def main():
                        ("standalone", "Runs without the factory."),
                        ("shipped_share", "What the provided checks leave out."),
                        ("ledger_size", "The spec, read twice."),
-                       ("auth_security", "Accounts and passwords.")):
+                       ("auth_security", "Accounts and passwords."),
+                       ("ui_states", "Every stage-2 state, at both widths.")):
         if isinstance(facts.get(key), str) and facts[key].strip():
             results.append(f"- **{label}** {facts[key]}")
     limits_list = need(facts, "limits", a.draft) or []
