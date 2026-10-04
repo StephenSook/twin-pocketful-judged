@@ -72,7 +72,7 @@ def build(floor, facts, factory_md_text=None):
         f"{totals['rejects_resolved_by_accepted_revision']} of {totals.get('rejects', 0)}",
         f"- Rejections with a same-stage writer commit after the REJECT itself: "
         f"{totals['rejects_followed_by_seat_commit']} of {totals.get('rejects', 0)}",
-        f"- Commits made by seats: {totals.get('seat_commits', 0)} of {totals.get('commits', 0)}",
+        f"- Commits to stage folders made by seats: {totals.get('seat_commits', 0)} of {totals.get('commits', 0)}",
         f"- Handoffs between seats: {totals.get('handoffs', 0):,}",
         f"- BAND messages retried or undelivered: "
         f"{totals.get('delivery_retries', 0) + totals.get('delivery_failures', 0)}",

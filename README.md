@@ -26,7 +26,7 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 - Gatekeeper verdicts: 12 REJECT and 4 ACCEPT
 - Rejections that ended with a newer writer revision the gatekeeper accepted: 12 of 12
 - Rejections with a same-stage writer commit after the REJECT itself: 9 of 12
-- Commits made by seats: 117 of 117
+- Commits to stage folders made by seats: 117 of 117
 - Handoffs between seats: 331
 - BAND messages retried or undelivered: 0
 - Room messages: 5,828 of 10,000

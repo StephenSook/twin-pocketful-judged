@@ -81,7 +81,7 @@ contain no word from either track's vocabulary. Mandate fingerprints (sha256) fo
 
 ## How it catches and recovers from bad work
 
-12 rejections and 4 acceptances over 331 handoffs. 12 of the 12 rejections ended with a newer writer revision of the same stage that the gatekeeper later accepted; 9 had a same-stage writer commit after the REJECT itself, and in the other 3 the fixes in the accepted revision were committed before the REJECT was posted. 117 of 117 commits were made by seats.
+12 rejections and 4 acceptances over 331 handoffs. 12 of the 12 rejections ended with a newer writer revision of the same stage that the gatekeeper later accepted; 9 had a same-stage writer commit after the REJECT itself, and in the other 3 the fixes in the accepted revision were committed before the REJECT was posted. 117 of 117 commits to stage folders were made by seats.
 
 | At | Verdict | Revision | What the gatekeeper said | Room message |
 |---|---|---|---|---|

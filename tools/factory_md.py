@@ -134,7 +134,7 @@ def catch_stats(T):
             f"gatekeeper later accepted; {followed} had a same-stage writer commit after the REJECT itself"
             + (f", and in the other {rejects - followed} the fixes in the accepted revision were committed before the REJECT was posted. "
                if resolved == rejects and 0 < rejects - followed == T.get("rejects_fixed_before_reject") else ". ")
-            + f"{T['seat_commits']} of {T['commits']} commits were made by seats.")
+            + f"{T['seat_commits']} of {T['commits']} commits to stage folders were made by seats.")
 
 
 def costs(sessions_path, room, facts, draft, development):
