@@ -37,6 +37,8 @@ python -m harness run --track pocketful --repo <path-to-this-repository> --all -
 ```
 **2:40 Evidence the band never saw.** The sealed holdout digest was committed before dispatch (`379f28f6c49b9b99`); after the event the suite is published and anyone can run `python tools/seal_holdout.py verify <suite folder> <digest>`.
 
+**2:50 The interface, every stage-2 state.** The gatekeeper accepted stage 2 (`8038718`, at 1h 49m) with 82 screenshots committed beside the verdict: the same 41 views at 375 px and at 1440 px, covering the empty, loading, filled, refused, held and uncertain states of login, sign-up, home, requests, split and authorizations. 14 minutes earlier it rejected `26581d1` because the phone illustration covered the sign-up heading at 1440 px (`stage-2/verification/gatekeeper/evidence/26581d1-signup-overlap.png`). Browse them in `stage-2/verification/gatekeeper/evidence/8038718/`.
+
 **Try it.** https://twin-pocketful-judged-demo.onrender.com/ (demo logins in `deploy/README.md`).
 
 The coordinator's final report: `18094c39-884d-472d-9b46-c18003280f66`.

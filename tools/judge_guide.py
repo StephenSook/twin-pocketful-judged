@@ -135,6 +135,8 @@ def main():
           "run `python tools/seal_holdout.py verify <suite folder> <digest>`.")
     else:
         w(f"**2:40 Private attack suite.** {facts.get('holdout_note', 'No private suite applies to this track.')}")
+    if isinstance(facts.get("ui_states"), str) and facts["ui_states"].strip():
+        w(f"\n**2:50 The interface, every stage-2 state.** {facts['ui_states']}")
     if facts.get("live_url"):
         w(f"\n**Try it.** {facts['live_url']} (demo logins in `deploy/README.md`).")
     if final:
