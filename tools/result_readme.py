@@ -43,7 +43,8 @@ def build(floor, facts, factory_md_text=None):
     ]
     if factory_md_text is not None:
         lines.extend(case_study_section(factory_md_text))
-    try_it = []
+    try_it = ["- Judges, start here: [`JUDGE-GUIDE.md`](JUDGE-GUIDE.md), the run in three minutes, one stop per "
+              "rubric criterion (Factory, App, Agent Teamwork)"]
     if facts.get("live_url"):
         try_it.append(f"- Live app: {facts['live_url']} (free hosting: the first visit after an idle spell "
                       "can take about a minute while it starts)")

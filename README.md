@@ -13,6 +13,7 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 
 ## Try it
 
+- Judges, start here: [`JUDGE-GUIDE.md`](JUDGE-GUIDE.md), the run in three minutes, one stop per rubric criterion (Factory, App, Agent Teamwork)
 - Live app: https://twin-pocketful-judged-demo.onrender.com/ (free hosting: the first visit after an idle spell can take about a minute while it starts)
 - Factory Floor, a replay of the whole room: https://stephensook.github.io/twin-pocketful-judged/
 - Demo film, with the Band Desktop room recording: https://youtu.be/f4lin76MaG4
