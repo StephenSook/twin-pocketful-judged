@@ -19,6 +19,25 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 - Demo film, with the Band Desktop room recording: https://youtu.be/f4lin76MaG4
 - Demo logins: `ada@demo.example`, `bob@demo.example`, `cleo@demo.example`, `dev@demo.example`, password `pocketful demo`. The demo reseeds every hour.
 
+## How to read this repository
+
+| Path | What it is | Written by (from git) |
+|---|---|---|
+| `stage-1/` | the stage-1 service: Dockerfile, RUN.md, source, and the checkers' files under verification/ | the band (builder 11, modeler 9, gatekeeper 8, surface 5 commits) |
+| `stage-2/` | stage 1 carried forward plus the browser interface and holds, same layout | the band (gatekeeper 7, modeler 6, surface 5, builder 4, auditor 3 commits) |
+| `stage-3/` | stage 2 carried forward plus history and corrections, same layout | the band (gatekeeper 14, builder 14, modeler 9, auditor 4, surface 4 commits) |
+| `stage-4/` | stage 3 carried forward plus refunds and correction batches: the final service | the band (modeler 4, gatekeeper 3, auditor 3, builder 3, surface 1 commits) |
+| `mandates/` | one generic mandate per seat, each starting with its harness and model | the human |
+| `room.json` | the BAND room of the judged run, downloaded unchanged | BAND (export committed unchanged by the human) |
+| `FACTORY.md` | the factory: seats, design choices and their cost, measured time and spend, how it catches bad work | the human |
+| `JUDGE-GUIDE.md` | a three-minute route with one stop per rubric criterion | the human |
+| `evidence/` | facts and evidence derived from the room, git and the organizers' checker | the human |
+| `tools/` | the scripts that check the room and generate these documents | the human |
+| `floor/` | the Factory Floor, a browser replay of the room | the human |
+| `deploy/` | the live demo's front door: proxy and hourly reseed around the unchanged stage-4 image | the human |
+| `docs/` | the FACTORY.md template | the human |
+| `.github/` | CI: the organizers' checker on a fresh clone, the Floor site and the demo image | the human |
+
 ## Measured run
 
 - Stages reached: 4 of 4

@@ -57,6 +57,9 @@ def build(floor, facts, factory_md_text=None):
                       + f", password `{facts['demo_password']}`. The demo reseeds every hour.")
     if try_it:
         lines.extend(["## Try it", "", *try_it, ""])
+    if facts.get("repo_map"):
+        lines.extend(["## How to read this repository", "", "| Path | What it is | Written by (from git) |",
+                      "|---|---|---|", *[f"| `{p}` | {w} | {who} |" for p, w, who in facts["repo_map"]], ""])
     if facts.get("holdout_applicable", True):
         holdout_line = (f"- Sealed holdout the band never saw: {need(facts, 'holdout_score')} attacks passed, "
                         f"digest `{str(need(facts, 'holdout_digest'))[:16]}` committed before the dispatch")
