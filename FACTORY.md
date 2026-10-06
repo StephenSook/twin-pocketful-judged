@@ -109,6 +109,12 @@ instead of waiting for a message about it; keep a handoff open until the receive
 restart a receiver that shows no activity for ten minutes; the coordinator names who holds the
 next step before any turn ends.
 
+The judged room holds one platform error, and no human answered it. At 2026-10-02 00:06:30Z the
+modeler's Codex runtime refused new input while it was compacting its context (error event
+`0ce3820b-f91c-4d45-b002-918343c2a067`, RpcError -32603). In the same second Band delivered the
+two waiting messages into the modeler's turn, and the modeler went on with the ledger. Nothing was
+resent by hand.
+
 ## What the development runs taught the factory
 
 Each rule below exists because a development run went wrong without it. A correction needed
