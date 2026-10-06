@@ -11,6 +11,12 @@ Six seats on three model families built all four Pocketful stages in BAND from o
 - **Cost.** BAND attributes 314,436,644 tokens and $204.51 of list-price equivalent to this room (an estimate, not a bill); the auditor's Featherless calls cost $1.03 in Featherless's own billed-request log; see Measured cost and time.
 - **Limitation.** Pocketful keeps state in memory, as the track allows, so a restart clears it; the live demo reseeds its accounts.
 
+## What the band built
+
+The stage-4 home screen just after a send, at 1440 px and at 375 px. Both screenshots were taken by the gatekeeper while it checked the accepted revision `a288cc4`; nobody retouched them.
+
+<img src="stage-4/verification/gatekeeper/evidence-a288cc4/screens/screens-browser_checks/1440-home-filled.png" alt="Pocketful home at 1440 px: balance 85.00 EUR, send and request forms, activity list" width="620"> <img src="stage-4/verification/gatekeeper/evidence-a288cc4/screens/screens-browser_checks/375-home-filled.png" alt="Pocketful home at 375 px, the same state on a phone" width="180">
+
 ## Try it
 
 - Judges, start here: [`JUDGE-GUIDE.md`](JUDGE-GUIDE.md), the run in three minutes, one stop per rubric criterion (Factory, App, Agent Teamwork)
