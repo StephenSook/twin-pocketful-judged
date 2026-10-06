@@ -147,6 +147,11 @@ twice became a mandate line.
 
 The Claude and Codex seats ran on flat-rate subscriptions; the dollars above are Band's own list-price estimate from its usage export, not a bill. The auditor ran on Featherless credits, metered: **$1.026102** for the whole run.
 
+Where the money went is a design choice. The two seats that check, the modeler and the gatekeeper,
+account for $141.43 of the $204.51 (69 percent), and the gatekeeper alone for $104.27 (51 percent),
+because it reruns the provided checks and its own probes on each candidate it judges. Checking costs
+more than building in this factory, on purpose: that spend is what produced the rejections above.
+
 Room message budget: **5,828 of 10,000** messages in the room export supplied to
 the generator. The generator cross-checks that export against the floor summary instead of trusting
 a copied count. The coordinator takes a stable snapshot at each stage boundary and announces lean
