@@ -195,3 +195,4 @@ python -m harness run --track pocketful --repo <path-to-this-repository> --all -
 - Concurrency and history checks are sampled, not proofs.
 - Two untracked auditor placeholder files stayed in the build machine's working tree and are not part of this repository.
 - The coordinator can post its last stage report after its FINAL REPORT. Both Tablekeeper runs did (26 s, then 12 s), so both fail the factory's own completion check even though every stage was accepted.
+- The look is not all the band's own. The dispatch carried the product owner's visual direction: a written design brief, reference images (never committed) and six illustrations made with an image model before the run. The surface seat copied the illustrations into `public/art/`, and each stage's RUN.md and the app footer credit them to the product owner. The screens, layout and interface code are the band's commits.
