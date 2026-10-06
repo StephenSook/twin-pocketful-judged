@@ -115,6 +115,10 @@ modeler's Codex runtime refused new input while it was compacting its context (e
 two waiting messages into the modeler's turn, and the modeler went on with the ledger. Nothing was
 resent by hand.
 
+Between the dispatch and the final report the operator only read status, with a read-only snapshot
+script. Nobody restarted a seat, a runtime, Docker or the box, and nobody posted in the room: its
+only human message is the dispatch.
+
 ## What the development runs taught the factory
 
 Each rule below exists because a development run went wrong without it. A correction needed
